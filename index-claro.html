@@ -149,15 +149,15 @@
     .rv.d3.on  { animation: fadeUp 0.7s 0.3s ease forwards; }
 
     .prod-card {
-      background:rgba(245,230,200,0.03);
-      border:1px solid rgba(123,18,19,0.12);
+      background:rgba(74,11,12,0.3);
+      border:1px solid rgba(245,230,200,0.12);
       border-radius:18px; overflow:hidden;
       transition:transform 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
     .prod-card:hover {
       transform:translateY(-8px);
-      border-color:rgba(123,18,19,0.35);
-      box-shadow:0 24px 60px rgba(123,18,19,0.15);
+      border-color:rgba(232,160,32,0.5);
+      box-shadow:0 24px 60px rgba(0,0,0,0.3);
     }
     .prod-card img { width:100%; height:220px; object-fit:cover; display:block; transition:transform 0.4s; }
     .prod-card:hover img { transform:scale(1.05); }
@@ -175,15 +175,15 @@
     .combo-img { width:100%; height:100%; min-height:260px; object-fit:cover; display:block; }
     .combo-info {
       padding:32px 28px;
-      background:rgba(245,230,200,0.6);
+      background:rgba(74,11,12,0.55);
       display:flex; flex-direction:column; justify-content:center; gap:12px;
     }
-    .combo-name { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#7B1213; line-height:1.05; }
-    .combo-desc { font-family:'Barlow Condensed',sans-serif; font-size:0.97rem; color:#4a1e10; line-height:1.55; }
+    .combo-name { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#E8A020; line-height:1.05; }
+    .combo-desc { font-family:'Barlow Condensed',sans-serif; font-size:0.97rem; color:rgba(245,230,200,0.85); line-height:1.55; }
     .ctag {
       display:inline-block;
-      background:rgba(123,18,19,0.08); border:1px solid rgba(123,18,19,0.25);
-      color:#7B1213; font-family:'Barlow Condensed',sans-serif;
+      background:rgba(232,160,32,0.15); border:1px solid rgba(232,160,32,0.4);
+      color:#E8A020; font-family:'Barlow Condensed',sans-serif;
       font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
       padding:4px 14px; border-radius:50px; width:fit-content;
     }
@@ -346,16 +346,16 @@
 
 <!-- 3. PROBLEMA -->
 <section style="background:#e8d0a0;position:relative;overflow:hidden;">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(123,18,19,0.16),transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(0,0,0,0.2),transparent 60%);pointer-events:none;"></div>
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;" class="two-col">
       <div class="rv">
-        <div class="s-tag">El problema real</div>
-        <h2 class="s-title" style="font-size:clamp(2.2rem,5vw,3.8rem);">
-          ¿Cansado de pagar caro<br/>por <span>porciones pequeñas</span><br/>y sabor mediocre?
+        <div class="s-tag" style="color:rgba(245,230,200,0.7);">El problema real</div>
+        <h2 class="s-title" style="font-size:clamp(2.2rem,5vw,3.8rem);color:#F5E6C8;">
+          ¿Cansado de pagar caro<br/>por <span style="color:#E8A020;">porciones pequeñas</span><br/>y sabor mediocre?
         </h2>
         <div class="bar"></div>
-        <p class="condensed" style="font-size:1.05rem;color:#4a1e10;line-height:1.65;">
+        <p class="condensed" style="font-size:1.05rem;color:rgba(245,230,200,0.85);line-height:1.65;">
           Muchos lugares cobran de más por comida sin alma, sin porción y sin ingredientes reales. Eso no tiene sentido cuando hay alternativas que sí cumplen.
         </p>
       </div>
@@ -397,8 +397,8 @@
 <section id="productos" style="background:#F5E6C8;">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:56px;" class="rv">
-      <div class="s-tag">Nuestros productos</div>
-      <h2 class="s-title">Lo que hacemos<br/><span>con orgullo</span></h2>
+      <div class="s-tag" style="color:rgba(245,230,200,0.7);">Nuestros productos</div>
+      <h2 class="s-title" style="color:#F5E6C8;">Lo que hacemos<br/><span style="color:#E8A020;">con orgullo</span></h2>
       <div class="bar bar-c"></div>
       <p class="condensed" style="font-size:1.05rem;color:var(--cream-dim);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;">
         Todo artesanal. Todo hecho al momento. Con ingredientes que puedes ver y sentir en cada mordisco.
@@ -426,32 +426,32 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;">
       <div class="prod-card rv">
         <img src="perrito.jpeg" alt="Perritos Calientes Cory's" />
-        <div style="padding:22px 20px;background:rgba(245,230,200,0.7);">
-          <div class="ctag" style="margin-bottom:10px;">Perritos Calientes</div>
-          <h3 class="display" style="font-size:1.65rem;color:#7B1213;margin-bottom:8px;">El Mártir, El Chamo,<br/>El Azteca y más</h3>
-          <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">Salchicha wiener, polaca o alemana con ensalada, cebolla, papas y queso amarillo. El Polonés, El Germano y el Lleve también esperan por ti.</p>
+        <div style="padding:22px 20px;background:rgba(74,11,12,0.55);">
+          <div style="display:inline-block;background:rgba(232,160,32,0.15);border:1px solid rgba(232,160,32,0.4);color:#E8A020;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding:4px 14px;border-radius:50px;width:fit-content;margin-bottom:10px;">Perritos Calientes</div>
+          <h3 class="display" style="font-size:1.65rem;color:#E8A020;margin-bottom:8px;">El Mártir, El Chamo,<br/>El Azteca y más</h3>
+          <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Salchicha wiener, polaca o alemana con ensalada, cebolla, papas y queso amarillo. El Polonés, El Germano y el Lleve también esperan por ti.</p>
         </div>
       </div>
       <div class="prod-card rv d1">
         <img src="pepito.jpeg" alt="Pepito Cory's" />
-        <div style="padding:22px 20px;background:rgba(232,215,175,0.7);">
-          <div class="ctag" style="margin-bottom:10px;">Pepitos</div>
-          <h3 class="display" style="font-size:1.65rem;color:#7B1213;margin-bottom:8px;">El Pepito<br/>de Cory's</h3>
-          <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">Carne, pollo o mixto con tocineta, maíz, queso amarillo, lechuga, tomate, papitas y salsas básicas. Una experiencia completa en cada bocado.</p>
+        <div style="padding:22px 20px;background:rgba(74,11,12,0.45);">
+          <div style="display:inline-block;background:rgba(232,160,32,0.15);border:1px solid rgba(232,160,32,0.4);color:#E8A020;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding:4px 14px;border-radius:50px;width:fit-content;margin-bottom:10px;">Pepitos</div>
+          <h3 class="display" style="font-size:1.65rem;color:#E8A020;margin-bottom:8px;">El Pepito<br/>de Cory's</h3>
+          <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Carne, pollo o mixto con tocineta, maíz, queso amarillo, lechuga, tomate, papitas y salsas básicas. Una experiencia completa en cada bocado.</p>
         </div>
       </div>
       <div class="prod-card rv d2">
         <img src="grill.png" alt="Salchipapas Cory's" />
-        <div style="padding:22px 20px;background:rgba(245,230,200,0.7);">
+        <div style="padding:22px 20px;background:rgba(74,11,12,0.55);">
           <div class="ctag" style="margin-bottom:10px;">Salchipapas & Chamitos</div>
-          <h3 class="display" style="font-size:1.65rem;color:#7B1213;margin-bottom:8px;">Clasiquitas<br/>& Quesua</h3>
-          <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">300g de papas francesas con salchichas y salsas. La Quesua suma queso amarillo y maíz. Más Tequeños, Nuggets y Mini Bandejita para los más pequeños.</p>
+          <h3 class="display" style="font-size:1.65rem;color:#E8A020;margin-bottom:8px;">Clasiquitas<br/>& Quesua</h3>
+          <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">300g de papas francesas con salchichas y salsas. La Quesua suma queso amarillo y maíz. Más Tequeños, Nuggets y Mini Bandejita para los más pequeños.</p>
         </div>
       </div>
     </div>
 
     <div style="text-align:center;margin-top:48px;" class="rv">
-      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7B1213,#4a0b0c);color:#F5E6C8;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;padding:16px 38px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowRed 2.5s ease-in-out infinite;">Hacer mi pedido ahora</a>
+      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#E8A020,#c87010);color:#1a0505;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;padding:16px 38px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowGold 2.5s ease-in-out infinite;">Hacer mi pedido ahora</a>
     </div>
   </div>
 </section>
@@ -504,7 +504,7 @@
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:52px;" class="rv">
       <div class="s-tag" style="color:rgba(245,230,200,0.7);">Combos especiales</div>
-      <h2 class="s-title">Combos que ya<br/><span>son favoritos</span></h2>
+      <h2 class="s-title">Combos que ya<br/><span style="color:#E8A020;">son favoritos</span></h2>
       <div class="bar bar-c"></div>
       <p class="condensed" style="font-size:1.05rem;color:var(--cream-dim);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;">
         Creados para compartir, para celebrar o simplemente para darte un gusto. Pregunta por los combos del día y las promos vigentes.
@@ -516,28 +516,28 @@
         onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
         <div class="ctag" style="margin-bottom:14px;">Para dos</div>
         <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Cuaima<br/>+ Perritos</h3>
-        <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">Hamburguesa completa más dos perritos calientes. Ideal para compartir sin quedarse corto.</p>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Hamburguesa completa más dos perritos calientes. Ideal para compartir sin quedarse corto.</p>
       </div>
       <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv d1"
         onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
         onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
         <div class="ctag" style="margin-bottom:14px;">El clásico</div>
         <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Chama<br/>+ La Catira</h3>
-        <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">Carne y pollo en el mismo pedido. El combo que más repiten las mesas de amigos.</p>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Carne y pollo en el mismo pedido. El combo que más repiten las mesas de amigos.</p>
       </div>
       <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv d2"
         onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
         onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
         <div class="ctag" style="margin-bottom:14px;">Para los atrevidos</div>
         <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Tóxica<br/>+ Pepito</h3>
-        <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">120g de carne más 120g de pollo, y un pepito con todo. Para los que en serio tienen hambre.</p>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">120g de carne más 120g de pollo, y un pepito con todo. Para los que en serio tienen hambre.</p>
       </div>
       <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv d3"
         onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
         onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
         <div class="ctag" style="margin-bottom:14px;">La reina</div>
         <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Queen<br/>+ Salchipapas</h3>
-        <p class="condensed" style="font-size:0.88rem;color:#4a1e10;line-height:1.5;">La fritica más pedida con 200g de pollo krispy y tequeyoyo, con salchipapas quesua.</p>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">La fritica más pedida con 200g de pollo krispy y tequeyoyo, con salchipapas quesua.</p>
       </div>
     </div>
     <div style="text-align:center;" class="rv">
