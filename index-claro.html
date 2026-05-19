@@ -10,12 +10,13 @@
     :root {
       --primary:      #7B1213;
       --primary-dark: #4a0b0c;
-      --primary-mid:  #9e1a1b;
       --gold:         #E8A020;
-      --gold-light:   #f5c84a;
+      --gold-dark:    #b87a10;
       --cream:        #F5E6C8;
-      --cream-dim:    rgba(245,230,200,0.75);
+      --cream-dark:   #e8d0a0;
       --brown:        #6B3A2A;
+      --text-dark:    #2a0e08;
+      --text-mid:     #4a1e10;
       --whatsapp:     #25D366;
     }
 
@@ -23,8 +24,8 @@
     html { scroll-behavior: smooth; }
 
     body {
-      background-color: #F5E6C8;
-      color: #2a0e08;
+      background-color: var(--cream);
+      color: var(--text-dark);
       font-family: 'Barlow', sans-serif;
       overflow-x: hidden;
     }
@@ -37,8 +38,8 @@
       50%      { box-shadow: 0 0 16px 5px #9e1a1b, 0 0 40px 10px rgba(123,18,19,0.5); }
     }
     @keyframes glowGold {
-      0%,100% { box-shadow: 0 0 8px 2px var(--gold), 0 0 22px 5px rgba(232,160,32,0.3); }
-      50%      { box-shadow: 0 0 16px 5px var(--gold-light), 0 0 40px 10px rgba(232,160,32,0.5); }
+      0%,100% { box-shadow: 0 0 8px 2px #E8A020, 0 0 22px 5px rgba(232,160,32,0.3); }
+      50%      { box-shadow: 0 0 16px 5px #f5c84a, 0 0 40px 10px rgba(232,160,32,0.5); }
     }
     @keyframes glowWA {
       0%,100% { box-shadow: 0 0 10px 3px #25D366, 0 0 28px 7px rgba(37,211,102,0.35); }
@@ -49,9 +50,22 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    .btn-cta {
+    .btn-red {
       display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      background: linear-gradient(135deg, var(--gold) 0%, #c87010 100%);
+      background: linear-gradient(135deg, #7B1213 0%, #4a0b0c 100%);
+      color: var(--cream);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 16px 38px; border-radius: 50px; border: none;
+      cursor: pointer; text-decoration: none; min-height: 52px;
+      transition: transform 0.2s, filter 0.2s;
+      animation: glowRed 2.5s ease-in-out infinite;
+    }
+    .btn-red:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.1); }
+
+    .btn-gold {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      background: linear-gradient(135deg, #E8A020 0%, #c87010 100%);
       color: #1a0505;
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 900; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
@@ -60,13 +74,20 @@
       transition: transform 0.2s, filter 0.2s;
       animation: glowGold 2.5s ease-in-out infinite;
     }
-    .btn-cta:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.1); }
-    .btn-outline {
-      background: transparent; color: var(--cream);
-      border: 2px solid rgba(245,230,200,0.6);
-      animation: glowGold 3s ease-in-out infinite;
+    .btn-gold:hover { transform: translateY(-3px) scale(1.03); filter: brightness(1.1); }
+
+    .btn-outline-red {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: #7B1213;
+      border: 2px solid #7B1213;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 16px 38px; border-radius: 50px;
+      cursor: pointer; text-decoration: none; min-height: 52px;
+      transition: transform 0.2s, background 0.2s;
+      animation: glowRed 3s ease-in-out infinite;
     }
-    .btn-outline:hover { background: rgba(245,230,200,0.07); }
+    .btn-outline-red:hover { background: rgba(123,18,19,0.07); transform: translateY(-3px); }
 
     .wa-float {
       position: fixed; bottom: 28px; right: 28px; z-index: 1000;
@@ -88,53 +109,23 @@
     section { padding: 90px 0; }
     .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
 
-    .s-tag {
-      font-family:'Barlow Condensed',sans-serif; font-size:0.72rem;
-      letter-spacing:0.28em; text-transform:uppercase;
-      color:#6B3A2A; opacity:0.9; margin-bottom:10px;
-    }
-    .s-title {
-      font-family:'Bebas Neue',sans-serif;
-      font-size: clamp(2.6rem, 6vw, 4.8rem);
-      line-height: 0.93; color: #2a0e08;
-    }
-    .s-title span { color: #7B1213; }
-    .bar { width:56px; height:3px; background:linear-gradient(90deg, #7B1213, #E8A020); border-radius:2px; margin:18px 0; }
-    .bar-c { margin:18px auto; }
+    /* Section tag variants */
+    .s-tag-brown { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:#6B3A2A; opacity:0.9; margin-bottom:10px; }
+    .s-tag-cream { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:rgba(245,230,200,0.75); margin-bottom:10px; }
+    .s-tag-gold  { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.28em; text-transform:uppercase; color:#E8A020; opacity:0.9; margin-bottom:10px; }
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      position: relative;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-      padding-top: 70px;
-    }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background-image: url('hero.png');
-      background-size: cover;
-      background-position: center 35%;
-      background-repeat: no-repeat;
-    }
-    .hero-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(
-        135deg,
-        rgba(245,230,200,0.90) 0%,
-        rgba(235,215,185,0.78) 35%,
-        rgba(200,160,100,0.50) 65%,
-        rgba(245,230,200,0.85) 100%
-      );
-    }
-    .hero-grid {
-      position:absolute; inset:0;
-      background-image:
-        linear-gradient(rgba(123,18,19,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(123,18,19,0.04) 1px, transparent 1px);
-      background-size: 55px 55px;
-    }
+    .s-title-dark  { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,6vw,4.8rem); line-height:0.93; color:#2a0e08; }
+    .s-title-cream { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.6rem,6vw,4.8rem); line-height:0.93; color:#F5E6C8; }
+
+    .bar-red  { width:56px; height:3px; background:linear-gradient(90deg,#7B1213,#E8A020); border-radius:2px; margin:18px 0; }
+    .bar-gold { width:56px; height:3px; background:linear-gradient(90deg,#E8A020,rgba(232,160,32,0.4)); border-radius:2px; margin:18px 0; }
+    .bar-c { margin-left:auto; margin-right:auto; }
+
+    /* HERO */
+    .hero { min-height:100vh; position:relative; display:flex; align-items:center; overflow:hidden; padding-top:70px; }
+    .hero-bg { position:absolute; inset:0; background-image:url('hero.png'); background-size:cover; background-position:center 35%; background-repeat:no-repeat; }
+    .hero-overlay { position:absolute; inset:0; background:linear-gradient(135deg, rgba(245,230,200,0.90) 0%, rgba(235,215,185,0.80) 35%, rgba(200,160,100,0.52) 65%, rgba(245,230,200,0.86) 100%); }
+    .hero-grid { position:absolute; inset:0; background-image:linear-gradient(rgba(123,18,19,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(123,18,19,0.04) 1px, transparent 1px); background-size:55px 55px; }
 
     .a1 { animation: fadeUp 0.75s 0.15s ease both; }
     .a2 { animation: fadeUp 0.75s 0.35s ease both; }
@@ -142,110 +133,66 @@
     .a4 { animation: fadeUp 0.75s 0.75s ease both; }
     .a5 { animation: fadeUp 0.75s 0.95s ease both; }
 
-    .rv { opacity: 0; }
-    .rv.on     { animation: fadeUp 0.7s ease forwards; }
-    .rv.d1.on  { animation: fadeUp 0.7s 0.1s ease forwards; }
-    .rv.d2.on  { animation: fadeUp 0.7s 0.2s ease forwards; }
-    .rv.d3.on  { animation: fadeUp 0.7s 0.3s ease forwards; }
+    .rv { opacity:0; }
+    .rv.on    { animation: fadeUp 0.7s ease forwards; }
+    .rv.d1.on { animation: fadeUp 0.7s 0.1s ease forwards; }
+    .rv.d2.on { animation: fadeUp 0.7s 0.2s ease forwards; }
+    .rv.d3.on { animation: fadeUp 0.7s 0.3s ease forwards; }
 
-    .prod-card {
-      background:rgba(74,11,12,0.3);
-      border:1px solid rgba(245,230,200,0.12);
-      border-radius:18px; overflow:hidden;
-      transition:transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    /* CARDS en beige */
+    .ben-card-light {
+      background:white; border:1px solid rgba(123,18,19,0.1); border-radius:14px;
+      padding:30px 22px; text-align:center; transition:all 0.3s;
     }
-    .prod-card:hover {
-      transform:translateY(-8px);
-      border-color:rgba(232,160,32,0.5);
-      box-shadow:0 24px 60px rgba(0,0,0,0.3);
-    }
-    .prod-card img { width:100%; height:220px; object-fit:cover; display:block; transition:transform 0.4s; }
-    .prod-card:hover img { transform:scale(1.05); }
+    .ben-card-light:hover { background:rgba(123,18,19,0.04); border-color:rgba(123,18,19,0.3); transform:translateY(-5px); box-shadow:0 12px 40px rgba(123,18,19,0.1); }
+    .ben-icon-red { width:54px; height:54px; border-radius:50%; background:rgba(123,18,19,0.07); border:1px solid rgba(123,18,19,0.2); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; }
+    .ben-icon-red svg { width:24px; height:24px; stroke:#7B1213; fill:none; stroke-width:1.8; }
 
-    .combo-row {
-      display:grid; grid-template-columns:1fr 1fr;
-      border-radius:18px; overflow:hidden;
-      border:1px solid rgba(123,18,19,0.12);
-      transition:border-color 0.3s, box-shadow 0.3s;
+    /* CARDS en borgoña — problema y productos */
+    .prob-card {
+      display:flex; align-items:flex-start; gap:16px; padding:22px;
+      border-radius:14px; background:#4a0b0c; border:1px solid rgba(245,230,200,0.15);
     }
-    .combo-row:hover {
-      border-color:rgba(123,18,19,0.35);
-      box-shadow:0 16px 50px rgba(123,18,19,0.12);
-    }
+    .prob-icon { min-width:36px; height:36px; border-radius:50%; background:rgba(232,160,32,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .prob-icon svg { width:16px; height:16px; stroke:#E8A020; fill:none; stroke-width:2.5; }
+
+    /* COMBO ROWS */
+    .combo-row { display:grid; grid-template-columns:1fr 1fr; border-radius:18px; overflow:hidden; border:1px solid rgba(245,230,200,0.15); transition:border-color 0.3s, box-shadow 0.3s; }
+    .combo-row:hover { border-color:rgba(232,160,32,0.5); box-shadow:0 16px 50px rgba(0,0,0,0.3); }
     .combo-img { width:100%; height:100%; min-height:260px; object-fit:cover; display:block; }
-    .combo-info {
-      padding:32px 28px;
-      background:rgba(74,11,12,0.55);
-      display:flex; flex-direction:column; justify-content:center; gap:12px;
-    }
-    .combo-name { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:#E8A020; line-height:1.05; }
-    .combo-desc { font-family:'Barlow Condensed',sans-serif; font-size:0.97rem; color:rgba(245,230,200,0.85); line-height:1.55; }
-    .ctag {
-      display:inline-block;
-      background:rgba(232,160,32,0.15); border:1px solid rgba(232,160,32,0.4);
-      color:#E8A020; font-family:'Barlow Condensed',sans-serif;
-      font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
-      padding:4px 14px; border-radius:50px; width:fit-content;
-    }
+    .combo-info-burg { padding:32px 28px; background:#4a0b0c; display:flex; flex-direction:column; justify-content:center; gap:12px; }
 
-    .ben-card {
-      background:white; border:1px solid rgba(123,18,19,0.1);
-      border-radius:14px; padding:30px 22px; text-align:center; transition:all 0.3s;
-    }
-    .ben-card:hover {
-      background:rgba(123,18,19,0.04); border-color:rgba(123,18,19,0.3);
-      transform:translateY(-5px);
-    }
-    .ben-icon {
-      width:54px; height:54px; border-radius:50%;
-      background:rgba(123,18,19,0.07); border:1px solid rgba(123,18,19,0.2);
-      display:flex; align-items:center; justify-content:center; margin:0 auto 18px;
-    }
-    .ben-icon svg { width:24px; height:24px; stroke:var(--gold); fill:none; stroke-width:1.8; }
+    /* PROD CARDS en borgoña */
+    .prod-card-burg { background:#4a0b0c; border:1px solid rgba(245,230,200,0.12); border-radius:18px; overflow:hidden; transition:transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
+    .prod-card-burg:hover { transform:translateY(-8px); border-color:rgba(232,160,32,0.5); box-shadow:0 24px 60px rgba(0,0,0,0.3); }
+    .prod-card-burg img { width:100%; height:220px; object-fit:cover; display:block; transition:transform 0.4s; }
+    .prod-card-burg:hover img { transform:scale(1.05); }
+    .prod-card-burg .info { padding:22px 20px; background:#4a0b0c; }
 
-    .tcard {
-      background:rgba(245,230,200,0.03); border:1px solid rgba(123,18,19,0.12);
-      border-radius:16px; padding:30px 26px 24px; position:relative;
-    }
-    .tcard::before {
-      content:'\201C'; position:absolute; top:10px; left:18px;
-      font-family:'Bebas Neue',sans-serif; font-size:5.5rem;
-      color:#7B1213; opacity:0.1; line-height:1;
-    }
+    .ctag-gold { display:inline-block; background:rgba(232,160,32,0.15); border:1px solid rgba(232,160,32,0.4); color:#E8A020; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; padding:4px 14px; border-radius:50px; width:fit-content; }
+    .ctag-red  { display:inline-block; background:rgba(123,18,19,0.08); border:1px solid rgba(123,18,19,0.25); color:#7B1213; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; padding:4px 14px; border-radius:50px; width:fit-content; }
 
-    .stat-n { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,5rem); color:var(--gold); line-height:1; }
+    /* TESTIMONIALES */
+    .tcard { background:white; border:1px solid rgba(123,18,19,0.1); border-radius:16px; padding:30px 26px 24px; position:relative; box-shadow:0 4px 20px rgba(123,18,19,0.06); }
+    .tcard::before { content:'\201C'; position:absolute; top:10px; left:18px; font-family:'Bebas Neue',sans-serif; font-size:5.5rem; color:#7B1213; opacity:0.1; line-height:1; }
 
-    .offer-bg {
-      background:linear-gradient(135deg,var(--primary-dark) 0%,#5a0d0e 50%,var(--primary-dark) 100%);
-      border-top:1px solid rgba(232,160,32,0.14); border-bottom:1px solid rgba(232,160,32,0.14);
-      position:relative; overflow:hidden;
-    }
-    .offer-bg::before {
-      content:''; position:absolute; top:-40%; left:-10%; width:60%; height:180%;
-      background:radial-gradient(ellipse, rgba(232,160,32,0.07), transparent 70%);
-      pointer-events:none;
-    }
+    .stat-n { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,5rem); color:#7B1213; line-height:1; }
 
-    .guar-circle {
-      width:130px; height:130px; border-radius:50%;
-      border:2px solid #7B1213; background:rgba(123,18,19,0.06);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      margin:0 auto 28px; animation:glowGold 3s ease-in-out infinite;
-    }
-    .guar-circle svg { width:44px; height:44px; stroke:var(--gold); fill:none; stroke-width:1.5; }
+    /* OFFER — rojo oscuro */
+    .offer-bg { background:#7B1213; position:relative; overflow:hidden; border-top:1px solid rgba(232,160,32,0.2); border-bottom:1px solid rgba(232,160,32,0.2); }
+    .offer-bg::before { content:''; position:absolute; top:-40%; left:-10%; width:60%; height:180%; background:radial-gradient(ellipse, rgba(232,160,32,0.1), transparent 70%); pointer-events:none; }
 
-    .cream-sec { background:var(--cream); }
-    .cream-sec .s-title { color:var(--primary-dark); }
-    .cream-sec .s-title span { color:var(--primary); }
-    .cream-sec .s-tag { color:var(--brown); }
+    /* COMBO CARDS en oferta */
+    .combo-card { background:rgba(245,230,200,0.08); border:1px solid rgba(245,230,200,0.18); border-radius:14px; padding:26px 22px; transition:all 0.3s; }
+    .combo-card:hover { border-color:rgba(232,160,32,0.6); background:rgba(245,230,200,0.14); }
 
-    .ig-card {
-      background:white;
-      border:1px solid rgba(123,18,19,0.15); border-radius:18px;
-      padding:40px 32px; text-align:center; max-width:440px; margin:0 auto;
-      transition:border-color 0.3s, transform 0.3s;
-    }
-    .ig-card:hover { border-color:rgba(232,160,32,0.45); transform:translateY(-4px); }
+    /* GARANTÍA */
+    .guar-circle { width:130px; height:130px; border-radius:50%; border:2px solid #7B1213; background:rgba(123,18,19,0.06); display:flex; align-items:center; justify-content:center; margin:0 auto 28px; animation:glowRed 3s ease-in-out infinite; }
+    .guar-circle svg { width:44px; height:44px; stroke:#7B1213; fill:none; stroke-width:1.5; }
+    .guar-item { padding:18px; border-radius:12px; background:rgba(123,18,19,0.05); border:1px solid rgba(123,18,19,0.12); }
+
+    /* DARK SECTIONS — autoridad */
+    .dark-sec { background:#4a0b0c; position:relative; overflow:hidden; }
 
     @media(max-width:768px){
       .combo-row { grid-template-columns:1fr; }
@@ -254,13 +201,13 @@
       .navbar { padding:10px 16px; }
       .two-col { grid-template-columns:1fr !important; gap:32px !important; }
       .hero { min-height:100svh; }
-      .hero-bg { background-position: center center; }
-      .btn-cta { font-size:0.9rem; padding:14px 24px; }
+      .hero-bg { background-position:center center; }
+      .btn-red, .btn-gold, .btn-outline-red { font-size:0.9rem; padding:14px 24px; }
     }
 
     ::-webkit-scrollbar { width:5px; }
-    ::-webkit-scrollbar-track { background:#F5E6C8; }
-    ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:3px; }
+    ::-webkit-scrollbar-track { background:var(--cream); }
+    ::-webkit-scrollbar-thumb { background:#7B1213; border-radius:3px; }
   </style>
 </head>
 <body>
@@ -268,14 +215,13 @@
 <!-- NAVBAR -->
 <nav class="navbar">
   <div style="display:flex;align-items:center;gap:12px;">
-    <img src="logo.jpg" alt="Logo Cory's Fast Food"
-      style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(232,160,32,0.45);" />
+    <img src="logo.jpg" alt="Logo" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(123,18,19,0.35);" />
     <div>
       <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:0.1em;color:#7B1213;line-height:1;">Cory's Fast Food</div>
       <div style="font-family:'Barlow Condensed',sans-serif;font-size:0.6rem;letter-spacing:0.22em;color:#6B3A2A;opacity:0.8;text-transform:uppercase;">@corysfast · Abierto desde 2025</div>
     </div>
   </div>
-  <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" style="display:inline-flex;align-items:center;background:linear-gradient(135deg,#7B1213,#4a0b0c);color:#F5E6C8;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:0.82rem;letter-spacing:0.1em;text-transform:uppercase;padding:12px 24px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowRed 2.5s ease-in-out infinite;">
+  <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" class="btn-red" style="font-size:0.82rem;padding:12px 24px;">
     Hacer Pedido
   </a>
 </nav>
@@ -297,45 +243,45 @@
         ya eres fan<br/>
         <span style="color:#b87a10;">de Cory's Fast.</span>
       </h1>
-      <div class="bar a3"></div>
+      <div class="bar-red a3"></div>
       <p class="a4 condensed" style="font-size:clamp(1rem,2.5vw,1.18rem);color:#4a1e10;line-height:1.65;max-width:450px;margin-bottom:34px;">
         Hamburguesas artesanales, pepitos, perritos y salchipapas preparados con ingredientes de primera. Sabor real, porciones que sí llenan.
       </p>
       <div class="a5" style="display:flex;flex-wrap:wrap;gap:14px;">
-        <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7B1213,#4a0b0c);color:#F5E6C8;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;padding:16px 38px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowRed 2.5s ease-in-out infinite;">Hacer mi pedido</a>
-        <a href="#productos" style="display:inline-flex;align-items:center;justify-content:center;background:transparent;color:#7B1213;border:2px solid #7B1213;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;padding:16px 38px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowRed 3s ease-in-out infinite;">Ver productos</a>
+        <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" class="btn-red">Hacer mi pedido</a>
+        <a href="#productos" class="btn-outline-red">Ver productos</a>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- 2. PARA QUIÉN -->
-<section style="background:#F5E6C8;">
+<!-- 2. PARA QUIÉN — beige -->
+<section style="background:var(--cream);">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:52px;" class="rv">
-      <div class="s-tag">Para quién es Cory's</div>
-      <h2 class="s-title">Para los que saben<br/><span>lo que quieren</span></h2>
-      <div class="bar bar-c"></div>
+      <div class="s-tag-brown">Para quién es Cory's</div>
+      <h2 class="s-title-dark">Para los que saben<br/><span style="color:#7B1213;">lo que quieren</span></h2>
+      <div class="bar-red bar-c"></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
-      <div class="ben-card rv">
-        <div class="ben-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <div class="ben-card-light rv">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
         <h3 class="condensed" style="font-weight:700;font-size:1.05rem;color:#2a0e08;margin-bottom:8px;">Familias</h3>
         <p style="font-size:0.86rem;color:#4a1e10;line-height:1.55;">Que buscan compartir algo rico en un ambiente cálido, sin complicaciones.</p>
       </div>
-      <div class="ben-card rv d1">
-        <div class="ben-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+      <div class="ben-card-light rv d1">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
         <h3 class="condensed" style="font-weight:700;font-size:1.05rem;color:#2a0e08;margin-bottom:8px;">Parejas</h3>
         <p style="font-size:0.86rem;color:#4a1e10;line-height:1.55;">Con ganas de un momento diferente alrededor de buena comida de verdad.</p>
       </div>
-      <div class="ben-card rv d2">
-        <div class="ben-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+      <div class="ben-card-light rv d2">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
         <h3 class="condensed" style="font-weight:700;font-size:1.05rem;color:#2a0e08;margin-bottom:8px;">Amigos</h3>
         <p style="font-size:0.86rem;color:#4a1e10;line-height:1.55;">Que se juntan a comer bien, reír y pedir la segunda ronda sin pensarlo.</p>
       </div>
-      <div class="ben-card rv d3">
-        <div class="ben-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="ben-card-light rv d3">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <h3 class="condensed" style="font-weight:700;font-size:1.05rem;color:#2a0e08;margin-bottom:8px;">Antojados</h3>
         <p style="font-size:0.86rem;color:#4a1e10;line-height:1.55;">Que exigen sabor auténtico, porciones generosas e ingredientes de primera.</p>
       </div>
@@ -344,47 +290,41 @@
 </section>
 
 
-<!-- 3. PROBLEMA -->
-<section style="background:#e8d0a0;position:relative;overflow:hidden;">
+<!-- 3. PROBLEMA — borgoña -->
+<section style="background:#7B1213;position:relative;overflow:hidden;">
   <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(0,0,0,0.2),transparent 60%);pointer-events:none;"></div>
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;" class="two-col">
       <div class="rv">
-        <div class="s-tag" style="color:rgba(245,230,200,0.7);">El problema real</div>
-        <h2 class="s-title" style="font-size:clamp(2.2rem,5vw,3.8rem);color:#F5E6C8;">
+        <div class="s-tag-cream">El problema real</div>
+        <h2 class="s-title-cream" style="font-size:clamp(2.2rem,5vw,3.8rem);">
           ¿Cansado de pagar caro<br/>por <span style="color:#E8A020;">porciones pequeñas</span><br/>y sabor mediocre?
         </h2>
-        <div class="bar"></div>
+        <div class="bar-gold"></div>
         <p class="condensed" style="font-size:1.05rem;color:rgba(245,230,200,0.85);line-height:1.65;">
           Muchos lugares cobran de más por comida sin alma, sin porción y sin ingredientes reales. Eso no tiene sentido cuando hay alternativas que sí cumplen.
         </p>
       </div>
       <div style="display:flex;flex-direction:column;gap:16px;" class="rv d2">
-        <div style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:14px;background:rgba(123,18,19,0.13);border:1px solid rgba(123,18,19,0.28);">
-          <div style="min-width:34px;height:34px;border-radius:50%;background:rgba(123,18,19,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </div>
+        <div class="prob-card">
+          <div class="prob-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
           <div>
-            <h4 class="condensed" style="font-weight:700;font-size:1rem;color:var(--cream);">Porciones que no convencen</h4>
-            <p style="font-size:0.83rem;margin-top:4px;color:rgba(245,230,200,0.52);">Pagas mucho y sigues con hambre. En Cory's eso simplemente no pasa.</p>
+            <h4 class="condensed" style="font-weight:700;font-size:1rem;color:#F5E6C8;">Porciones que no convencen</h4>
+            <p style="font-size:0.83rem;margin-top:4px;color:rgba(245,230,200,0.65);">Pagas mucho y sigues con hambre. En Cory's eso simplemente no pasa.</p>
           </div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:14px;background:rgba(123,18,19,0.13);border:1px solid rgba(123,18,19,0.28);">
-          <div style="min-width:34px;height:34px;border-radius:50%;background:rgba(123,18,19,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </div>
+        <div class="prob-card">
+          <div class="prob-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
           <div>
-            <h4 class="condensed" style="font-weight:700;font-size:1rem;color:var(--cream);">Ingredientes que saben a nada</h4>
-            <p style="font-size:0.83rem;margin-top:4px;color:rgba(245,230,200,0.52);">El sabor importa. Por eso solo usamos ingredientes frescos y de primera calidad.</p>
+            <h4 class="condensed" style="font-weight:700;font-size:1rem;color:#F5E6C8;">Ingredientes que saben a nada</h4>
+            <p style="font-size:0.83rem;margin-top:4px;color:rgba(245,230,200,0.65);">El sabor importa. Por eso solo usamos ingredientes frescos y de primera calidad.</p>
           </div>
         </div>
-        <div style="display:flex;align-items:flex-start;gap:16px;padding:20px;border-radius:14px;background:rgba(123,18,19,0.13);border:1px solid rgba(123,18,19,0.28);">
-          <div style="min-width:34px;height:34px;border-radius:50%;background:rgba(123,18,19,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-          </div>
+        <div class="prob-card">
+          <div class="prob-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
           <div>
-            <h4 class="condensed" style="font-weight:700;font-size:1rem;color:var(--cream);">Comida sin alma familiar</h4>
-            <p style="font-size:0.83rem;margin-top:4px;color:rgba(245,230,200,0.52);">Cory's es un negocio de familia. Cada plato sale con cariño y con el orgullo de quien pone su nombre en lo que hace.</p>
+            <h4 class="condensed" style="font-weight:700;font-size:1rem;color:#F5E6C8;">Comida sin alma familiar</h4>
+            <p style="font-size:0.83rem;margin-top:4px;color:rgba(245,230,200,0.65);">Cory's es un negocio de familia. Cada plato sale con cariño y el orgullo de quien pone su nombre en lo que hace.</p>
           </div>
         </div>
       </div>
@@ -393,57 +333,60 @@
 </section>
 
 
-<!-- 4. PRODUCTOS -->
-<section id="productos" style="background:#F5E6C8;">
+<!-- 4. PRODUCTOS — borgoña -->
+<section id="productos" style="background:#7B1213;">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:56px;" class="rv">
-      <div class="s-tag" style="color:rgba(245,230,200,0.7);">Nuestros productos</div>
-      <h2 class="s-title" style="color:#F5E6C8;">Lo que hacemos<br/><span style="color:#E8A020;">con orgullo</span></h2>
-      <div class="bar bar-c"></div>
-      <p class="condensed" style="font-size:1.05rem;color:var(--cream-dim);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;">
+      <div class="s-tag-cream">Nuestros productos</div>
+      <h2 class="s-title-cream">Lo que hacemos<br/><span style="color:#E8A020;">con orgullo</span></h2>
+      <div class="bar-gold bar-c"></div>
+      <p class="condensed" style="font-size:1.05rem;color:rgba(245,230,200,0.82);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;">
         Todo artesanal. Todo hecho al momento. Con ingredientes que puedes ver y sentir en cada mordisco.
       </p>
     </div>
 
+    <!-- Burguesitas -->
     <div class="combo-row rv" style="margin-bottom:24px;">
       <img class="combo-img" src="burger2.png" alt="Hamburguesas Cory's" />
-      <div class="combo-info">
-        <div class="ctag">Hamburguesas</div>
-        <div class="combo-name">Las Burguesitas<br/>& Friticas</div>
-        <p class="combo-desc">Carne o pollo crujiente con lechuga, tomate, papas francesas y las salsas que las hacen únicas. Nombres que ya son leyenda: La Cuaima, La Chama, La Morena, La Sifrina, La Catira, La Mamasita, La Empoderada y La Queen.</p>
+      <div class="combo-info-burg">
+        <div class="ctag-gold">Hamburguesas</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#E8A020;line-height:1.05;">Las Burguesitas<br/>& Friticas</div>
+        <p class="condensed" style="font-size:0.97rem;color:rgba(245,230,200,0.85);line-height:1.55;">Carne o pollo crujiente con lechuga, tomate, papas francesas y las salsas que las hacen únicas. Nombres que ya son leyenda: La Cuaima, La Chama, La Morena, La Sifrina, La Catira, La Mamasita, La Empoderada y La Queen.</p>
       </div>
     </div>
 
+    <!-- Puro Power -->
     <div class="combo-row rv" style="margin-bottom:48px;">
-      <div class="combo-info" style="background:rgba(232,220,180,0.6);">
-        <div class="ctag">Serie Premium</div>
-        <div class="combo-name">Puro Power</div>
-        <p class="combo-desc">Para los que necesitan más. 240g de carne o pollo con todo lo que las hace irresistibles. La Pana, La Potra, La Diva, La Caballota y la temida La Tóxica — carne y pollo juntos en una sola.</p>
+      <div class="combo-info-burg">
+        <div class="ctag-gold">Serie Premium</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#E8A020;line-height:1.05;">Puro Power</div>
+        <p class="condensed" style="font-size:0.97rem;color:rgba(245,230,200,0.85);line-height:1.55;">Para los que necesitan más. 240g de carne o pollo con todo lo que las hace irresistibles. La Pana, La Potra, La Diva, La Caballota y la temida La Tóxica — carne y pollo juntos en una sola.</p>
       </div>
       <img class="combo-img" src="chicken.png" alt="Puro Power Cory's" />
     </div>
 
+    <!-- 3 tarjetas -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;">
-      <div class="prod-card rv">
-        <img src="perrito.jpeg" alt="Perritos Calientes Cory's" />
-        <div style="padding:22px 20px;background:rgba(74,11,12,0.55);">
-          <div style="display:inline-block;background:rgba(232,160,32,0.15);border:1px solid rgba(232,160,32,0.4);color:#E8A020;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding:4px 14px;border-radius:50px;width:fit-content;margin-bottom:10px;">Perritos Calientes</div>
+      <div class="prod-card-burg rv">
+        <img src="perrito.jpeg" alt="Perritos Calientes" />
+        <div class="info">
+          <div class="ctag-gold" style="margin-bottom:10px;">Perritos Calientes</div>
           <h3 class="display" style="font-size:1.65rem;color:#E8A020;margin-bottom:8px;">El Mártir, El Chamo,<br/>El Azteca y más</h3>
           <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Salchicha wiener, polaca o alemana con ensalada, cebolla, papas y queso amarillo. El Polonés, El Germano y el Lleve también esperan por ti.</p>
         </div>
       </div>
-      <div class="prod-card rv d1">
+      <div class="prod-card-burg rv d1">
         <img src="pepito.jpeg" alt="Pepito Cory's" />
-        <div style="padding:22px 20px;background:rgba(74,11,12,0.45);">
-          <div style="display:inline-block;background:rgba(232,160,32,0.15);border:1px solid rgba(232,160,32,0.4);color:#E8A020;font-family:'Barlow Condensed',sans-serif;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;padding:4px 14px;border-radius:50px;width:fit-content;margin-bottom:10px;">Pepitos</div>
+        <div class="info">
+          <div class="ctag-gold" style="margin-bottom:10px;">Pepitos</div>
           <h3 class="display" style="font-size:1.65rem;color:#E8A020;margin-bottom:8px;">El Pepito<br/>de Cory's</h3>
           <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Carne, pollo o mixto con tocineta, maíz, queso amarillo, lechuga, tomate, papitas y salsas básicas. Una experiencia completa en cada bocado.</p>
         </div>
       </div>
-      <div class="prod-card rv d2">
+      <div class="prod-card-burg rv d2">
         <img src="grill.png" alt="Salchipapas Cory's" />
-        <div style="padding:22px 20px;background:rgba(74,11,12,0.55);">
-          <div class="ctag" style="margin-bottom:10px;">Salchipapas & Chamitos</div>
+        <div class="info">
+          <div class="ctag-gold" style="margin-bottom:10px;">Salchipapas & Chamitos</div>
           <h3 class="display" style="font-size:1.65rem;color:#E8A020;margin-bottom:8px;">Clasiquitas<br/>& Quesua</h3>
           <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">300g de papas francesas con salchichas y salsas. La Quesua suma queso amarillo y maíz. Más Tequeños, Nuggets y Mini Bandejita para los más pequeños.</p>
         </div>
@@ -451,150 +394,134 @@
     </div>
 
     <div style="text-align:center;margin-top:48px;" class="rv">
-      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#E8A020,#c87010);color:#1a0505;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;padding:16px 38px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowGold 2.5s ease-in-out infinite;">Hacer mi pedido ahora</a>
+      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" class="btn-gold">Hacer mi pedido ahora</a>
     </div>
   </div>
 </section>
 
 
-<!-- 5. BENEFICIOS -->
-<section class="cream-sec">
+<!-- 5. BENEFICIOS — beige -->
+<section style="background:var(--cream);">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:52px;" class="rv">
-      <div class="s-tag">Por qué Cory's</div>
-      <h2 class="s-title">Lo que nos hace<br/><span>diferentes</span></h2>
-      <div class="bar bar-c" style="background:linear-gradient(90deg,var(--primary),var(--brown));"></div>
+      <div class="s-tag-brown">Por qué Cory's</div>
+      <h2 class="s-title-dark">Lo que nos hace<br/><span style="color:#7B1213;">diferentes</span></h2>
+      <div class="bar-red bar-c"></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;">
-      <div style="text-align:center;padding:28px 18px;" class="rv">
-        <div style="width:50px;height:50px;border-radius:50%;background:rgba(123,18,19,0.1);border:1px solid rgba(123,18,19,0.22);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        </div>
-        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:var(--primary-dark);margin-bottom:8px;">Hecho con amor</h3>
-        <p style="font-size:0.83rem;color:rgba(30,8,8,0.62);line-height:1.55;">Somos una familia que pone su nombre en cada plato. No hay atajos cuando el orgullo está en juego.</p>
+      <div class="ben-card-light rv">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:#2a0e08;margin-bottom:8px;">Hecho con amor</h3>
+        <p style="font-size:0.83rem;color:#4a1e10;line-height:1.55;">Somos una familia que pone su nombre en cada plato. No hay atajos cuando el orgullo está en juego.</p>
       </div>
-      <div style="text-align:center;padding:28px 18px;" class="rv d1">
-        <div style="width:50px;height:50px;border-radius:50%;background:rgba(123,18,19,0.1);border:1px solid rgba(123,18,19,0.22);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:var(--primary-dark);margin-bottom:8px;">Ingredientes de primera</h3>
-        <p style="font-size:0.83rem;color:rgba(30,8,8,0.62);line-height:1.55;">Solo lo mejor entra a nuestra cocina. Cada sabor que sientes es intencional y con producto fresco.</p>
+      <div class="ben-card-light rv d1">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:#2a0e08;margin-bottom:8px;">Ingredientes de primera</h3>
+        <p style="font-size:0.83rem;color:#4a1e10;line-height:1.55;">Solo lo mejor entra a nuestra cocina. Cada sabor que sientes es intencional y con producto fresco.</p>
       </div>
-      <div style="text-align:center;padding:28px 18px;" class="rv d2">
-        <div style="width:50px;height:50px;border-radius:50%;background:rgba(123,18,19,0.1);border:1px solid rgba(123,18,19,0.22);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        </div>
-        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:var(--primary-dark);margin-bottom:8px;">Porciones generosas</h3>
-        <p style="font-size:0.83rem;color:rgba(30,8,8,0.62);line-height:1.55;">De 120g hasta 240g de proteína real, más papas que sí llenan. Aquí no te quedas con hambre.</p>
+      <div class="ben-card-light rv d2">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:#2a0e08;margin-bottom:8px;">Porciones generosas</h3>
+        <p style="font-size:0.83rem;color:#4a1e10;line-height:1.55;">De 120g hasta 240g de proteína real, más papas que sí llenan. Aquí no te quedas con hambre.</p>
       </div>
-      <div style="text-align:center;padding:28px 18px;" class="rv d3">
-        <div style="width:50px;height:50px;border-radius:50%;background:rgba(123,18,19,0.1);border:1px solid rgba(123,18,19,0.22);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg>
-        </div>
-        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:var(--primary-dark);margin-bottom:8px;">Pedido fácil por WhatsApp</h3>
-        <p style="font-size:0.83rem;color:rgba(30,8,8,0.62);line-height:1.55;">Sin apps ni registros. Escríbenos, elige tu combo y te atendemos al instante.</p>
+      <div class="ben-card-light rv d3">
+        <div class="ben-icon-red"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16.92z"/></svg></div>
+        <h3 class="condensed" style="font-weight:700;font-size:1rem;color:#2a0e08;margin-bottom:8px;">Pedido fácil por WhatsApp</h3>
+        <p style="font-size:0.83rem;color:#4a1e10;line-height:1.55;">Sin apps ni registros. Escríbenos, elige tu combo y te atendemos al instante.</p>
       </div>
     </div>
   </div>
 </section>
 
 
-<!-- 6. COMBOS -->
+<!-- 6. COMBOS — borgoña oscuro -->
 <section class="offer-bg">
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="text-align:center;margin-bottom:52px;" class="rv">
-      <div class="s-tag" style="color:rgba(245,230,200,0.7);">Combos especiales</div>
-      <h2 class="s-title">Combos que ya<br/><span style="color:#E8A020;">son favoritos</span></h2>
-      <div class="bar bar-c"></div>
-      <p class="condensed" style="font-size:1.05rem;color:var(--cream-dim);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;">
-        Creados para compartir, para celebrar o simplemente para darte un gusto. Pregunta por los combos del día y las promos vigentes.
+      <div class="s-tag-gold">Combos especiales</div>
+      <h2 class="s-title-cream">Combos que ya<br/><span style="color:#E8A020;">son favoritos</span></h2>
+      <div class="bar-gold bar-c"></div>
+      <p class="condensed" style="font-size:1.05rem;color:rgba(245,230,200,0.82);margin-top:8px;max-width:480px;margin-left:auto;margin-right:auto;">
+        Creados para compartir, para celebrar o simplemente para darte un gusto. Pregunta por los combos del día.
       </p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-bottom:44px;">
-      <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv"
-        onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
-        onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
-        <div class="ctag" style="margin-bottom:14px;">Para dos</div>
-        <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Cuaima<br/>+ Perritos</h3>
-        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Hamburguesa completa más dos perritos calientes. Ideal para compartir sin quedarse corto.</p>
+      <div class="combo-card rv">
+        <div class="ctag-gold" style="margin-bottom:14px;">Para dos</div>
+        <h3 class="display" style="font-size:1.75rem;color:#F5E6C8;line-height:1;margin-bottom:10px;">La Cuaima<br/>+ Perritos</h3>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.78);line-height:1.5;">Hamburguesa completa más dos perritos calientes. Ideal para compartir sin quedarse corto.</p>
       </div>
-      <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv d1"
-        onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
-        onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
-        <div class="ctag" style="margin-bottom:14px;">El clásico</div>
-        <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Chama<br/>+ La Catira</h3>
-        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">Carne y pollo en el mismo pedido. El combo que más repiten las mesas de amigos.</p>
+      <div class="combo-card rv d1">
+        <div class="ctag-gold" style="margin-bottom:14px;">El clásico</div>
+        <h3 class="display" style="font-size:1.75rem;color:#F5E6C8;line-height:1;margin-bottom:10px;">La Chama<br/>+ La Catira</h3>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.78);line-height:1.5;">Carne y pollo en el mismo pedido. El combo que más repiten las mesas de amigos.</p>
       </div>
-      <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv d2"
-        onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
-        onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
-        <div class="ctag" style="margin-bottom:14px;">Para los atrevidos</div>
-        <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Tóxica<br/>+ Pepito</h3>
-        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">120g de carne más 120g de pollo, y un pepito con todo. Para los que en serio tienen hambre.</p>
+      <div class="combo-card rv d2">
+        <div class="ctag-gold" style="margin-bottom:14px;">Para los atrevidos</div>
+        <h3 class="display" style="font-size:1.75rem;color:#F5E6C8;line-height:1;margin-bottom:10px;">La Tóxica<br/>+ Pepito</h3>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.78);line-height:1.5;">120g de carne más 120g de pollo, y un pepito con todo. Para los que en serio tienen hambre.</p>
       </div>
-      <div style="background:rgba(245,230,200,0.04);border:1px solid rgba(123,18,19,0.12);border-radius:14px;padding:26px 22px;transition:all 0.3s;" class="rv d3"
-        onmouseover="this.style.borderColor='rgba(232,160,32,0.4)';this.style.background='rgba(123,18,19,0.25)'"
-        onmouseout="this.style.borderColor='rgba(245,230,200,0.25)';this.style.background='rgba(245,230,200,0.12)'">
-        <div class="ctag" style="margin-bottom:14px;">La reina</div>
-        <h3 class="display" style="font-size:1.75rem;color:var(--cream);line-height:1;margin-bottom:10px;">La Queen<br/>+ Salchipapas</h3>
-        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.82);line-height:1.5;">La fritica más pedida con 200g de pollo krispy y tequeyoyo, con salchipapas quesua.</p>
+      <div class="combo-card rv d3">
+        <div class="ctag-gold" style="margin-bottom:14px;">La reina</div>
+        <h3 class="display" style="font-size:1.75rem;color:#F5E6C8;line-height:1;margin-bottom:10px;">La Queen<br/>+ Salchipapas</h3>
+        <p class="condensed" style="font-size:0.88rem;color:rgba(245,230,200,0.78);line-height:1.5;">La fritica más pedida con 200g de pollo krispy y tequeyoyo, con salchipapas quesua.</p>
       </div>
     </div>
     <div style="text-align:center;" class="rv">
-      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20saber%20los%20combos%20disponibles%20hoy" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#E8A020,#c87010);color:#1a0505;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1rem;letter-spacing:0.1em;text-transform:uppercase;padding:16px 38px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowGold 2.5s ease-in-out infinite;">Preguntar por los combos del día</a>
+      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20saber%20los%20combos%20disponibles%20hoy" target="_blank" class="btn-gold">Preguntar por los combos del día</a>
     </div>
   </div>
 </section>
 
 
-<!-- 7. TESTIMONIOS -->
-<section style="background:#F5E6C8;">
+<!-- 7. TESTIMONIOS — beige oscuro -->
+<section style="background:var(--cream-dark);">
   <div class="wrap">
     <div style="text-align:center;margin-bottom:52px;" class="rv">
-      <div class="s-tag">Lo que dicen nuestros fans</div>
-      <h2 class="s-title">Ellos ya<br/><span>mordieron primero</span></h2>
-      <div class="bar bar-c"></div>
+      <div class="s-tag-brown">Lo que dicen nuestros fans</div>
+      <h2 class="s-title-dark">Ellos ya<br/><span style="color:#7B1213;">mordieron primero</span></h2>
+      <div class="bar-red bar-c"></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:20px;">
       <div class="tcard rv">
         <div style="display:flex;gap:3px;margin-bottom:16px;padding-top:8px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <p class="condensed" style="font-size:0.98rem;color:#4a1e10;line-height:1.6;margin-bottom:20px;">La Morena es lo mejor que he probado por aquí. La porción es enorme y el tequeyoyo le da un sabor único. Ya soy fan desde la primera vez.</p>
         <div style="display:flex;align-items:center;gap:12px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:var(--cream);">ML</div>
+          <div style="width:36px;height:36px;border-radius:50%;background:#7B1213;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:#F5E6C8;">ML</div>
           <div><p class="condensed" style="font-weight:700;font-size:0.92rem;color:#2a0e08;">María L.</p><p style="font-size:0.72rem;color:#9e6347;">Cliente frecuente</p></div>
         </div>
       </div>
       <div class="tcard rv d1">
         <div style="display:flex;gap:3px;margin-bottom:16px;padding-top:8px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <p class="condensed" style="font-size:0.98rem;color:#4a1e10;line-height:1.6;margin-bottom:20px;">Pedí La Tóxica y quedé completamente impresionado. Carne y pollo juntos, con todo encima. Eso sí es generosidad de verdad.</p>
         <div style="display:flex;align-items:center;gap:12px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:var(--cream);">CR</div>
+          <div style="width:36px;height:36px;border-radius:50%;background:#7B1213;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:#F5E6C8;">CR</div>
           <div><p class="condensed" style="font-weight:700;font-size:0.92rem;color:#2a0e08;">Carlos R.</p><p style="font-size:0.72rem;color:#9e6347;">Fanático de La Tóxica</p></div>
         </div>
       </div>
       <div class="tcard rv d2">
         <div style="display:flex;gap:3px;margin-bottom:16px;padding-top:8px;">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="var(--gold)" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="#E8A020" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
         </div>
         <p class="condensed" style="font-size:0.98rem;color:#4a1e10;line-height:1.6;margin-bottom:20px;">Llevé a mi familia y todos quedaron contentos. Las salchipapas quesua son adictivas. Se nota que es un negocio familiar, se siente el cariño en cada plato.</p>
         <div style="display:flex;align-items:center;gap:12px;">
-          <div style="width:36px;height:36px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:var(--cream);">AP</div>
+          <div style="width:36px;height:36px;border-radius:50%;background:#7B1213;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;color:#F5E6C8;">AP</div>
           <div><p class="condensed" style="font-weight:700;font-size:0.92rem;color:#2a0e08;">Ana P.</p><p style="font-size:0.72rem;color:#9e6347;">Visita en familia</p></div>
         </div>
       </div>
@@ -603,37 +530,37 @@
 </section>
 
 
-<!-- 8. AUTORIDAD -->
-<section style="background:#e8d0a0;position:relative;overflow:hidden;">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(123,18,19,0.2),transparent 70%);pointer-events:none;"></div>
+<!-- 8. AUTORIDAD — borgoña oscuro -->
+<section class="dark-sec">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(232,160,32,0.06),transparent 70%);pointer-events:none;"></div>
   <div class="wrap" style="position:relative;z-index:1;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;" class="two-col">
       <div class="rv">
-        <div class="s-tag">Nuestra historia</div>
-        <h2 class="s-title" style="font-size:clamp(2.2rem,5vw,3.8rem);">
-          Un negocio de familia<br/>con <span>sabor propio</span>
+        <div class="s-tag-cream">Nuestra historia</div>
+        <h2 class="s-title-cream" style="font-size:clamp(2.2rem,5vw,3.8rem);">
+          Un negocio de familia<br/>con <span style="color:#E8A020;">sabor propio</span>
         </h2>
-        <div class="bar"></div>
-        <p class="condensed" style="font-size:1.05rem;color:#4a1e10;line-height:1.65;">
+        <div class="bar-gold"></div>
+        <p class="condensed" style="font-size:1.05rem;color:rgba(245,230,200,0.82);line-height:1.65;">
           Cory's Fast Food nació con una sola misión: darle a cada cliente sabor real, ingredientes de primera, porciones que sí llenan y el trato cálido que solo una familia puede dar. Abiertos al público desde 2025, ya con una comunidad fiel que regresa una y otra vez.
         </p>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;" class="rv d2">
-        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.03);border:1px solid rgba(123,18,19,0.12);border-radius:14px;">
-          <div class="stat-n" style="color:#7B1213;">2025</div>
-          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:#4a1e10;">Abiertos al público</p>
+        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.06);border:1px solid rgba(245,230,200,0.12);border-radius:14px;">
+          <div class="stat-n" style="color:#E8A020;">2025</div>
+          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:rgba(245,230,200,0.55);">Abiertos al público</p>
         </div>
-        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.03);border:1px solid rgba(123,18,19,0.12);border-radius:14px;">
-          <div class="stat-n" style="color:#7B1213;">20+</div>
-          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:#4a1e10;">Opciones en el menú</p>
+        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.06);border:1px solid rgba(245,230,200,0.12);border-radius:14px;">
+          <div class="stat-n" style="color:#E8A020;">20+</div>
+          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:rgba(245,230,200,0.55);">Opciones en el menú</p>
         </div>
-        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.03);border:1px solid rgba(123,18,19,0.12);border-radius:14px;">
-          <div class="stat-n" style="color:#7B1213;">100%</div>
-          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:#4a1e10;">Artesanal y fresco</p>
+        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.06);border:1px solid rgba(245,230,200,0.12);border-radius:14px;">
+          <div class="stat-n" style="color:#E8A020;">100%</div>
+          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:rgba(245,230,200,0.55);">Artesanal y fresco</p>
         </div>
-        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.03);border:1px solid rgba(123,18,19,0.12);border-radius:14px;">
-          <div class="stat-n" style="color:#7B1213;">1</div>
-          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:#4a1e10;">Familia detrás de cada plato</p>
+        <div style="text-align:center;padding:28px 14px;background:rgba(245,230,200,0.06);border:1px solid rgba(245,230,200,0.12);border-radius:14px;">
+          <div class="stat-n" style="color:#E8A020;">1</div>
+          <p class="condensed" style="font-size:0.82rem;margin-top:6px;color:rgba(245,230,200,0.55);">Familia detrás de cada plato</p>
         </div>
       </div>
     </div>
@@ -641,29 +568,29 @@
 </section>
 
 
-<!-- 9. GARANTÍA -->
-<section style="background:#F5E6C8;">
+<!-- 9. GARANTÍA — beige -->
+<section style="background:var(--cream);">
   <div class="wrap" style="text-align:center;">
     <div class="rv">
       <div class="guar-circle">
         <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
       </div>
-      <div class="s-tag" style="text-align:center;">Nuestra promesa</div>
-      <h2 class="s-title" style="text-align:center;">Tu satisfacción es<br/><span>nuestra prioridad</span></h2>
-      <div class="bar bar-c"></div>
+      <div class="s-tag-brown" style="text-align:center;">Nuestra promesa</div>
+      <h2 class="s-title-dark" style="text-align:center;">Tu satisfacción es<br/><span style="color:#7B1213;">nuestra prioridad</span></h2>
+      <div class="bar-red bar-c"></div>
       <p class="condensed" style="font-size:1.08rem;color:#4a1e10;line-height:1.65;max-width:540px;margin:0 auto 40px;">
         En Cory's te prometemos que cada pedido sale recién preparado, con los ingredientes acordados y la porción completa. Si algo no está bien, lo resolvemos de inmediato. Tu confianza vale más que cualquier venta.
       </p>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;max-width:660px;margin:0 auto;">
-        <div style="padding:18px;border-radius:12px;background:rgba(123,18,19,0.05);border:1px solid rgba(123,18,19,0.12);">
+        <div class="guar-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B1213" stroke-width="2.2" style="margin:0 auto 10px;display:block;"><polyline points="20 6 9 17 4 12"/></svg>
           <p class="condensed" style="font-weight:700;font-size:0.88rem;color:#2a0e08;">Ingredientes frescos siempre</p>
         </div>
-        <div style="padding:18px;border-radius:12px;background:rgba(123,18,19,0.05);border:1px solid rgba(123,18,19,0.12);">
+        <div class="guar-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B1213" stroke-width="2.2" style="margin:0 auto 10px;display:block;"><polyline points="20 6 9 17 4 12"/></svg>
           <p class="condensed" style="font-weight:700;font-size:0.88rem;color:#2a0e08;">Atención rápida por WhatsApp</p>
         </div>
-        <div style="padding:18px;border-radius:12px;background:rgba(123,18,19,0.05);border:1px solid rgba(123,18,19,0.12);">
+        <div class="guar-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7B1213" stroke-width="2.2" style="margin:0 auto 10px;display:block;"><polyline points="20 6 9 17 4 12"/></svg>
           <p class="condensed" style="font-weight:700;font-size:0.88rem;color:#2a0e08;">Porciones exactas y generosas</p>
         </div>
@@ -673,34 +600,34 @@
 </section>
 
 
-<!-- 10. CTA FINAL -->
-<section style="background:#e8d0a0;position:relative;overflow:hidden;text-align:center;">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(123,18,19,0.3),transparent 65%);pointer-events:none;"></div>
+<!-- 10. CTA FINAL — beige oscuro -->
+<section style="background:var(--cream-dark);position:relative;overflow:hidden;text-align:center;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(123,18,19,0.08),transparent 65%);pointer-events:none;"></div>
   <div class="wrap" style="position:relative;z-index:1;">
     <div class="rv">
-      <div class="s-tag">Ya tienes antojo</div>
-      <h2 class="s-title" style="font-size:clamp(3rem,9vw,6.8rem);">
-        ¿Listo para<br/><span>tu pedido?</span>
+      <div class="s-tag-brown">Ya tienes antojo</div>
+      <h2 class="s-title-dark" style="font-size:clamp(3rem,9vw,6.8rem);">
+        ¿Listo para<br/><span style="color:#7B1213;">tu pedido?</span>
       </h2>
-      <div class="bar bar-c"></div>
+      <div class="bar-red bar-c"></div>
       <p class="condensed" style="font-size:1.15rem;color:#4a1e10;line-height:1.6;max-width:460px;margin:0 auto 40px;">
         Escríbenos por WhatsApp, cuéntanos lo que quieres y te atendemos al instante. Desde el primer mordisco, ya eres fan de Cory's Fast.
       </p>
-      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7B1213,#4a0b0c);color:#F5E6C8;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:1.05rem;letter-spacing:0.1em;text-transform:uppercase;padding:18px 50px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowRed 2.5s ease-in-out infinite;">
+      <a href="https://wa.me/584120367308?text=¡Hola!%20Quiero%20hacer%20un%20pedido%20en%20Cory's%20Fast%20Food" target="_blank" class="btn-red" style="font-size:1.05rem;padding:18px 50px;">
         Hacer mi pedido por WhatsApp
       </a>
       <p style="font-size:0.72rem;margin-top:12px;color:rgba(42,14,8,0.4);">+58 412-0367308 · Atención inmediata</p>
     </div>
     <div style="margin-top:80px;" class="rv">
-      <div class="s-tag">Síguenos en redes</div>
+      <div class="s-tag-brown">Síguenos en redes</div>
       <h3 class="display" style="font-size:2.3rem;color:#2a0e08;margin-bottom:28px;">
-        Únete a la comunidad <span style="color:var(--gold);"" style="color:#7B1213;">@corysfast</span>
+        Únete a la comunidad <span style="color:#7B1213;">@corysfast</span>
       </h3>
-      <div class="ig-card">
+      <div style="background:white;border:1px solid rgba(123,18,19,0.15);border-radius:18px;padding:40px 32px;text-align:center;max-width:440px;margin:0 auto;box-shadow:0 8px 30px rgba(123,18,19,0.08);">
         <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#7B1213" stroke-width="1.5" style="margin:0 auto 16px;display:block;"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
         <h4 class="condensed" style="font-weight:700;font-size:1.25rem;color:#2a0e08;margin-bottom:8px;">@corysfast</h4>
         <p style="font-size:0.86rem;color:#4a1e10;line-height:1.55;margin-bottom:24px;">Fotos del menú, novedades, promos y puro sabor. Síguenos y sé el primero en enterarte de todo.</p>
-        <a href="https://www.instagram.com/corysfast" target="_blank" style="display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#7B1213,#4a0b0c);color:#F5E6C8;font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:0.88rem;letter-spacing:0.1em;text-transform:uppercase;padding:13px 30px;border-radius:50px;text-decoration:none;min-height:52px;animation:glowRed 2.5s ease-in-out infinite;">Seguir en Instagram</a>
+        <a href="https://www.instagram.com/corysfast" target="_blank" class="btn-red" style="font-size:0.88rem;padding:13px 30px;">Seguir en Instagram</a>
       </div>
     </div>
   </div>
@@ -709,10 +636,10 @@
 
 <!-- FOOTER -->
 <footer style="background:#4a0b0c;border-top:1px solid rgba(232,160,32,0.15);padding:36px 24px;text-align:center;">
-  <img src="logo.jpg" alt="Logo Cory's" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block;border:1.5px solid rgba(232,160,32,0.28);" />
-  <p class="display" style="font-size:1.45rem;color:var(--gold);letter-spacing:0.12em;">CORY'S FAST FOOD</p>
-  <p class="condensed" style="font-size:0.78rem;margin-top:6px;color:rgba(245,230,200,0.32);">Desde el primer mordisco, ya eres fan. · Abierto al público desde 2025</p>
-  <p style="font-size:0.68rem;margin-top:8px;color:rgba(245,230,200,0.18);">+58 412-0367308 · @corysfast</p>
+  <img src="logo.jpg" alt="Logo Cory's" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block;border:1.5px solid rgba(232,160,32,0.35);" />
+  <p class="display" style="font-size:1.45rem;color:#E8A020;letter-spacing:0.12em;">CORY'S FAST FOOD</p>
+  <p class="condensed" style="font-size:0.78rem;margin-top:6px;color:rgba(245,230,200,0.4);">Desde el primer mordisco, ya eres fan. · Abierto al público desde 2025</p>
+  <p style="font-size:0.68rem;margin-top:8px;color:rgba(245,230,200,0.2);">+58 412-0367308 · @corysfast</p>
   <p style="font-size:0.6rem;margin-top:6px;color:rgba(245,230,200,0.1);">© 2025 Cory's Fast Food — Todos los derechos reservados</p>
 </footer>
 
