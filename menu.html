@@ -7,10 +7,11 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    .corys-category-scroll::-webkit-scrollbar {
+    /* Ocultar barra de scroll para efecto limpio en móviles */
+    .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
-    .corys-category-scroll {
+    .no-scrollbar {
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
@@ -18,206 +19,320 @@
 </head>
 <body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
 
-  <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-[0_8px_30px_rgba(0,0,0,.18)]" style="background-color: rgba(78,17,17,.97)">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6 sm:py-3">
-      <div class="flex min-w-0 items-center gap-3">
-        <a href="index.html" class="flex shrink-0 items-center justify-center rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 p-2 text-[#F5E6C8] transition hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313]">
-          <i class="fa-solid fa-arrow-left text-sm"></i>
-        </a>
-        <img src="logo.webp" alt="Logo de Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-[0_0_18px_rgba(232,160,32,.20)] sm:h-14 sm:w-14" onerror="this.src='https://via.placeholder.com/50'" />
+  <!-- HEADER CON BOTÓN DE REGRESO -->
+  <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
+      
+      <!-- BOTÓN VOLVER A LANDING -->
+      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313]">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="hidden sm:inline">Volver</span>
+      </a>
+
+      <!-- LOGO Y TÍTULO -->
+      <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-md" onerror="this.src='https://via.placeholder.com/50'" />
         <div class="min-w-0">
-          <p class="truncate text-[10px] font-bold uppercase tracking-[0.28em] text-[#E8A020] sm:text-xs">
-            Cory's Fast Food
-          </p>
-          <h1 class="mt-0.5 truncate text-base font-black uppercase leading-none text-[#F5E6C8] sm:text-2xl">
-            Menú Interactivo
-          </h1>
+          <p class="truncate text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8A020]">Cory's Fast Food</p>
+          <h1 class="truncate text-sm font-black uppercase leading-none text-[#F5E6C8] sm:text-xl">Menú Interactivo</h1>
         </div>
       </div>
 
-      <button type="button" onclick="setIsCartOpen(true)" class="hidden shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-5 py-3 text-xs font-black uppercase tracking-wider text-[#F5E6C8] shadow-[0_0_22px_rgba(232,160,32,.10)] transition hover:border-[#E8A020] hover:bg-[#8A1617] sm:inline-flex">
+      <!-- VER PEDIDO -->
+      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] sm:px-4 sm:py-2.5">
         <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
-        Ver pedido
+        <span class="hidden sm:inline">Ver pedido</span>
       </button>
+
     </div>
   </header>
 
-  <section class="border-b border-[#E8A020]/15 bg-[#171313]/35">
+  <!-- BARRA DE CATEGORÍAS CON CORTE VISUAL -->
+  <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/20 bg-[#171313]/95 backdrop-blur-md">
     <div class="relative mx-auto max-w-6xl">
-      <div class="corys-category-scroll overflow-x-auto px-4 py-4 pr-10 sm:px-6 sm:pr-12">
-        <div class="flex min-w-max gap-2.5" id="categories-container"></div>
+      <!-- Muestra el borde cortado de la siguiente categoría para invitar a deslizar -->
+      <div class="no-scrollbar overflow-x-auto px-4 py-3 sm:px-6">
+        <div class="flex min-w-max gap-3 pr-6" id="categories-bar"></div>
       </div>
 
-      <div class="pointer-events-none absolute inset-y-0 right-0 flex w-16 items-center justify-end bg-gradient-to-l from-[#100c0c] via-[#100c0c]/70 to-transparent pr-2">
-        <i class="fa-solid fa-chevron-right text-sm text-[#E8A020] animate-pulse"></i>
-      </div>
+      <!-- Sombreante sutil al borde derecho que insinúa más contenido -->
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#171313] to-transparent"></div>
     </div>
   </section>
 
+  <!-- LISTA DE PRODUCTOS -->
   <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
     <div class="mb-3 flex items-end justify-between gap-4 sm:mb-6">
       <div>
-        <p id="active-category-title" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">
-          Burguesitas
-        </p>
-        <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">
-          Elige tu favorito
-        </h2>
+        <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Burguesitas</p>
+        <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
         <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
       </div>
-
-      <p id="options-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">
-        0 opciones
-      </p>
+      <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">0 opciones</p>
     </div>
 
-    <div id="products-container"></div>
+    <div id="products-grid" class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3"></div>
   </main>
 
+  <!-- BARRA FLOTANTE INFERIOR DE PEDIDO -->
   <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
-    <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-[0_-10px_34px_rgba(0,0,0,.30)] backdrop-blur-xl">
-      <button type="button" onclick="setIsCartOpen(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
+    <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
+      <button onclick="toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
         <div class="flex min-w-0 items-center gap-2">
           <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313]">
-            <i class="fa-solid fa-bag-shopping text-sm"></i>
-            <span id="badge-count" class="hidden absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313]">0</span>
+            <i class="fa-solid fa-basket-shopping"></i>
+            <span id="badge-count" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313]">0</span>
           </div>
-          <p id="bar-item-label" class="truncate text-xs font-black text-[#F5E6C8]">
-            Tu pedido está vacío
-          </p>
+          <p id="bottom-cart-label" class="truncate text-xs font-black text-[#F5E6C8]">Tu pedido está vacío</p>
         </div>
-        <span id="bar-total-price" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">
-          $0.00
-        </span>
+        <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
       </button>
 
-      <button type="button" onclick="orderOnWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
-        <i class="fa-solid fa-circle-dot text-xs"></i>
+      <button onclick="sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
+        <i class="fa-brands fa-whatsapp text-sm"></i>
         <span class="hidden sm:inline">Pedir por </span>WhatsApp
       </button>
     </div>
   </div>
 
+  <!-- MODAL DE DETALLE DEL PEDIDO (CARRITO) -->
   <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
-    <section class="max-h-[88vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/20 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
+    <div class="max-h-[88vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/20 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
         <div>
           <h2 class="text-xl font-black uppercase text-[#F5E6C8]">Tu pedido</h2>
           <p class="text-xs font-medium text-[#F5E6C8]/45">Revisa cantidades antes de enviarlo.</p>
         </div>
-        <button type="button" onclick="setIsCartOpen(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
+        <button onclick="toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
 
-      <div id="modal-cart-body" class="max-h-[55vh] overflow-y-auto p-5"></div>
+      <div id="modal-cart-items" class="max-h-[55vh] overflow-y-auto p-5 space-y-3"></div>
 
       <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
         <div class="mb-4 flex items-center justify-between">
           <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total a pagar</span>
-          <span id="modal-total-price" class="text-2xl font-black text-[#E8A020]">$0.00</span>
+          <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
         </div>
-
-        <button type="button" onclick="orderOnWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
-          <i class="fa-solid fa-check text-lg"></i>
+        <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
+          <i class="fa-solid fa-check"></i>
           Confirmar pedido por WhatsApp
         </button>
       </div>
-    </section>
+    </div>
   </div>
 
   <script>
-    const categories = [
-      "Burguesitas", "Friticas", "Chamitos", "Puro Power",
-      "Perritos", "Salchipapas", "Para tomar", "Pepitos", "Promos"
-    ];
-
-    const categoryIcons = {
-      "Burguesitas": "fa-burger",
-      "Friticas": "fa-drumstick-bite",
-      "Chamitos": "fa-baby",
-      "Puro Power": "fa-fire",
-      "Perritos": "fa-utensils",
-      "Salchipapas": "fa-[#171313] fa-kitchen-set",
-      "Para tomar": "fa-wine-glass-empty",
-      "Pepitos": "fa-burger",
-      "Promos": "fa-tag"
-    };
-
     const products = [
-      { id: "burguesitas-la-cuaima", category: "Burguesitas", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 6.2 },
-      { id: "burguesitas-la-chama", category: "Burguesitas", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 8.8 },
-      { id: "burguesitas-la-morena", category: "Burguesitas", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft, tocineta, coronada con un tequeyoyo + 100grs de papas francesas.", price: 10.1 },
-      { id: "burguesitas-la-sifrina", category: "Burguesitas", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 5.2 },
-      { id: "burguesitas-la-catira", category: "Burguesitas", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 7.8 },
-
-      { id: "friticas-mamasita", category: "Friticas", name: "Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 8.1 },
-      { id: "friticas-la-empoderada", category: "Friticas", name: "La Empoderada", description: "200grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 9.6 },
-      { id: "friticas-la-queen", category: "Friticas", name: "La Queen", description: "200grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta, coronada con un tequeyoyo + 100grs de papas francesas.", price: 11 },
-
-      { id: "chamitos-racion-de-tequenos", category: "Chamitos", name: "Ración de Tequeños", description: "5 unidades.", price: 2 },
-      { id: "chamitos-racion-de-nuggets", category: "Chamitos", name: "Ración de Nuggets", description: "5 unidades + 80grs de papas.", price: null },
-      { id: "chamitos-mini-bandejita", category: "Chamitos", name: "Mini Bandejita", description: "4 tequeños, 4 nuggets + 100grs de papas.", price: null },
-
-      { id: "puro-power-la-pana", category: "Puro Power", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 9.7 },
-      { id: "puro-power-la-potra", category: "Puro Power", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 12.3 },
-      { id: "puro-power-la-diva", category: "Puro Power", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 7.8 },
-      { id: "puro-power-la-caballota", category: "Puro Power", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 10.4 },
-      { id: "puro-power-la-toxica", category: "Puro Power", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 11.4 },
-
-      { id: "perritos-el-martir", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 2.6 },
-      { id: "perritos-el-chamo", category: "Perritos", name: "El Chamo", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo, facilitas kraft, tocineta y salsas básicas.", price: 4.9 },
-      { id: "perritos-el-azteca", category: "Perritos", name: "El Azteca", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo, maíz dulce y salsas básicas.", price: 3.4 },
-      { id: "perritos-el-polones", category: "Perritos", name: "El Polonés", description: "Salchicha polaca, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
-      { id: "perritos-el-germano", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
-      { id: "perritos-llueve", category: "Perritos", name: "Llueve", description: "Chorifrito, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
-
-      { id: "salchipapas-clasiquitas", category: "Salchipapas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas wiener y salsas básicas.", price: 5.6 },
-      { id: "salchipapas-quesua", category: "Salchipapas", name: "Quesua", description: "300 grs de papas francesas, salchichas wiener, queso amarillo, maíz y salsas básicas.", price: 6.9 },
-
-      { id: "bebidas-refresco-bombonita", category: "Para tomar", name: "Refresco bombonita", description: "Refresco individual.", price: 1.2 },
-      { id: "bebidas-refresco-1lt", category: "Para tomar", name: "Refresco de 1lt", description: "Refresco de 1 litro.", price: 2 },
-      { id: "bebidas-agua", category: "Para tomar", name: "Agua", description: "Agua embotellada.", price: 1 }
+      // BURGUESITAS
+      { id: "b1", category: "Burguesitas", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 6.2 },
+      { id: "b2", category: "Burguesitas", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 8.8 },
+      { id: "b3", category: "Burguesitas", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft, tocineta, coronada con un tequeyoyo + 100grs de papas francesas.", price: 10.1 },
+      { id: "b4", category: "Burguesitas", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 5.2 },
+      { id: "b5", category: "Burguesitas", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 7.8 },
+      // FRITICAS
+      { id: "f1", category: "Friticas", name: "Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 8.1 },
+      { id: "f2", category: "Friticas", name: "La Empoderada", description: "200grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 9.6 },
+      { id: "f3", category: "Friticas", name: "La Queen", description: "200grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta, coronada con un tequeyoyo + 100grs de papas francesas.", price: 11.0 },
+      // CHAMITOS
+      { id: "c1", category: "Chamitos", name: "Ración de Tequeños", description: "5 unidades.", price: 2.0 },
+      { id: "c2", category: "Chamitos", name: "Ración de Nuggets", description: "5 unidades + 80grs de papas.", price: null },
+      { id: "c3", category: "Chamitos", name: "Mini Bandejita", description: "4 tequeños, 4 nuggets + 100grs de papas.", price: null },
+      // PURO POWER
+      { id: "pp1", category: "Puro Power", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 9.7 },
+      { id: "pp2", category: "Puro Power", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 12.3 },
+      { id: "pp3", category: "Puro Power", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 7.8 },
+      { id: "pp4", category: "Puro Power", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 10.4 },
+      { id: "pp5", category: "Puro Power", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 11.4 },
+      // PERRITOS
+      { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 2.6 },
+      { id: "p2", category: "Perritos", name: "El Chamo", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo, facilitas kraft, tocineta y salsas básicas.", price: 4.9 },
+      { id: "p3", category: "Perritos", name: "El Azteca", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo, maíz dulce y salsas básicas.", price: 3.4 },
+      { id: "p4", category: "Perritos", name: "El Polonés", description: "Salchicha polaca, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
+      { id: "p5", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
+      { id: "p6", category: "Perritos", name: "Llueve", description: "Chorifrito, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
+      // SALCHIPAPAS
+      { id: "s1", category: "Salchipapas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas wiener y salsas básicas.", price: 5.6 },
+      { id: "s2", category: "Salchipapas", name: "Quesua", description: "300 grs de papas francesas, salchichas wiener, queso amarillo, maíz y salsas básicas.", price: 6.9 },
+      // PARA TOMAR
+      { id: "t1", category: "Para tomar", name: "Refresco bombonita", description: "Refresco individual.", price: 1.2 },
+      { id: "t2", category: "Para tomar", name: "Refresco de 1lt", description: "Refresco de 1 litro.", price: 2.0 },
+      { id: "t3", category: "Para tomar", name: "Agua", description: "Agua embotellada.", price: 1.0 }
     ];
 
+    const categories = ["Burguesitas", "Friticas", "Chamitos", "Puro Power", "Perritos", "Salchipapas", "Para tomar", "Pepitos", "Promos"];
     let activeCategory = "Burguesitas";
-    let cart = [];
+    let cart = {};
 
-    const formatCurrency = (val) => val == null ? "Consultar" : `$${val.toFixed(2)}`;
-
-    function setActiveCategory(cat) {
-      activeCategory = cat;
-      renderCategories();
-      renderProducts();
-    }
+    const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
 
     function renderCategories() {
-      const container = document.getElementById("categories-container");
-      container.innerHTML = categories.map(category => {
-        const active = activeCategory === category;
-        const hasProducts = products.some(p => p.category === category);
-        const iconClass = categoryIcons[category] || "fa-utensils";
-
+      const container = document.getElementById("categories-bar");
+      container.innerHTML = categories.map(cat => {
+        const active = cat === activeCategory;
         return `
-          <button
-            type="button"
-            onclick="setActiveCategory('${category}')"
-            class="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-xs font-black uppercase tracking-wider transition sm:text-sm ${
-              active
-                ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-[0_7px_22px_rgba(232,160,32,.18)]"
-                : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
-            }"
-          >
-            <i class="fa-solid ${iconClass} text-sm"></i>
-            <span>${category}</span>${!hasProducts ? '<span class="rounded-full bg-black/15 px-2 py-0.5 text-[9px] font-black tracking-normal">Pronto</span>' : ''}
+          <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition sm:text-sm ${
+            active
+              ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md"
+              : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
+          }">
+            <span>${cat}</span>
           </button>
         `;
       }).join('');
     }
 
+    function selectCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      renderProducts();
+    }
+
     function renderProducts() {
-      const container = document.getElementById("products-container");
+      const grid = document.getElementById("products-grid");
       const filtered = products.filter(p => p.category === activeCategory);
 
-      document.getElementById("active-category-title").innerText = activeCategory;
-      document.getElementById("options-count").innerText = `${filtered.length}${
+      document.getElementById("cat-subtitle").innerText = activeCategory;
+      document.getElementById("cat-count").innerText = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full rounded-[28px] border border-[#E8A020]/20 bg-[#171313]/80 p-10 text-center">
+            <h3 class="text-xl font-black uppercase text-[#F5E6C8]">Próximamente</h3>
+            <p class="mt-2 text-sm text-[#F5E6C8]/55">Esta categoría estará disponible pronto con nuevos productos.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const disabled = p.price == null;
+        return `
+          <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition hover:border-[#E8A020] sm:p-3">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-baseline justify-between gap-3">
+                <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
+              </div>
+              <p class="mt-0.5 line-clamp-2 text-xs leading-snug text-[#500707]">${p.description}</p>
+            </div>
+            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartUI();
+    }
+
+    function changeQuantity(id, delta) {
+      if (!cart[id]) return;
+      cart[id] += delta;
+      if (cart[id] <= 0) delete cart[id];
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      let count = 0;
+      let total = 0;
+
+      Object.keys(cart).forEach(id => {
+        const item = products.find(p => p.id === id);
+        if (item && item.price != null) {
+          count += cart[id];
+          total += item.price * cart[id];
+        }
+      });
+
+      document.getElementById("badge-count").innerText = count;
+      document.getElementById("bottom-cart-total").innerText = `$${total.toFixed(2)}`;
+      document.getElementById("modal-cart-total").innerText = `$${total.toFixed(2)}`;
+      document.getElementById("bottom-cart-label").innerText = count === 0 ? "Tu pedido está vacío" : `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
+
+      const disabled = count === 0;
+      document.getElementById("btn-whatsapp-bar").disabled = disabled;
+      document.getElementById("btn-whatsapp-modal").disabled = disabled;
+
+      renderCartModalItems();
+    }
+
+    function renderCartModalItems() {
+      const container = document.getElementById("modal-cart-items");
+      const keys = Object.keys(cart);
+
+      if (keys.length === 0) {
+        container.innerHTML = `
+          <div class="rounded-2xl border border-dashed border-[#E8A020]/20 bg-[#4E1111]/45 p-8 text-center">
+            <p class="font-black uppercase text-[#F5E6C8]">Tu pedido está vacío.</p>
+            <p class="mt-1 text-sm text-[#F5E6C8]/45">Agrega algo delicioso para comenzar.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = keys.map(id => {
+        const item = products.find(p => p.id === id);
+        const qty = cart[id];
+        const lineTotal = (item.price || 0) * qty;
+
+        return `
+          <div class="rounded-2xl border border-[#500707]/15 bg-[#FFFBEB] p-4 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-black uppercase text-[#500707]">${item.name}</h3>
+                <p class="mt-1 text-xs font-medium text-[#500707]/70">$${(item.price || 0).toFixed(2)} c/u</p>
+              </div>
+              <p class="shrink-0 font-black text-[#500707]">$${lineTotal.toFixed(2)}</p>
+            </div>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="inline-flex items-center rounded-xl border border-[#500707]/20 bg-white p-1">
+                <button onclick="changeQuantity('${id}', -1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10"><i class="fa-solid fa-minus text-xs"></i></button>
+                <span class="w-8 text-center text-sm font-black text-[#500707]">${qty}</span>
+                <button onclick="changeQuantity('${id}', 1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10"><i class="fa-solid fa-plus text-xs"></i></button>
+              </div>
+              <button onclick="changeQuantity('${id}', -${qty})" class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-[#500707] hover:bg-[#500707]/10">
+                <i class="fa-solid fa-trash"></i> Eliminar
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function toggleCartModal(show) {
+      const modal = document.getElementById("cart-modal");
+      if (show) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+      } else {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        document.body.style.overflow = "unset";
+      }
+    }
+
+    function sendWhatsApp() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) return;
+
+      let total = 0;
+      const lines = keys.map(id => {
+        const item = products.find(p => p.id === id);
+        const sub = (item.price || 0) * cart[id];
+        total += sub;
+        return `- ${cart[id]}x ${item.name} ($${sub.toFixed(2)})`;
+      });
+
+      const message = `¡Hola Cory Fast! Quisiera hacer el siguiente pedido:\n\n${lines.join('\n')}\n\n- Total a pagar: $${total.toFixed(2)}`;
+      window.open(`https://wa.me/584120367308?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    renderCategories();
+    renderProducts();
+    updateCartUI();
+  </script>
+</body>
+</html>
