@@ -7,33 +7,58 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Estilo para la barra de desplazamiento dorada */
+    .golden-scrollbar::-webkit-scrollbar {
+      height: 6px;
+    }
+    .golden-scrollbar::-webkit-scrollbar-track {
+      background: rgba(23, 19, 19, 0.6);
+      border-radius: 10px;
+    }
+    .golden-scrollbar::-webkit-scrollbar-thumb {
+      background: #E8A020;
+      border-radius: 10px;
+    }
+    .golden-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #E8A020 rgba(23, 19, 19, 0.6);
+    }
   </style>
 </head>
 <body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
 
-  <!-- HEADER -->
+  <!-- HEADER CON BOTÓN DE REGRESO -->
   <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2 sm:px-6 sm:py-3">
-      <div class="flex min-w-0 items-center gap-3">
-        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-md sm:h-14 sm:w-14" onerror="this.src='https://via.placeholder.com/50'" />
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
+      
+      <!-- BOTÓN VOLVER A LANDING -->
+      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313]">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="hidden sm:inline">Volver</span>
+      </a>
+
+      <!-- LOGO Y TÍTULO -->
+      <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-md" onerror="this.src='https://via.placeholder.com/50'" />
         <div class="min-w-0">
-          <p class="truncate text-[10px] font-bold uppercase tracking-[0.28em] text-[#E8A020] sm:text-xs">Cory's Fast Food</p>
-          <h1 class="mt-0.5 truncate text-base font-black uppercase leading-none text-[#F5E6C8] sm:text-2xl">Menú Interactivo</h1>
+          <p class="truncate text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8A020]">Cory's Fast Food</p>
+          <h1 class="truncate text-sm font-black uppercase leading-none text-[#F5E6C8] sm:text-xl">Menú Interactivo</h1>
         </div>
       </div>
-      <button onclick="toggleCartModal(true)" class="hidden shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-5 py-3 text-xs font-black uppercase tracking-wider text-[#F5E6C8] transition hover:border-[#E8A020] sm:inline-flex">
+
+      <!-- VER PEDIDO -->
+      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] sm:px-4 sm:py-2.5">
         <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
-        Ver pedido
+        <span class="hidden sm:inline">Ver pedido</span>
       </button>
+
     </div>
   </header>
 
-  <!-- CATEGORÍAS BARRA -->
-  <section class="border-b border-[#E8A020]/15 bg-[#171313]/35 sticky top-[57px] z-40 backdrop-blur-md">
+  <!-- CATEGORÍAS BARRA CON SCROLL VISIBLE -->
+  <section class="border-b border-[#E8A020]/20 bg-[#171313]/90 sticky top-[57px] z-40 backdrop-blur-md">
     <div class="relative mx-auto max-w-6xl">
-      <div class="no-scrollbar overflow-x-auto px-4 py-4 sm:px-6">
+      <div class="golden-scrollbar overflow-x-auto px-4 pt-3 pb-3 sm:px-6">
         <div class="flex min-w-max gap-2.5" id="categories-bar"></div>
       </div>
     </div>
@@ -151,7 +176,7 @@
       container.innerHTML = categories.map(cat => {
         const active = cat === activeCategory;
         return `
-          <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2.5 text-xs font-black uppercase tracking-wider transition sm:text-sm ${
+          <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition sm:text-sm ${
             active
               ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md"
               : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
