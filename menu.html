@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Interactivo - Cory's Fast Food</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-[#7B1213] text-[#F5E6C8] min-h-screen pb-24">
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-[#4E1111]/95 border-b border-[#E8A020]/20 backdrop-blur-md">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 rounded-full border border-[#E8A020]/50 object-cover" onerror="this.src='https://via.placeholder.com/40'">
+        <div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-[#E8A020]">Cory's Fast Food</p>
+          <h1 class="text-base font-black uppercase text-[#F5E6C8]">Menú Interactivo</h1>
+        </div>
+      </div>
+      <button onclick="toggleCart()" class="flex items-center gap-2 bg-[#E8A020] text-[#171313] px-3 py-1.5 rounded-full text-xs font-black uppercase">
+        <i class="fa-solid fa-basket-shopping"></i>
+        <span id="cart-count">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CATEGORÍAS -->
+  <nav class="bg-[#171313]/40 border-b border-[#E8A020]/15 sticky top-[57px] z-40 backdrop-blur-md">
+    <div class="max-w-4xl mx-auto px-4 py-3 overflow-x-auto no-scrollbar flex gap-2" id="categories-container"></div>
+  </nav>
+
+  <!-- PRODUCTOS -->
+  <main class="max-w-4xl mx-auto px-4 py-6">
+    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+  </main>
+
+  <!-- BARRA INFERIOR DE PEDIDO -->
+  <div class="fixed bottom-0 inset-x-0 bg-[#171313]/95 border-t border-[#E8A020]/25 p-3 backdrop-blur-md z-40">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-3">
+      <div>
+        <p class="text-[10px] uppercase font-bold text-[#F5E6C8]/60">Total a pagar</p>
+        <p id="cart-total" class="text-lg font-black text-[#E8A020]">$0.00</p>
+      </div>
+      <button onclick="sendWhatsApp()" class="bg-[#25D366] text-white px-5 py-2.5 rounded-xl font-black uppercase text-xs flex items-center gap-2 shadow-lg">
+        <i class="fa-brands fa-whatsapp text-base"></i>
+        Pedir por WhatsApp
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, cat: "Burguesitas", name: "La Cuaima", desc: "120g carne, lechuga, tomate, papas, salsas + 100g papas", price: 6.2 },
+      { id: 2, cat: "Burguesitas", name: "La Chama", desc: "120g carne, queso kraft, tocineta, papas + 100g papas", price: 8.8 },
+      { id: 3, cat: "Burguesitas", name: "La Morena", desc: "120g carne, kraft, tocineta, tequeyoyo + 100g papas", price: 10.1 },
+      { id: 4, cat: "Burguesitas", name: "La Sifrina", desc: "120g pollo, lechuga, tomate, papas, salsas + 100g papas", price: 5.2 },
+      { id: 5, cat: "Friticas", name: "Mamasita", desc: "120g pollo krispy, kraft, tocineta + 100g papas", price: 8.1 },
+      { id: 6, cat: "Friticas", name: "La Queen", desc: "200g pollo krispy, tequeyoyo, kraft + 100g papas", price: 11.0 },
+      { id: 7, cat: "Chamitos", name: "Ración de Tequeños", desc: "5 unidades de queso", price: 2.0 },
+      { id: 8, cat: "Perritos", name: "El Mártir", desc: "Salchicha wiener, ensalada, cebolla, papas, queso", price: 2.6 },
+      { id: 9, cat: "Perritos", name: "El Chamo", desc: "Salchicha wiener, kraft, tocineta, ensalada, papas", price: 4.9 },
+      { id: 10, cat: "Salchipapas", name: "Clasiquitas", desc: "300g papas francesas, salchichas wiener, salsas", price: 5.6 },
+      { id: 11, cat: "Para tomar", name: "Refresco 1L", desc: "Refresco de 1 Litro", price: 2.0 }
+    ];
+
+    const categories = ["Burguesitas", "Friticas", "Chamitos", "Perritos", "Salchipapas", "Para tomar"];
+    let activeCategory = "Burguesitas";
+    let cart = {};
+
+    function renderCategories() {
+      const container = document.getElementById("categories-container");
+      container.innerHTML = categories.map(cat => `
+        <button onclick="selectCategory('${cat}')" class="px-4 py-1.5 rounded-full text-xs font-black uppercase whitespace-nowrap transition ${cat === activeCategory ? 'bg-[#E8A020] text-[#171313]' : 'bg-[#171313]/60 text-[#F5E6C8]/80'}">
+          ${cat}
+        </button>
+      `).join('');
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById("products-grid");
+      const filtered = products.filter(p => p.cat === activeCategory);
+      grid.innerHTML = filtered.map(p => `
+        <div class="bg-[#F5E6C8] text-[#171313] p-3 rounded-xl flex justify-between items-center shadow-md">
+          <div class="pr-2">
+            <h3 class="font-black uppercase text-sm">${p.name}</h3>
+            <p class="text-[11px] text-[#5F3B2B] leading-tight mt-0.5">${p.desc}</p>
+            <p class="font-black text-[#7B1213] text-sm mt-1">$${p.price.toFixed(2)}</p>
+          </div>
+          <button onclick="addToCart(${p.id})" class="bg-[#E8A020] text-[#171313] w-8 h-8 rounded-lg font-black text-lg flex items-center justify-center shrink-0 hover:bg-[#F2B33A]">
+            +
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      let count = 0;
+      let total = 0;
+      Object.keys(cart).forEach(id => {
+        const item = products.find(p => p.id == id);
+        count += cart[id];
+        total += item.price * cart[id];
+      });
+      document.getElementById("cart-count").innerText = count;
+      document.getElementById("cart-total").innerText = `$${total.toFixed(2)}`;
+    }
+
+    function sendWhatsApp() {
+      const items = Object.keys(cart).map(id => {
+        const item = products.find(p => p.id == id);
+        return `- ${cart[id]}x ${item.name} ($${(item.price * cart[id]).toFixed(2)})`;
+      });
+
+      if (items.length === 0) {
+        alert("Agrega al menos un producto a tu pedido.");
+        return;
+      }
+
+      let total = 0;
+      Object.keys(cart).forEach(id => {
+        const item = products.find(p => p.id == id);
+        total += item.price * cart[id];
+      });
+
+      const message = `¡Hola Cory's Fast Food! Quisiera realizar este pedido:\n\n${items.join('\n')}\n\n*Total: $${total.toFixed(2)}*`;
+      window.open(`https://wa.me/584120367308?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    renderCategories();
+    renderProducts();
+  </script>
+</body>
+</html>
