@@ -7,33 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Barra dorada visible permanentemente */
-    .golden-scrollbar-always {
-      overflow-x: scroll;
-      scrollbar-width: auto;
-      scrollbar-color: #E8A020 #2A0909;
+    /* Ocultar barra de scroll para efecto limpio en móviles */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-    .golden-scrollbar-always::-webkit-scrollbar {
-      height: 8px !important;
-      display: block !important;
-    }
-    .golden-scrollbar-always::-webkit-scrollbar-track {
-      background: #2A0909 !important;
-      border-radius: 10px;
-    }
-    .golden-scrollbar-always::-webkit-scrollbar-thumb {
-      background: #E8A020 !important;
-      border-radius: 10px;
-      border: 1px solid #7B1213;
-    }
-
-    /* Animación para la flecha de deslizamiento */
-    @keyframes slideArrow {
-      0%, 100% { transform: translateX(0); }
-      50% { transform: translateX(5px); }
-    }
-    .animate-slide-arrow {
-      animation: slideArrow 1.2s infinite ease-in-out;
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
   </style>
 </head>
@@ -67,21 +47,16 @@
     </div>
   </header>
 
-  <!-- CATEGORÍAS BARRA CON SCROLL VISIBLE Y FLECHA -->
+  <!-- BARRA DE CATEGORÍAS CON CORTE VISUAL -->
   <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/20 bg-[#171313]/95 backdrop-blur-md">
-    <div class="relative mx-auto flex max-w-6xl items-center">
-      
-      <div class="golden-scrollbar-always w-full px-4 pt-3 pb-3 sm:px-6">
-        <div class="flex min-w-max gap-2.5 pr-8" id="categories-bar"></div>
+    <div class="relative mx-auto max-w-6xl">
+      <!-- Muestra el borde cortado de la siguiente categoría para invitar a deslizar -->
+      <div class="no-scrollbar overflow-x-auto px-4 py-3 sm:px-6">
+        <div class="flex min-w-max gap-3 pr-6" id="categories-bar"></div>
       </div>
 
-      <!-- FLECHA INDICADORA DE DESLIZAMIENTO -->
-      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-center bg-gradient-to-l from-[#171313] via-[#171313]/80 to-transparent pl-6 pr-3">
-        <span class="flex items-center gap-1 text-[11px] font-black uppercase tracking-wider text-[#E8A020]">
-          <i class="fa-solid fa-chevron-right animate-slide-arrow text-sm"></i>
-        </span>
-      </div>
-
+      <!-- Sombreante sutil al borde derecho que insinúa más contenido -->
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#171313] to-transparent"></div>
     </div>
   </section>
 
