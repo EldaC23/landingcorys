@@ -67,13 +67,20 @@
   </section>
 
   <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
-    <div class="mb-3 flex items-end justify-between gap-4 sm:mb-6">
-      <div>
-        <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Hamb. Carne</p>
-        <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
-        <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
+    <div class="mb-3 flex flex-col gap-2 sm:mb-6">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Hamb. Carne</p>
+          <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
+          <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
+        </div>
+        <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">0 opciones</p>
       </div>
-      <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">0 opciones</p>
+
+      <!-- Notice Badge for Burger Categories -->
+      <div id="burgers-notice" class="hidden mt-2 rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-xs font-bold text-[#E8A020] shadow-sm">
+        🍟 Todas nuestras hamburguesas vienen acompañadas con 100g de papas fritas
+      </div>
     </div>
 
     <div id="products-grid" class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3"></div>
@@ -129,28 +136,28 @@
   <script>
     const products = [
       // HAMBURGUESAS DE CARNE
-      { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 6.2 },
-      { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 8.8 },
-      { id: "hc3", category: "Hamb. Carne", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con un tequeyoyo + 100grs de papas fritas.", price: 10.1 },
+      { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 6.2 },
+      { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.8 },
+      { id: "hc3", category: "Hamb. Carne", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con un tequeyoyo.", price: 10.1 },
 
       // HAMBURGUESAS DE POLLO
-      { id: "hp1", category: "Hamb. Pollo", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 5.2 },
-      { id: "hp2", category: "Hamb. Pollo", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 7.8 },
-      { id: "hp3", category: "Hamb. Pollo", name: "La Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 8.1 },
-      { id: "hp4", category: "Hamb. Pollo", name: "La Empoderada", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 9.6 },
-      { id: "hp5", category: "Hamb. Pollo", name: "La Queen", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta coronada con un tequeyoyo + 100grs de papas fritas.", price: 11.0 },
+      { id: "hp1", category: "Hamb. Pollo", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas hilo y salsas básicas.", price: 5.2 },
+      { id: "hp2", category: "Hamb. Pollo", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 7.8 },
+      { id: "hp3", category: "Hamb. Pollo", name: "La Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.1 },
+      { id: "hp4", category: "Hamb. Pollo", name: "La Empoderada", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 9.6 },
+      { id: "hp5", category: "Hamb. Pollo", name: "La Queen", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta coronada con un tequeyoyo.", price: 11.0 },
 
       // SÚPER HAMBURGUESAS
-      { id: "sh1", category: "Súper Hamburguesas", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 7.8 },
-      { id: "sh2", category: "Súper Hamburguesas", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 10.4 },
-      { id: "sh3", category: "Súper Hamburguesas", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 9.7 },
-      { id: "sh4", category: "Súper Hamburguesas", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 10.4 },
-      { id: "sh5", category: "Súper Hamburguesas", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 11.4 },
-      { id: "sh6", category: "Súper Hamburguesas", name: "La Bandida", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, huevo, facilita Kraft y tocineta + 100grs de papas fritas.", price: 11.8 },
+      { id: "sh1", category: "Súper Hamburguesas", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas hilo y salsas básicas.", price: 7.8 },
+      { id: "sh2", category: "Súper Hamburguesas", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 10.4 },
+      { id: "sh3", category: "Súper Hamburguesas", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 9.7 },
+      { id: "sh4", category: "Súper Hamburguesas", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 10.4 },
+      { id: "sh5", category: "Súper Hamburguesas", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 11.4 },
+      { id: "sh6", category: "Súper Hamburguesas", name: "La Bandida", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, huevo, facilita Kraft y tocineta.", price: 11.8 },
 
       // HAMBURGUESAS GOURMETS
-      { id: "hg1", category: "Hamb. Gourmets", name: "La Sugar", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, chutney de piña, facilita Kraft y tocineta + 100grs de papas fritas.", price: 10.4 },
-      { id: "hg2", category: "Hamb. Gourmets", name: "La Mommy", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, queso crema con tocineta caramelizada y facilita Kraft + 100grs de papas fritas.", price: 10.4 },
+      { id: "hg1", category: "Hamb. Gourmets", name: "La Sugar", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, chutney de piña, facilita Kraft y tocineta.", price: 10.4 },
+      { id: "hg2", category: "Hamb. Gourmets", name: "La Mommy", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, queso crema con tocineta caramelizada y facilita Kraft.", price: 10.4 },
 
       // PERRITOS
       { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 2.6 },
@@ -212,6 +219,13 @@
       "Para tomar"
     ];
 
+    const burgerCategories = [
+      "Hamb. Carne",
+      "Hamb. Pollo",
+      "Súper Hamburguesas",
+      "Hamb. Gourmets"
+    ];
+
     let activeCategory = "Hamb. Carne";
     let cart = {};
 
@@ -246,6 +260,13 @@
       document.getElementById("cat-subtitle").innerText = activeCategory;
       document.getElementById("cat-count").innerText = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
 
+      const noticeEl = document.getElementById("burgers-notice");
+      if (burgerCategories.includes(activeCategory)) {
+        noticeEl.classList.remove("hidden");
+      } else {
+        noticeEl.classList.add("hidden");
+      }
+
       if (filtered.length === 0) {
         grid.innerHTML = `
           <div class="col-span-full rounded-[28px] border border-[#E8A020]/20 bg-[#171313]/80 p-10 text-center">
@@ -264,7 +285,7 @@
                 <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
                 <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
               </div>
-              <p class="mt-0.5 line-clamp-2 text-xs leading-snug text-[#500707]">${p.description}</p>
+              <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
             </div>
             <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
               <i class="fa-solid fa-plus text-xs"></i>
