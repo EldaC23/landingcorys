@@ -69,7 +69,7 @@
   <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
     <div class="mb-3 flex items-end justify-between gap-4 sm:mb-6">
       <div>
-        <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Burguesitas</p>
+        <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Hamb. Carne</p>
         <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
         <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
       </div>
@@ -128,44 +128,91 @@
 
   <script>
     const products = [
-      // BURGUESITAS
-      { id: "b1", category: "Burguesitas", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 6.2 },
-      { id: "b2", category: "Burguesitas", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 8.8 },
-      { id: "b3", category: "Burguesitas", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft, tocineta, coronada con un tequeyoyo + 100grs de papas francesas.", price: 10.1 },
-      { id: "b4", category: "Burguesitas", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 5.2 },
-      { id: "b5", category: "Burguesitas", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 7.8 },
-      // FRITICAS
-      { id: "f1", category: "Friticas", name: "Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 8.1 },
-      { id: "f2", category: "Friticas", name: "La Empoderada", description: "200grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 9.6 },
-      { id: "f3", category: "Friticas", name: "La Queen", description: "200grs de pollo krispy, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta, coronada con un tequeyoyo + 100grs de papas francesas.", price: 11.0 },
-      // CHAMITOS
-      { id: "c1", category: "Chamitos", name: "Ración de Tequeños", description: "5 unidades.", price: 2.0 },
-      { id: "c2", category: "Chamitos", name: "Ración de Nuggets", description: "5 unidades + 80grs de papas.", price: null },
-      { id: "c3", category: "Chamitos", name: "Mini Bandejita", description: "4 tequeños, 4 nuggets + 100grs de papas.", price: null },
-      // PURO POWER
-      { id: "pp1", category: "Puro Power", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 9.7 },
-      { id: "pp2", category: "Puro Power", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 12.3 },
-      { id: "pp3", category: "Puro Power", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 7.8 },
-      { id: "pp4", category: "Puro Power", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 10.4 },
-      { id: "pp5", category: "Puro Power", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 11.4 },
+      // HAMBURGUESAS DE CARNE
+      { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 6.2 },
+      { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 8.8 },
+      { id: "hc3", category: "Hamb. Carne", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con un tequeyoyo + 100grs de papas fritas.", price: 10.1 },
+
+      // HAMBURGUESAS DE POLLO
+      { id: "hp1", category: "Hamb. Pollo", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 5.2 },
+      { id: "hp2", category: "Hamb. Pollo", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 7.8 },
+      { id: "hp3", category: "Hamb. Pollo", name: "La Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 8.1 },
+      { id: "hp4", category: "Hamb. Pollo", name: "La Empoderada", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 9.6 },
+      { id: "hp5", category: "Hamb. Pollo", name: "La Queen", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta coronada con un tequeyoyo + 100grs de papas fritas.", price: 11.0 },
+
+      // SÚPER HAMBURGUESAS
+      { id: "sh1", category: "Súper Hamburguesas", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 7.8 },
+      { id: "sh2", category: "Súper Hamburguesas", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 10.4 },
+      { id: "sh3", category: "Súper Hamburguesas", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas hilo y salsas básicas + 100grs de papas fritas.", price: 9.7 },
+      { id: "sh4", category: "Súper Hamburguesas", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 10.4 },
+      { id: "sh5", category: "Súper Hamburguesas", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta + 100grs de papas fritas.", price: 11.4 },
+      { id: "sh6", category: "Súper Hamburguesas", name: "La Bandida", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, huevo, facilita Kraft y tocineta + 100grs de papas fritas.", price: 11.8 },
+
+      // HAMBURGUESAS GOURMETS
+      { id: "hg1", category: "Hamb. Gourmets", name: "La Sugar", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, chutney de piña, facilita Kraft y tocineta + 100grs de papas fritas.", price: 10.4 },
+      { id: "hg2", category: "Hamb. Gourmets", name: "La Mommy", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, queso crema con tocineta caramelizada y facilita Kraft + 100grs de papas fritas.", price: 10.4 },
+
       // PERRITOS
-      { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 2.6 },
-      { id: "p2", category: "Perritos", name: "El Chamo", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo, facilitas kraft, tocineta y salsas básicas.", price: 4.9 },
-      { id: "p3", category: "Perritos", name: "El Azteca", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo, maíz dulce y salsas básicas.", price: 3.4 },
-      { id: "p4", category: "Perritos", name: "El Polonés", description: "Salchicha polaca, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
-      { id: "p5", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
-      { id: "p6", category: "Perritos", name: "Llueve", description: "Chorifrito, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 4.4 },
-      // SALCHIPAPAS
-      { id: "s1", category: "Salchipapas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas wiener y salsas básicas.", price: 5.6 },
-      { id: "s2", category: "Salchipapas", name: "Quesua", description: "300 grs de papas francesas, salchichas wiener, queso amarillo, maíz y salsas básicas.", price: 6.9 },
+      { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 2.6 },
+      { id: "p2", category: "Perritos", name: "El Chamo", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, facilita Kraft, tocineta y salsas básicas.", price: 4.9 },
+      { id: "p3", category: "Perritos", name: "El Azteca", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, maíz y salsas básicas.", price: 3.4 },
+      { id: "p4", category: "Perritos", name: "El Polonés", description: "Salchicha polaca, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
+      { id: "p5", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
+      { id: "p6", category: "Perritos", name: "Lleve", description: "Chorifrito, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
+
+      // PAPAS
+      { id: "pa1", category: "Papas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas Wiener y salsas básicas.", price: 5.2 },
+      { id: "pa2", category: "Papas", name: "Quesua", description: "300 grs de papas francesas, salchichas Wiener, maíz, queso amarillo y salsas básicas.", price: 6.9 },
+      { id: "pa3", category: "Papas", name: "Chorreada", description: "300 grs de papas francesas, queso fundido, tocineta y topping de cebollín.", price: 8.5 },
+
+      // PEPITOS
+      { id: "pe1", category: "Pepitos", name: "Carne, Pollo o Mixto", description: "Pan de orégano tostado con ajo, 300grs de proteína, queso amarillo, tocineta, maíz, lechuga, tomate, papas hilo, salsas básicas.", price: 15.5 },
+
+      // SANGUCHES
+      { id: "s1", category: "Sanguches", name: "El Club de la Casa", description: "Sándwich estilo club house con jamón, queso, huevo, lechuga, tomate, salsas básicas, 150 grs de proteína (carne, pollo o krispy) + 200 grs de papas francesas.", price: 13.5 },
+      { id: "s2", category: "Sanguches", name: "El Campesino", description: "Sándwich estilo granjero con queso Kraft, tocineta, lechuga, tomate, pepinillo, salsa tártara + 200grs de pechuga krispy.", price: 12.5 },
+
+      // RACIONES & EXTRAS
+      { id: "r1", category: "Raciones & Extras", name: "Tequeños (5 unidades)", description: "5 deliciosas unidades de tequeños.", price: 3.0 },
+      { id: "r2", category: "Raciones & Extras", name: "Tender + Papas Fritas", description: "Tenders de pollo acompañados con papas fritas.", price: 4.5 },
+      { id: "r3", category: "Raciones & Extras", name: "Tequeyoyo", description: "Tequeyoyo tradicional.", price: 1.5 },
+      { id: "r4", category: "Raciones & Extras", name: "Papas Fritas", description: "Ración adicional de papas fritas.", price: 1.0 },
+      { id: "r5", category: "Raciones & Extras", name: "Extra de Carne", description: "Porción adicional de carne.", price: 3.0 },
+      { id: "r6", category: "Raciones & Extras", name: "Extra de Pollo", description: "Porción adicional de pollo.", price: 2.0 },
+      { id: "r7", category: "Raciones & Extras", name: "Extra de Krispy", description: "Porción adicional de pollo krispy.", price: 2.5 },
+      { id: "r8", category: "Raciones & Extras", name: "Huevo", description: "Adicional de huevo.", price: 1.0 },
+      { id: "r9", category: "Raciones & Extras", name: "Extra de Facilita", description: "Adicional de queso Kraft facilita.", price: 1.0 },
+      { id: "r10", category: "Raciones & Extras", name: "Extra de Tocineta", description: "Porción adicional de tocineta.", price: 1.4 },
+      { id: "r11", category: "Raciones & Extras", name: "Salchicha", description: "Adicional de salchicha.", price: 0.8 },
+
+      // ENSALADAS
+      { id: "e1", category: "Ensaladas", name: "César Pollo", description: "200grs de pollo a la plancha, lechuga, crutones, tocineta, aderezo césar.", price: 10.0 },
+      { id: "e2", category: "Ensaladas", name: "César Krispy", description: "200grs de pollo krispy, lechuga, crutones, tocineta, aderezo césar.", price: 11.0 },
+
       // PARA TOMAR
-      { id: "t1", category: "Para tomar", name: "Refresco bombonita", description: "Refresco individual.", price: 1.2 },
-      { id: "t2", category: "Para tomar", name: "Refresco de 1lt", description: "Refresco de 1 litro.", price: 2.0 },
-      { id: "t3", category: "Para tomar", name: "Agua", description: "Agua embotellada.", price: 1.0 }
+      { id: "t1", category: "Para tomar", name: "Refresco 355ml", description: "Refresco individual de 355ml.", price: 1.2 },
+      { id: "t2", category: "Para tomar", name: "Refresco 1Lt", description: "Refresco de 1 litro.", price: 2.0 },
+      { id: "t3", category: "Para tomar", name: "Refresco 2Lt", description: "Refresco de 2 litros.", price: 3.5 },
+      { id: "t4", category: "Para tomar", name: "Malta", description: "Malta fría.", price: 1.2 },
+      { id: "t5", category: "Para tomar", name: "Agua", description: "Agua embotellada.", price: 1.0 },
+      { id: "t6", category: "Para tomar", name: "Té", description: "Té frío.", price: 2.5 }
     ];
 
-    const categories = ["Burguesitas", "Friticas", "Chamitos", "Puro Power", "Perritos", "Salchipapas", "Para tomar", "Pepitos", "Promos"];
-    let activeCategory = "Burguesitas";
+    const categories = [
+      "Hamb. Carne",
+      "Hamb. Pollo",
+      "Súper Hamburguesas",
+      "Hamb. Gourmets",
+      "Perritos",
+      "Papas",
+      "Pepitos",
+      "Sanguches",
+      "Raciones & Extras",
+      "Ensaladas",
+      "Para tomar"
+    ];
+
+    let activeCategory = "Hamb. Carne";
     let cart = {};
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
