@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,29 +8,37 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Ocultar barra de scroll para efecto limpio en móviles */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    /* Scrollbar personalizada con el color #E8A020 */
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 6px;
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(232, 160, 32, 0.1);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #E8A020;
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #f2b33a;
+    }
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: #E8A020 rgba(232, 160, 32, 0.1);
     }
   </style>
 </head>
 <body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
 
-  <!-- HEADER CON BOTÓN DE REGRESO -->
   <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
       
-      <!-- BOTÓN VOLVER A LANDING -->
       <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313]">
         <i class="fa-solid fa-arrow-left"></i>
         <span class="hidden sm:inline">Volver</span>
       </a>
 
-      <!-- LOGO Y TÍTULO -->
       <div class="flex min-w-0 items-center gap-2 sm:gap-3">
         <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-md" onerror="this.src='https://via.placeholder.com/50'" />
         <div class="min-w-0">
@@ -38,7 +47,6 @@
         </div>
       </div>
 
-      <!-- VER PEDIDO -->
       <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] sm:px-4 sm:py-2.5">
         <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
         <span class="hidden sm:inline">Ver pedido</span>
@@ -47,20 +55,18 @@
     </div>
   </header>
 
-  <!-- BARRA DE CATEGORÍAS CON CORTE VISUAL -->
   <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/20 bg-[#171313]/95 backdrop-blur-md">
     <div class="relative mx-auto max-w-6xl">
-      <!-- Muestra el borde cortado de la siguiente categoría para invitar a deslizar -->
-      <div class="no-scrollbar overflow-x-auto px-4 py-3 sm:px-6">
-        <div class="flex min-w-max gap-3 pr-6" id="categories-bar"></div>
+      <div class="custom-scrollbar overflow-x-auto pl-4 pr-12 py-3 sm:pl-6 sm:pr-16">
+        <div class="flex min-w-max gap-3 pr-8" id="categories-bar"></div>
       </div>
 
-      <!-- Sombreante sutil al borde derecho que insinúa más contenido -->
-      <div class="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#171313] to-transparent"></div>
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-end pr-2 w-14 bg-gradient-to-l from-[#171313] via-[#171313]/80 to-transparent">
+        <i class="fa-solid fa-chevron-right text-[#E8A020] text-xs animate-pulse opacity-80"></i>
+      </div>
     </div>
   </section>
 
-  <!-- LISTA DE PRODUCTOS -->
   <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
     <div class="mb-3 flex items-end justify-between gap-4 sm:mb-6">
       <div>
@@ -74,7 +80,6 @@
     <div id="products-grid" class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3"></div>
   </main>
 
-  <!-- BARRA FLOTANTE INFERIOR DE PEDIDO -->
   <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
     <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
       <button onclick="toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
@@ -95,7 +100,6 @@
     </div>
   </div>
 
-  <!-- MODAL DE DETALLE DEL PEDIDO (CARRITO) -->
   <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
     <div class="max-h-[88vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/20 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
@@ -143,7 +147,7 @@
       { id: "pp1", category: "Puro Power", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 9.7 },
       { id: "pp2", category: "Puro Power", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 12.3 },
       { id: "pp3", category: "Puro Power", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas y salsas básicas + 100grs de papas francesas.", price: 7.8 },
-      { id: "pp4", category: "Puro Power", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 10.4 },
+      { id: "pp4", category: "Puro Power", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 10.4 },
       { id: "pp5", category: "Puro Power", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas, salsas básicas, facilitas kraft y tocineta + 100grs de papas francesas.", price: 11.4 },
       // PERRITOS
       { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas, queso amarillo y salsas básicas.", price: 2.6 },
