@@ -1,190 +1,415 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cory's Fast Food - Menú Digital</title>
-
-  <!-- Preconectores para optimización de rendimiento -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.tailwindcss.com">
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  
-  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
-  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-
-  <!-- Estilos y fuentes -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cory's Fast Food - Menú Interactivo</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brandYellow: '#E8A020',
-            brandRed: '#DC2626',
-            brandDark: '#1F2937'
-          },
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    /* Scrollbar siempre visible con el color #E8A020 */
+    .custom-scrollbar {
+      scrollbar-width: auto;
+      scrollbar-color: #E8A020 rgba(232, 160, 32, 0.25);
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 8px;
+      display: block !important;
     }
-    .category-btn.active {
-      background-color: #E8A020;
-      color: #1F2937;
-      font-weight: 700;
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(232, 160, 32, 0.15);
+      border-radius: 10px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #E8A020;
+      border-radius: 10px;
+      border: 1px solid rgba(23, 19, 19, 0.5);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #f2b33a;
     }
   </style>
 </head>
-<body class="bg-gray-100 font-sans text-gray-800 pb-20">
+<body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
 
-  <!-- Encabezado / Header -->
-  <header class="bg-brandRed text-white py-6 shadow-md sticky top-0 z-40">
-    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
-      <div>
-        <h1 class="text-2xl font-extrabold tracking-wide">CORY'S FAST FOOD</h1>
-        <p class="text-xs text-yellow-300 font-medium">Sabor que te atrapa</p>
-      </div>
-      <a href="tel:+584120000000" class="bg-brandYellow text-brandDark font-bold px-3 py-1.5 rounded-full text-xs shadow-sm hover:opacity-90 transition-opacity">
-        <i class="fa-solid fa-phone mr-1"></i> Pedir
+  <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
+      
+      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313]">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="hidden sm:inline">Volver</span>
       </a>
+
+      <div class="flex min-w-0 items-center gap-2 sm:gap-3">
+        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-md" onerror="this.src='https://via.placeholder.com/50'" />
+        <div class="min-w-0">
+          <p class="truncate text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8A020]">Cory's Fast Food</p>
+          <h1 class="truncate text-sm font-black uppercase leading-none text-[#F5E6C8] sm:text-xl">Menú Interactivo</h1>
+        </div>
+      </div>
+
+      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] sm:px-4 sm:py-2.5">
+        <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
+        <span class="hidden sm:inline">Ver pedido</span>
+      </button>
+
     </div>
   </header>
 
-  <!-- Aviso Informativo -->
-  <div class="bg-yellow-100 border-l-4 border-brandYellow text-yellow-800 p-3 text-xs max-w-4xl mx-auto my-3 mx-4 rounded shadow-sm flex items-center gap-2">
-    <i class="fa-solid fa-circle-info text-base text-brandYellow"></i>
-    <span><strong>¡Nota especial!</strong> Todas nuestras hamburguesas y perros calientes incluyen papas fritas crujientes.</span>
-  </div>
+  <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
+    <div class="relative mx-auto max-w-6xl">
+      <div class="custom-scrollbar overflow-x-auto pl-4 pr-16 py-3.5 sm:pl-6 sm:pr-20">
+        <div class="flex min-w-max gap-3 pr-12" id="categories-bar"></div>
+      </div>
 
-  <!-- Barra de Categorías Color #E8A020 (sticky) -->
-  <nav class="sticky top-[72px] z-30 bg-[#E8A020] shadow-md py-2.5">
-    <div class="max-w-4xl mx-auto px-4">
-      <div class="flex gap-2 overflow-x-auto no-scrollbar py-1">
-        <button class="category-btn active px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-white text-brandDark transition-all" onclick="filterCategory('todos', this)">
-          Todos
-        </button>
-        <button class="category-btn px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-brandDark/10 text-brandDark hover:bg-white/40 transition-all" onclick="filterCategory('hamburguesas', this)">
-          Hamburguesas
-        </button>
-        <button class="category-btn px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-brandDark/10 text-brandDark hover:bg-white/40 transition-all" onclick="filterCategory('perros', this)">
-          Perros Calientes
-        </button>
-        <button class="category-btn px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-brandDark/10 text-brandDark hover:bg-white/40 transition-all" onclick="filterCategory('promos', this)">
-          Promociones
-        </button>
-        <button class="category-btn px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap bg-brandDark/10 text-brandDark hover:bg-white/40 transition-all" onclick="filterCategory('bebidas', this)">
-          Bebidas
-        </button>
+      <!-- Indicador y Flecha destacados -->
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-end pr-2 pl-6 w-20 bg-gradient-to-l from-[#171313] via-[#171313]/90 to-transparent">
+        <div class="flex items-center gap-1.5 rounded-full border border-[#E8A020]/60 bg-[#171313] px-2 py-1 shadow-lg shadow-black/50">
+          <span class="text-[10px] font-black uppercase text-[#E8A020] sm:hidden">Desliza</span>
+          <i class="fa-solid fa-chevron-right text-xs font-black text-[#E8A020] animate-bounce"></i>
+        </div>
       </div>
     </div>
-  </nav>
+  </section>
 
-  <!-- Grid de Productos -->
-  <main class="max-w-4xl mx-auto px-4 pt-6">
-    <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      
-      <!-- Producto 1: Hamburguesa -->
-      <div class="product-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col justify-between" data-category="hamburguesas">
-        <div class="flex">
-          <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300&auto=format&fit=crop&q=80" alt="Hamburguesa Clásica" loading="lazy" class="w-28 h-28 object-cover flex-shrink-0">
-          <div class="p-3 flex-1">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-gray-900 text-base">Hamburguesa Clásica</h3>
-              <span class="text-brandRed font-extrabold text-base">$5.00</span>
-            </div>
-            <p class="text-xs text-gray-500 mt-1 leading-snug">Carne 150g, queso cheddar, lechuga, tomate y salsas de la casa. Incluye papas.</p>
-          </div>
+  <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
+    <div class="mb-3 flex flex-col gap-2 sm:mb-6">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Hamb. Carne</p>
+          <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
+          <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
         </div>
+        <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">0 opciones</p>
       </div>
 
-      <!-- Producto 2: Perro Caliente -->
-      <div class="product-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col justify-between" data-category="perros">
-        <div class="flex">
-          <img src="https://images.unsplash.com/photo-1619740455993-9e612b1af08a?w=300&auto=format&fit=crop&q=80" alt="Perro Cory Special" loading="lazy" class="w-28 h-28 object-cover flex-shrink-0">
-          <div class="p-3 flex-1">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-gray-900 text-base">Perro Cory Special</h3>
-              <span class="text-brandRed font-extrabold text-base">$3.50</span>
-            </div>
-            <p class="text-xs text-gray-500 mt-1 leading-snug">Salchicha jumbo, cebolla frita, queso rallado, tocino picado y papitas. Incluye papas.</p>
-          </div>
-        </div>
+      <!-- Notice Badge for Burger Categories -->
+      <div id="burgers-notice" class="hidden mt-2 rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-xs font-bold text-[#E8A020] shadow-sm">
+        🍟 Todas nuestras hamburguesas vienen acompañadas con 100g de papas fritas
       </div>
-
-      <!-- Producto 3: Promo Combo -->
-      <div class="product-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col justify-between" data-category="promos">
-        <div class="flex">
-          <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=300&auto=format&fit=crop&q=80" alt="Combo Dúo Cory" loading="lazy" class="w-28 h-28 object-cover flex-shrink-0">
-          <div class="p-3 flex-1">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-gray-900 text-base">Combo Dúo Cory</h3>
-              <span class="text-brandRed font-extrabold text-base">$11.99</span>
-            </div>
-            <p class="text-xs text-gray-500 mt-1 leading-snug">2 Hamburguesas Clásicas + 2 porciones de papas + 2 refrescos de lata.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Producto 4: Bebida -->
-      <div class="product-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden flex flex-col justify-between" data-category="bebidas">
-        <div class="flex">
-          <img src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=300&auto=format&fit=crop&q=80" alt="Refresco 1.5L" loading="lazy" class="w-28 h-28 object-cover flex-shrink-0">
-          <div class="p-3 flex-1">
-            <div class="flex justify-between items-start">
-              <h3 class="font-bold text-gray-900 text-base">Refresco 1.5L</h3>
-              <span class="text-brandRed font-extrabold text-base">$2.00</span>
-            </div>
-            <p class="text-xs text-gray-500 mt-1 leading-snug">Sabores variados (Coca-Cola, Pepsi, Hit, Chinotto) según disponibilidad.</p>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <div id="products-grid" class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3"></div>
   </main>
 
-  <!-- Script optimizado para la lógica de filtrado de categorías -->
-  <script defer>
-    function filterCategory(category, button) {
-      // Remover clase active de todos los botones
-      const buttons = document.querySelectorAll('.category-btn');
-      buttons.forEach(btn => {
-        btn.classList.remove('active', 'bg-white');
-        btn.classList.add('bg-brandDark/10');
-      });
+  <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
+    <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
+      <button onclick="toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
+        <div class="flex min-w-0 items-center gap-2">
+          <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313]">
+            <i class="fa-solid fa-basket-shopping"></i>
+            <span id="badge-count" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313]">0</span>
+          </div>
+          <p id="bottom-cart-label" class="truncate text-xs font-black text-[#F5E6C8]">Tu pedido está vacío</p>
+        </div>
+        <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
+      </button>
 
-      // Activar el botón seleccionado
-      button.classList.add('active', 'bg-white');
-      button.classList.remove('bg-brandDark/10');
+      <button onclick="sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
+        <i class="fa-brands fa-whatsapp text-sm"></i>
+        <span class="hidden sm:inline">Pedir por </span>WhatsApp
+      </button>
+    </div>
+  </div>
 
-      // Filtrar los productos
-      const products = document.querySelectorAll('.product-card');
-      products.forEach(product => {
-        if (category === 'todos' || product.dataset.category === category) {
-          product.style.display = 'flex';
-        } else {
-          product.style.display = 'none';
+  <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
+    <div class="max-h-[88vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/20 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
+      <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
+        <div>
+          <h2 class="text-xl font-black uppercase text-[#F5E6C8]">Tu pedido</h2>
+          <p class="text-xs font-medium text-[#F5E6C8]/45">Revisa cantidades antes de enviarlo.</p>
+        </div>
+        <button onclick="toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div id="modal-cart-items" class="max-h-[55vh] overflow-y-auto p-5 space-y-3"></div>
+
+      <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
+        <div class="mb-4 flex items-center justify-between">
+          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total a pagar</span>
+          <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
+        </div>
+        <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
+          <i class="fa-solid fa-check"></i>
+          Confirmar pedido por WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      // HAMBURGUESAS DE CARNE
+      { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 6.2 },
+      { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.8 },
+      { id: "hc3", category: "Hamb. Carne", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con un tequeyoyo.", price: 10.1 },
+
+      // HAMBURGUESAS DE POLLO
+      { id: "hp1", category: "Hamb. Pollo", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas hilo y salsas básicas.", price: 5.2 },
+      { id: "hp2", category: "Hamb. Pollo", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 7.8 },
+      { id: "hp3", category: "Hamb. Pollo", name: "La Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.1 },
+      { id: "hp4", category: "Hamb. Pollo", name: "La Empoderada", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 9.6 },
+      { id: "hp5", category: "Hamb. Pollo", name: "La Queen", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta coronada con un tequeyoyo.", price: 11.0 },
+
+      // SÚPER HAMBURGUESAS
+      { id: "sh1", category: "Súper Hamburguesas", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas hilo y salsas básicas.", price: 7.8 },
+      { id: "sh2", category: "Súper Hamburguesas", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 10.4 },
+      { id: "sh3", category: "Súper Hamburguesas", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 9.7 },
+      { id: "sh4", category: "Súper Hamburguesas", name: "La Potra", description: "240grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 10.4 },
+      { id: "sh5", category: "Súper Hamburguesas", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 11.4 },
+      { id: "sh6", category: "Súper Hamburguesas", name: "La Bandida", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, huevo, facilita Kraft y tocineta.", price: 11.8 },
+
+      // HAMBURGUESAS GOURMETS
+      { id: "hg1", category: "Hamb. Gourmets", name: "La Sugar", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, chutney de piña, facilita Kraft y tocineta.", price: 10.4 },
+      { id: "hg2", category: "Hamb. Gourmets", name: "La Mommy", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, queso crema con tocineta caramelizada y facilita Kraft.", price: 10.4 },
+
+      // PERRITOS
+      { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 2.6 },
+      { id: "p2", category: "Perritos", name: "El Chamo", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, facilita Kraft, tocineta y salsas básicas.", price: 4.9 },
+      { id: "p3", category: "Perritos", name: "El Azteca", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, maíz y salsas básicas.", price: 3.4 },
+      { id: "p4", category: "Perritos", name: "El Polonés", description: "Salchicha polaca, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
+      { id: "p5", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
+      { id: "p6", category: "Perritos", name: "Lleve", description: "Chorifrito, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
+
+      // PAPAS
+      { id: "pa1", category: "Papas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas Wiener y salsas básicas.", price: 5.2 },
+      { id: "pa2", category: "Papas", name: "Quesua", description: "300 grs de papas francesas, salchichas Wiener, maíz, queso amarillo y salsas básicas.", price: 6.9 },
+      { id: "pa3", category: "Papas", name: "Chorreada", description: "300 grs de papas francesas, queso fundido, tocineta y topping de cebollín.", price: 8.5 },
+
+      // PEPITOS
+      { id: "pe1", category: "Pepitos", name: "Carne, Pollo o Mixto", description: "Pan de orégano tostado con ajo, 300grs de proteína, queso amarillo, tocineta, maíz, lechuga, tomate, papas hilo, salsas básicas.", price: 15.5 },
+
+      // SANGUCHES
+      { id: "s1", category: "Sanguches", name: "El Club de la Casa", description: "Sándwich estilo club house con jamón, queso, huevo, lechuga, tomate, salsas básicas, 150 grs de proteína (carne, pollo o krispy) + 200 grs de papas francesas.", price: 13.5 },
+      { id: "s2", category: "Sanguches", name: "El Campesino", description: "Sándwich estilo granjero con queso Kraft, tocineta, lechuga, tomate, pepinillo, salsa tártara + 200grs de pechuga krispy.", price: 12.5 },
+
+      // RACIONES & EXTRAS
+      { id: "r1", category: "Raciones & Extras", name: "Tequeños (5 unidades)", description: "5 deliciosas unidades de tequeños.", price: 3.0 },
+      { id: "r2", category: "Raciones & Extras", name: "Tender + Papas Fritas", description: "Tenders de pollo acompañados con papas fritas.", price: 4.5 },
+      { id: "r3", category: "Raciones & Extras", name: "Tequeyoyo", description: "Tequeyoyo tradicional.", price: 1.5 },
+      { id: "r4", category: "Raciones & Extras", name: "Papas Fritas", description: "Ración adicional de papas fritas.", price: 1.0 },
+      { id: "r5", category: "Raciones & Extras", name: "Extra de Carne", description: "Porción adicional de carne.", price: 3.0 },
+      { id: "r6", category: "Raciones & Extras", name: "Extra de Pollo", description: "Porción adicional de pollo.", price: 2.0 },
+      { id: "r7", category: "Raciones & Extras", name: "Extra de Krispy", description: "Porción adicional de pollo krispy.", price: 2.5 },
+      { id: "r8", category: "Raciones & Extras", name: "Huevo", description: "Adicional de huevo.", price: 1.0 },
+      { id: "r9", category: "Raciones & Extras", name: "Extra de Facilita", description: "Adicional de queso Kraft facilita.", price: 1.0 },
+      { id: "r10", category: "Raciones & Extras", name: "Extra de Tocineta", description: "Porción adicional de tocineta.", price: 1.4 },
+      { id: "r11", category: "Raciones & Extras", name: "Salchicha", description: "Adicional de salchicha.", price: 0.8 },
+
+      // ENSALADAS
+      { id: "e1", category: "Ensaladas", name: "César Pollo", description: "200grs de pollo a la plancha, lechuga, crutones, tocineta, aderezo césar.", price: 10.0 },
+      { id: "e2", category: "Ensaladas", name: "César Krispy", description: "200grs de pollo krispy, lechuga, crutones, tocineta, aderezo césar.", price: 11.0 },
+
+      // PARA TOMAR
+      { id: "t1", category: "Para tomar", name: "Refresco 355ml", description: "Refresco individual de 355ml.", price: 1.2 },
+      { id: "t2", category: "Para tomar", name: "Refresco 1Lt", description: "Refresco de 1 litro.", price: 2.0 },
+      { id: "t3", category: "Para tomar", name: "Refresco 2Lt", description: "Refresco de 2 litros.", price: 3.5 },
+      { id: "t4", category: "Para tomar", name: "Malta", description: "Malta fría.", price: 1.2 },
+      { id: "t5", category: "Para tomar", name: "Agua", description: "Agua embotellada.", price: 1.0 },
+      { id: "t6", category: "Para tomar", name: "Té", description: "Té frío.", price: 2.5 }
+    ];
+
+    const categories = [
+      "Hamb. Carne",
+      "Hamb. Pollo",
+      "Súper Hamburguesas",
+      "Hamb. Gourmets",
+      "Perritos",
+      "Papas",
+      "Pepitos",
+      "Sanguches",
+      "Raciones & Extras",
+      "Ensaladas",
+      "Para tomar"
+    ];
+
+    const burgerCategories = [
+      "Hamb. Carne",
+      "Hamb. Pollo",
+      "Súper Hamburguesas",
+      "Hamb. Gourmets"
+    ];
+
+    let activeCategory = "Hamb. Carne";
+    let cart = {};
+
+    const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
+
+    function renderCategories() {
+      const container = document.getElementById("categories-bar");
+      container.innerHTML = categories.map(cat => {
+        const active = cat === activeCategory;
+        return `
+          <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition sm:text-sm ${
+            active
+              ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md"
+              : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
+          }">
+            <span>${cat}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const grid = document.getElementById("products-grid");
+      const filtered = products.filter(p => p.category === activeCategory);
+
+      document.getElementById("cat-subtitle").innerText = activeCategory;
+      document.getElementById("cat-count").innerText = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
+
+      const noticeEl = document.getElementById("burgers-notice");
+      if (burgerCategories.includes(activeCategory)) {
+        noticeEl.classList.remove("hidden");
+      } else {
+        noticeEl.classList.add("hidden");
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full rounded-[28px] border border-[#E8A020]/20 bg-[#171313]/80 p-10 text-center">
+            <h3 class="text-xl font-black uppercase text-[#F5E6C8]">Próximamente</h3>
+            <p class="mt-2 text-sm text-[#F5E6C8]/55">Esta categoría estará disponible pronto con nuevos productos.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const disabled = p.price == null;
+        return `
+          <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition hover:border-[#E8A020] sm:p-3">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-baseline justify-between gap-3">
+                <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
+              </div>
+              <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
+            </div>
+            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function addToCart(id) {
+      cart[id] = (cart[id] || 0) + 1;
+      updateCartUI();
+    }
+
+    function changeQuantity(id, delta) {
+      if (!cart[id]) return;
+      cart[id] += delta;
+      if (cart[id] <= 0) delete cart[id];
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      let count = 0;
+      let total = 0;
+
+      Object.keys(cart).forEach(id => {
+        const item = products.find(p => p.id === id);
+        if (item && item.price != null) {
+          count += cart[id];
+          total += item.price * cart[id];
         }
       });
-    }
-  </script>
 
+      document.getElementById("badge-count").innerText = count;
+      document.getElementById("bottom-cart-total").innerText = `$${total.toFixed(2)}`;
+      document.getElementById("modal-cart-total").innerText = `$${total.toFixed(2)}`;
+      document.getElementById("bottom-cart-label").innerText = count === 0 ? "Tu pedido está vacío" : `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
+
+      const disabled = count === 0;
+      document.getElementById("btn-whatsapp-bar").disabled = disabled;
+      document.getElementById("btn-whatsapp-modal").disabled = disabled;
+
+      renderCartModalItems();
+    }
+
+    function renderCartModalItems() {
+      const container = document.getElementById("modal-cart-items");
+      const keys = Object.keys(cart);
+
+      if (keys.length === 0) {
+        container.innerHTML = `
+          <div class="rounded-2xl border border-dashed border-[#E8A020]/20 bg-[#4E1111]/45 p-8 text-center">
+            <p class="font-black uppercase text-[#F5E6C8]">Tu pedido está vacío.</p>
+            <p class="mt-1 text-sm text-[#F5E6C8]/45">Agrega algo delicioso para comenzar.</p>
+          </div>`;
+        return;
+      }
+
+      container.innerHTML = keys.map(id => {
+        const item = products.find(p => p.id === id);
+        const qty = cart[id];
+        const lineTotal = (item.price || 0) * qty;
+
+        return `
+          <div class="rounded-2xl border border-[#500707]/15 bg-[#FFFBEB] p-4 shadow-sm">
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <h3 class="font-black uppercase text-[#500707]">${item.name}</h3>
+                <p class="mt-1 text-xs font-medium text-[#500707]/70">$${(item.price || 0).toFixed(2)} c/u</p>
+              </div>
+              <p class="shrink-0 font-black text-[#500707]">$${lineTotal.toFixed(2)}</p>
+            </div>
+            <div class="mt-3 flex items-center justify-between">
+              <div class="inline-flex items-center rounded-xl border border-[#500707]/20 bg-white p-1">
+                <button onclick="changeQuantity('${id}', -1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10"><i class="fa-solid fa-minus text-xs"></i></button>
+                <span class="w-8 text-center text-sm font-black text-[#500707]">${qty}</span>
+                <button onclick="changeQuantity('${id}', 1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10"><i class="fa-solid fa-plus text-xs"></i></button>
+              </div>
+              <button onclick="changeQuantity('${id}', -${qty})" class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-[#500707] hover:bg-[#500707]/10">
+                <i class="fa-solid fa-trash"></i> Eliminar
+              </button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function toggleCartModal(show) {
+      const modal = document.getElementById("cart-modal");
+      if (show) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+      } else {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        document.body.style.overflow = "unset";
+      }
+    }
+
+    function sendWhatsApp() {
+      const keys = Object.keys(cart);
+      if (keys.length === 0) return;
+
+      let total = 0;
+      const lines = keys.map(id => {
+        const item = products.find(p => p.id === id);
+        const sub = (item.price || 0) * cart[id];
+        total += sub;
+        return `- ${cart[id]}x ${item.name} ($${sub.toFixed(2)})`;
+      });
+
+      const message = `¡Hola Cory Fast! Quisiera hacer el siguiente pedido:\n\n${lines.join('\n')}\n\n- Total a pagar: $${total.toFixed(2)}`;
+      window.open(`https://wa.me/584120367308?text=${encodeURIComponent(message)}`, '_blank');
+    }
+
+    renderCategories();
+    renderProducts();
+    updateCartUI();
+  </script>
 </body>
 </html>
