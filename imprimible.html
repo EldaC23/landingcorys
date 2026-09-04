@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cory's Fast Food - Menú Imprimible</title>
+    <!-- Tailwind CSS & FontAwesome -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #1a1a1a;
+            color: #1a1a1a;
+            margin: 0;
+            padding: 0;
+        }
+        .page {
+            width: 216mm;
+            height: 279mm;
+            padding: 12mm;
+            margin: 10px auto;
+            background: #f7f3eb; /* Fondo crema suave vintage */
+            box-sizing: border-box;
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            page-break-after: always;
+            overflow: hidden;
+        }
+        .font-oswald { font-family: 'Oswald', sans-serif; }
+        .bg-burgundy { background-color: #58111A; }
+        .text-burgundy { color: #58111A; }
+        .bg-gold { background-color: #E8A020; }
+        .border-gold { border-color: #E8A020; }
+        
+        /* Simulación de cinta/banner estilizado */
+        .ribbon {
+            background: #58111A;
+            color: #ffffff;
+            padding: 4px 15px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .price-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #58111A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            background: #fff;
+            color: #1a1a1a;
+            flex-shrink: 0;
+        }
+
+        @media print {
+            body { background: none; }
+            .page {
+                margin: 0;
+                box-shadow: none;
+                width: 216mm;
+                height: 279mm;
+            }
+            @page {
+                size: letter portrait;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================= PÁGINA 1: HAMBURGUESAS ================= -->
+    <div class="page flex flex-col justify-between">
+        
+        <!-- HEADER -->
+        <div class="text-center relative border-b-4 border-[#E8A020] pb-2">
+            <div class="flex justify-center items-center gap-3">
+                <div class="bg-[#58111A] text-white p-2 rounded-full w-12 h-12 flex items-center justify-center font-bold border-2 border-[#E8A020]">
+                    <i class="fa-solid font-bold text-xl">C</i>
+                </div>
+                <div>
+                    <span class="text-sm font-bold tracking-widest text-[#58111A] block uppercase">NUESTRO</span>
+                    <h1 class="text-4xl font-extrabold font-oswald text-[#58111A] leading-none uppercase tracking-wider">MENÚ DIGITAL</h1>
+                </div>
+            </div>
+            <div class="bg-[#E8A020] text-[#58111A] font-oswald font-bold text-lg py-1 mt-2 tracking-widest uppercase rounded">
+                HAMBURGUESAS
+            </div>
+        </div>
+
+        <!-- CONTENIDO HAMBURGUESAS (2 COLUMNAS) -->
+        <div class="grid grid-cols-2 gap-4 my-2 flex-grow">
+            
+            <!-- COLUMNA IZQUIERDA: CARNE & SÚPER -->
+            <div class="flex flex-col gap-3">
+                
+                <!-- FOTO REAL 1 (SIN TEXTO ENCIMA) -->
+                <div class="h-36 rounded-lg overflow-hidden border-2 border-[#E8A020] shadow-md">
+                    <img src="buger2.jpg.png" class="w-full h-full object-cover" alt="Hamburguesa de Carne">
+                </div>
+
+                <!-- CARNE -->
+                <div>
+                    <div class="ribbon mb-2">
+                        <i class="fa-solid fa-[#E8A020] fa-cow text-[#E8A020]"></i> CARNE
+                    </div>
+                    <div class="space-y-2 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA CUAIMA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">120grs de carne, lechuga, tomate, papas hilo y salsas básicas</p>
+                            </div>
+                            <div class="price-circle">6.2</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA CHAMA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">8.8</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA MORENA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con tequeyoyo</p>
+                            </div>
+                            <div class="price-circle">10.1</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SÚPER -->
+                <div>
+                    <div class="ribbon mb-2">
+                        <i class="fa-solid fa-star text-[#E8A020]"></i> SÚPER
+                    </div>
+                    <div class="space-y-2 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA DIVA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">240grs de pollo, lechuga, tomate, papas hilo y salsas básicas</p>
+                            </div>
+                            <div class="price-circle">7.8</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA CABALLOTA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">240grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">10.4</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA: POLLO & GOURMETS -->
+            <div class="flex flex-col gap-3">
+                
+                <!-- POLLO -->
+                <div>
+                    <div class="ribbon mb-2">
+                        <i class="fa-solid fa-drumstick-bite text-[#E8A020]"></i> POLLO
+                    </div>
+                    <div class="space-y-2 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA SIFRINA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">120grs de pollo, lechuga, tomate, papas hilo y salsas básicas</p>
+                            </div>
+                            <div class="price-circle">5.2</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA CATIRA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">7.8</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA MAMASITA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">120grs de pollo krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">8.1</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA EMPODERADA</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">9.6</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-sm text-[#58111A] uppercase">LA QUEEN</h3>
+                                <p class="text-[10px] text-gray-700 leading-tight">200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta coronada con un tequeyoyo</p>
+                            </div>
+                            <div class="price-circle">11</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FOTO REAL 2 (SIN TEXTO ENCIMA) -->
+                <div class="h-32 rounded-lg overflow-hidden border-2 border-[#E8A020] shadow-md">
+                    <img src="chicken.jpg.png" class="w-full h-full object-cover" alt="Hamburguesa con Tequeyoyo">
+                </div>
+
+                <!-- GOURMETS -->
+                <div>
+                    <div class="ribbon mb-2">
+                        <i class="fa-solid fa-crown text-[#E8A020]"></i> GOURMETS
+                    </div>
+                    <div class="space-y-1.5 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">LA PANA</h3>
+                                <p class="text-[9px] text-gray-700 leading-tight">240grs de carne, lechuga, tomate, papas hilo y salsas básicas</p>
+                            </div>
+                            <div class="price-circle">9.7</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">LA POTRA</h3>
+                                <p class="text-[9px] text-gray-700 leading-tight">240grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">10.4</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">LA TÓXICA</h3>
+                                <p class="text-[9px] text-gray-700 leading-tight">120grs carne, 120grs pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">11.4</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">LA BANDIDA</h3>
+                                <p class="text-[9px] text-gray-700 leading-tight">120grs carne, 120grs pollo, lechuga, tomate, papas hilo, salsas básicas, huevo, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">11.8</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">LA SUGAR</h3>
+                                <p class="text-[9px] text-gray-700 leading-tight">120grs carne, lechuga, tomate, papas hilo, salsas básicas, chutney de piña, facilita Kraft y tocineta</p>
+                            </div>
+                            <div class="price-circle">11.8</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">LA MOMMY</h3>
+                                <p class="text-[9px] text-gray-700 leading-tight">120grs carne, lechuga, tomate, papas hilo, salsas básicas, queso crema con tocineta caramelizada y facilita Kraft</p>
+                            </div>
+                            <div class="price-circle">11.8</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER AVISO -->
+        <div class="bg-[#58111A] text-white text-center py-2 px-3 rounded-lg border-2 border-[#E8A020] mt-auto">
+            <p class="font-oswald text-sm text-[#E8A020] uppercase tracking-wider">
+                TODAS NUESTRAS HAMBURGUESAS VIENEN ACOMPAÑADAS CON 100GRS DE PAPAS FRITAS
+            </p>
+            <p class="text-[11px] text-gray-200 mt-0.5">
+                <i class="fa-brands fa-instagram text-[#E8A020]"></i> @corysfast
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ================= PÁGINA 2: OTROS PRODUCTOS ================= -->
+    <div class="page flex flex-col justify-between">
+        
+        <!-- HEADER PÁGINA 2 -->
+        <div class="text-center relative border-b-4 border-[#E8A020] pb-2">
+            <h1 class="text-3xl font-extrabold font-oswald text-[#58111A] leading-none uppercase tracking-wider">CORY'S FAST FOOD</h1>
+            <div class="bg-[#E8A020] text-[#58111A] font-oswald font-bold text-lg py-1 mt-2 tracking-widest uppercase rounded">
+                ESPECIALIDADES, COMPLEMENTOS Y BEBIDAS
+            </div>
+        </div>
+
+        <!-- CONTENIDO RESTO DE PRODUCTOS (GRID 2 COLUMNAS) -->
+        <div class="grid grid-cols-2 gap-4 my-2 flex-grow">
+            
+            <!-- COLUMNA IZQUIERDA -->
+            <div class="space-y-3">
+                
+                <!-- PERRITOS -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-hotdog text-[#E8A020]"></i> PERRITOS</div>
+                    <div class="space-y-1.5 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL MÁRTIR</h3><p class="text-[9px] text-gray-700">Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas</p></div>
+                            <div class="price-circle">2.6</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL CHAMO</h3><p class="text-[9px] text-gray-700">Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, facilita kraft, tocineta y salsas básicas</p></div>
+                            <div class="price-circle">4.9</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL AZTECA</h3><p class="text-[9px] text-gray-700">Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, maíz y salsas básicas</p></div>
+                            <div class="price-circle">3.4</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL POLONÉS</h3><p class="text-[9px] text-gray-700">Salchicha polaca, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas</p></div>
+                            <div class="price-circle">4.4</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL GERMANO</h3><p class="text-[9px] text-gray-700">Salchicha alemana, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas</p></div>
+                            <div class="price-circle">4.4</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">LLEVE</h3><p class="text-[9px] text-gray-700">Chorifrito, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas</p></div>
+                            <div class="price-circle">4.4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PEPITOS -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-bread-slice text-[#E8A020]"></i> PEPITOS</div>
+                    <div class="pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div>
+                                <h3 class="font-bold text-xs text-[#58111A] uppercase">CARNE, POLLO O MIXTO</h3>
+                                <p class="text-[9px] text-gray-700">Pan de orégano tostado con ajo, 300grs de proteína, queso amarillo, tocineta, maíz, lechuga, tomate, papas hilo, salsas básicas</p>
+                            </div>
+                            <div class="price-circle">15.5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PAPAS -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-box-archive text-[#E8A020]"></i> PAPAS</div>
+                    <div class="space-y-1.5 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">CLASIQUITAS</h3><p class="text-[9px] text-gray-700">300 grs de papas francesas, salchichas Wiener y salsas básicas</p></div>
+                            <div class="price-circle">5.2</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">QUESUA</h3><p class="text-[9px] text-gray-700">300 grs de papas francesas, salchichas Wiener, maíz, queso amarillo y salsas básicas</p></div>
+                            <div class="price-circle">6.9</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">CHORREADA</h3><p class="text-[9px] text-gray-700">300 grs de papas francesas, queso fundido, tocineta y topping de cebollín</p></div>
+                            <div class="price-circle">6.9</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SANGUCHES -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-sandwich text-[#E8A020]"></i> SANGUCHES</div>
+                    <div class="space-y-1.5 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL CLUB DE LA CASA</h3><p class="text-[9px] text-gray-700">Estilo club house con jamón, queso, huevo, lechuga, tomate, salsas básicas, 150 grs de proteína + 200 grs de papas</p></div>
+                            <div class="price-circle">10</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">EL CAMPESINO</h3><p class="text-[9px] text-gray-700">Estilo granjero con queso kraft, tocineta, lechuga, tomate, pepinillo, salsa tártara + 200grs de pechuga krispy</p></div>
+                            <div class="price-circle">10</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- COLUMNA DERECHA -->
+            <div class="space-y-3">
+                
+                <!-- RACIONES & EXTRAS -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-plus text-[#E8A020]"></i> RACIONES & EXTRAS</div>
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1 pl-1 text-[10px]">
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">TEQUEÑOS (5 UNID)</span> <span class="font-bold">3.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">TENDER + PAPAS</span> <span class="font-bold">4.5</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">TEQUEYOYO</span> <span class="font-bold">1.5</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">PAPAS FRITAS</span> <span class="font-bold">1.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">EXTRA CARNE</span> <span class="font-bold">3.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">EXTRA POLLO</span> <span class="font-bold">2.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">EXTRA KRISPY</span> <span class="font-bold">2.5</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">HUEVO</span> <span class="font-bold">1.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">EXTRA FACILITA</span> <span class="font-bold">1.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">EXTRA TOCINETA</span> <span class="font-bold">1.4</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">SALCHICHA</span> <span class="font-bold">0.8</span></div>
+                    </div>
+                </div>
+
+                <!-- ENSALADAS -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-bowl-rice text-[#E8A020]"></i> ENSALADAS</div>
+                    <div class="space-y-1.5 pl-1">
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">CÉSAR POLLO</h3><p class="text-[9px] text-gray-700">200grs de pollo a la plancha, lechuga, crutones, tocineta, aderezo césar</p></div>
+                            <div class="price-circle">10</div>
+                        </div>
+                        <div class="flex justify-between items-start gap-1">
+                            <div><h3 class="font-bold text-xs text-[#58111A] uppercase">CÉSAR KRISPY</h3><p class="text-[9px] text-gray-700">200grs de pollo krispy, lechuga, crutones, tocineta, aderezo césar</p></div>
+                            <div class="price-circle">11</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PARA TOMAR -->
+                <div>
+                    <div class="ribbon mb-2"><i class="fa-solid fa-bottle-water text-[#E8A020]"></i> PARA TOMAR</div>
+                    <div class="grid grid-cols-2 gap-x-2 gap-y-1 pl-1 text-[10px]">
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">REFRESCO 355ML</span> <span class="font-bold">1.2</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">REFRESCO 1LT</span> <span class="font-bold">2.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">REFRESCO 2LT</span> <span class="font-bold">3.5</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">MALTA</span> <span class="font-bold">1.2</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">AGUA</span> <span class="font-bold">1.0</span></div>
+                        <div class="flex justify-between border-b pb-0.5"><span class="font-bold text-[#58111A]">TÉ</span> <span class="font-bold">2.5</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- FOOTER PÁGINA 2 -->
+        <div class="bg-[#58111A] text-white text-center py-2 px-3 rounded-lg border-2 border-[#E8A020] mt-auto">
+            <p class="font-oswald text-sm text-[#E8A020] uppercase tracking-wider">
+                ¡GRACIAS POR TU PREFERENCIA!
+            </p>
+            <p class="text-[11px] text-gray-200 mt-0.5">
+                <i class="fa-brands fa-instagram text-[#E8A020]"></i> @corysfast
+            </p>
+        </div>
+
+    </div>
+
+</body>
+</html>
