@@ -7,24 +7,26 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Scrollbar personalizada con el color #E8A020 */
+    /* Scrollbar siempre visible con el color #E8A020 */
+    .custom-scrollbar {
+      scrollbar-width: auto;
+      scrollbar-color: #E8A020 rgba(232, 160, 32, 0.25);
+    }
     .custom-scrollbar::-webkit-scrollbar {
-      height: 6px;
+      height: 8px;
+      display: block !important;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(232, 160, 32, 0.1);
+      background: rgba(232, 160, 32, 0.15);
       border-radius: 10px;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #E8A020;
       border-radius: 10px;
+      border: 1px solid rgba(23, 19, 19, 0.5);
     }
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #f2b33a;
-    }
-    .custom-scrollbar {
-      scrollbar-width: thin;
-      scrollbar-color: #E8A020 rgba(232, 160, 32, 0.1);
     }
   </style>
 </head>
@@ -54,14 +56,18 @@
     </div>
   </header>
 
-  <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/20 bg-[#171313]/95 backdrop-blur-md">
+  <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
     <div class="relative mx-auto max-w-6xl">
-      <div class="custom-scrollbar overflow-x-auto pl-4 pr-12 py-3 sm:pl-6 sm:pr-16">
-        <div class="flex min-w-max gap-3 pr-8" id="categories-bar"></div>
+      <div class="custom-scrollbar overflow-x-auto pl-4 pr-16 py-3.5 sm:pl-6 sm:pr-20">
+        <div class="flex min-w-max gap-3 pr-12" id="categories-bar"></div>
       </div>
 
-      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-end pr-2 w-14 bg-gradient-to-l from-[#171313] via-[#171313]/80 to-transparent">
-        <i class="fa-solid fa-chevron-right text-[#E8A020] text-xs animate-pulse opacity-80"></i>
+      <!-- Indicador y Flecha destacados -->
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-end pr-2 pl-6 w-20 bg-gradient-to-l from-[#171313] via-[#171313]/90 to-transparent">
+        <div class="flex items-center gap-1.5 rounded-full border border-[#E8A020]/60 bg-[#171313] px-2 py-1 shadow-lg shadow-black/50">
+          <span class="text-[10px] font-black uppercase text-[#E8A020] sm:hidden">Desliza</span>
+          <i class="fa-solid fa-chevron-right text-xs font-black text-[#E8A020] animate-bounce"></i>
+        </div>
       </div>
     </div>
   </section>
