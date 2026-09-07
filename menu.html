@@ -37,25 +37,25 @@
     }
   </style>
 </head>
-<body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
+<body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #5C0D0E; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.12), transparent 35%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.4), transparent 40%);">
 
-  <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
-    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
+  <header class="sticky top-0 z-50 border-b border-[#E8A020]/30 shadow-2xl backdrop-blur-md" style="background-color: rgba(30, 8, 8, 0.95)">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6 sm:py-3">
       
-      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition duration-200 hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313] active:scale-95">
+      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/40 bg-[#171313] px-3.5 py-2 text-xs font-black uppercase text-[#F5E6C8] shadow-md transition duration-200 hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313] active:scale-95">
         <i class="fa-solid fa-arrow-left"></i>
         <span class="hidden sm:inline">Volver</span>
       </a>
 
-      <div class="flex min-w-0 items-center gap-2 sm:gap-3">
-        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020]/50 object-cover shadow-md" onerror="this.src='https://via.placeholder.com/50'" />
+      <div class="flex min-w-0 items-center gap-2.5 sm:gap-3">
+        <img src="logo.webp" alt="Cory's Fast Food" class="h-10 w-10 shrink-0 rounded-full border-2 border-[#E8A020] object-cover shadow-lg" onerror="this.src='https://via.placeholder.com/50'" />
         <div class="min-w-0">
           <p class="truncate text-[10px] font-bold uppercase tracking-[0.2em] text-[#E8A020]">Cory's Fast Food</p>
           <h1 class="truncate text-sm font-black uppercase leading-none text-[#F5E6C8] sm:text-xl">Menú Interactivo</h1>
         </div>
       </div>
 
-      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] shadow-md transition duration-200 hover:border-[#E8A020] hover:bg-[#8f1618] active:scale-95 sm:px-4 sm:py-2.5">
+      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020] bg-gradient-to-r from-[#7B1213] to-[#4E1111] px-3.5 py-2 text-xs font-black uppercase text-[#F5E6C8] shadow-lg transition duration-200 hover:brightness-110 active:scale-95 sm:px-4 sm:py-2.5">
         <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
         <span class="hidden sm:inline">Ver pedido</span>
       </button>
@@ -63,15 +63,14 @@
     </div>
   </header>
 
-  <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
+  <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#120a0a]/98 backdrop-blur-md">
     <div class="relative mx-auto max-w-6xl">
       <div class="custom-scrollbar overflow-x-auto pl-4 pr-16 py-3.5 sm:pl-6 sm:pr-20">
         <div class="flex min-w-max gap-3 pr-12" id="categories-bar"></div>
       </div>
 
-      <!-- Indicador y Flecha destacados -->
-      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-end pr-2 pl-6 w-20 bg-gradient-to-l from-[#171313] via-[#171313]/90 to-transparent">
-        <div class="flex items-center gap-1.5 rounded-full border border-[#E8A020]/60 bg-[#171313] px-2 py-1 shadow-lg shadow-black/50">
+      <div class="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center justify-end pr-2 pl-6 w-20 bg-gradient-to-l from-[#120a0a] via-[#120a0a]/90 to-transparent">
+        <div class="flex items-center gap-1.5 rounded-full border border-[#E8A020] bg-[#171313] px-2.5 py-1 shadow-xl shadow-black/80">
           <span class="text-[10px] font-black uppercase text-[#E8A020] sm:hidden">Desliza</span>
           <i class="fa-solid fa-chevron-right text-xs font-black text-[#E8A020] animate-bounce"></i>
         </div>
@@ -79,66 +78,62 @@
     </div>
   </section>
 
-  <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
-    <div class="mb-3 flex flex-col gap-2 sm:mb-6">
+  <main class="mx-auto max-w-6xl px-4 py-5 sm:px-6 sm:py-8">
+    <div class="mb-4 flex flex-col gap-2 sm:mb-6">
       <div class="flex items-end justify-between gap-4">
         <div>
           <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Hamb. Carne</p>
-          <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
-          <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
+          <h2 class="mt-1 text-xl font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
+          <div class="mt-2 h-1 w-14 rounded-full bg-[#E8A020]"></div>
         </div>
-        <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">0 opciones</p>
+        <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/60">0 opciones</p>
       </div>
 
-      <!-- Notice Badge for Burger Categories -->
-      <div id="burgers-notice" class="hidden mt-2 rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-xs font-bold text-[#E8A020] shadow-sm">
+      <div id="burgers-notice" class="hidden mt-3 rounded-xl border border-[#E8A020]/50 bg-[#171313]/90 px-4 py-2.5 text-xs font-bold text-[#E8A020] shadow-md backdrop-blur-sm">
         🍟 Todas nuestras hamburguesas vienen acompañadas con 100g de papas fritas
       </div>
     </div>
 
-    <div id="products-grid" class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3"></div>
+    <div id="products-grid" class="flex flex-col gap-3 sm:grid sm:grid-cols-2 sm:gap-4 lg:grid-cols-3"></div>
   </main>
 
-  <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
-    <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
-      <button onclick="toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
-        <div class="flex min-w-0 items-center gap-2">
-          <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow-sm">
-            <i class="fa-solid fa-basket-shopping"></i>
-            <span id="badge-count" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313]">0</span>
+  <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 sm:px-6 sm:pb-4">
+    <div class="mx-auto flex max-w-6xl items-center gap-2.5 rounded-2xl border border-[#E8A020]/40 bg-[#120a0a]/95 p-2 shadow-2xl backdrop-blur-xl">
+      <button onclick="toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-xl px-3 py-2 text-left transition hover:bg-[#2e0a0a]">
+        <div class="flex min-w-0 items-center gap-2.5">
+          <div class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#E8A020] text-[#171313] shadow-md">
+            <i class="fa-solid fa-basket-shopping text-sm"></i>
+            <span id="badge-count" class="absolute -right-1.5 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313] shadow">0</span>
           </div>
           <p id="bottom-cart-label" class="truncate text-xs font-black text-[#F5E6C8]">Tu pedido está vacío</p>
         </div>
-        <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
+        <span id="bottom-cart-total" class="ml-2 shrink-0 text-base font-black text-[#E8A020]">$0.00</span>
       </button>
 
-      <button onclick="sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
-        <i class="fa-brands fa-whatsapp text-sm"></i>
+      <button onclick="sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#E8A020] to-[#f2b33a] px-4 py-2.5 text-xs font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:brightness-105 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
+        <i class="fa-brands fa-whatsapp text-base"></i>
         <span class="hidden sm:inline">Pedir por </span>WhatsApp
       </button>
     </div>
   </div>
 
-  <!-- MODAL DEL CARRITO DE COMPRAS -->
-  <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
-    <div class="max-h-[90vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
+  <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-black/80 p-0 backdrop-blur-md sm:items-center sm:justify-center sm:p-4">
+    <div class="max-h-[90vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/40 bg-[#120a0a] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       
-      <!-- Encabezado Modal -->
-      <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
+      <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4 bg-[#171313]">
         <div>
           <h2 class="text-xl font-black uppercase text-[#F5E6C8]">Tu pedido</h2>
-          <p class="text-xs font-medium text-[#F5E6C8]/45">Revisa cantidades y datos antes de enviarlo.</p>
+          <p class="text-xs font-medium text-[#F5E6C8]/50">Revisa cantidades y datos antes de enviarlo.</p>
         </div>
-        <button onclick="toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
-          <i class="fa-solid fa-xmark text-lg"></i>
+        <button onclick="toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/60 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
+          <i class="fa-solid fa-xmark text-xl"></i>
         </button>
       </div>
 
-      <!-- Lista de Productos -->
       <div id="modal-cart-items" class="max-h-[42vh] overflow-y-auto p-5 space-y-3 custom-scrollbar"></div>
 
-      <!-- Datos del Cliente (Nombre y Observaciones) -->
-      <div class="border-t border-[#F5E6C8]/10 bg-[#1f1a1a] p-4 space-y-2.5">
+      <!-- DATOS DEL CLIENTE CON MEJOR DESTACADO VISUAL -->
+      <div class="border-t border-[#E8A020]/20 bg-[#1a1212] p-4 space-y-3">
         <div>
           <label for="clientName" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
             <i class="fa-solid fa-user mr-1"></i> Tu Nombre Completo
@@ -147,7 +142,7 @@
             type="text" 
             id="clientName" 
             placeholder="Ej. María Pérez" 
-            class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
+            class="w-full rounded-xl border border-[#E8A020]/40 bg-[#120a0a] px-3.5 py-2.5 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
           >
         </div>
         <div>
@@ -158,19 +153,18 @@
             type="text" 
             id="clientNotes" 
             placeholder="Ej. Sin cebolla, salsa tártara aparte..." 
-            class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
+            class="w-full rounded-xl border border-[#E8A020]/40 bg-[#120a0a] px-3.5 py-2.5 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
           >
         </div>
       </div>
 
-      <!-- Pie del Modal: Total y Botón de Envío -->
-      <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
+      <div class="border-t border-[#F5E6C8]/10 bg-[#3d0b0c] p-5">
         <div class="mb-4 flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total a pagar</span>
+          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/60">Total a pagar</span>
           <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
         </div>
-        <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
-          <i class="fa-brands fa-whatsapp text-lg"></i>
+        <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#E8A020] to-[#f2b33a] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-xl transition duration-200 hover:brightness-105 active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
+          <i class="fa-brands fa-whatsapp text-xl"></i>
           Confirmar pedido por WhatsApp
         </button>
       </div>
@@ -282,8 +276,8 @@
         return `
           <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition duration-150 active:scale-95 sm:text-sm ${
             active
-              ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md shadow-[#E8A020]/20"
-              : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
+              ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md shadow-[#E8A020]/30"
+              : "border-[#F5E6C8]/15 bg-[#171313]/80 text-[#F5E6C8]/80 hover:border-[#E8A020]/50 hover:text-[#F5E6C8]"
           }">
             <span>${cat}</span>
           </button>
@@ -320,18 +314,19 @@
         return;
       }
 
+      /* TARJETAS CON FONDO OSCURO DE ELEVADO CONTRASTE */
       grid.innerHTML = filtered.map(p => {
         const disabled = p.price == null;
         return `
-          <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
+          <article class="flex items-center gap-3 rounded-2xl border border-[#E8A020]/30 bg-[#1f1a1a] p-3 shadow-lg transition duration-200 hover:border-[#E8A020] hover:shadow-2xl">
             <div class="min-w-0 flex-1">
-              <div class="flex items-baseline justify-between gap-3">
-                <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
-                <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
+              <div class="flex items-baseline justify-between gap-2">
+                <h3 class="truncate text-sm font-black uppercase leading-tight text-[#F5E6C8]">${p.name}</h3>
+                <span class="shrink-0 text-sm font-black text-[#E8A020] bg-[#120a0a] px-2 py-0.5 rounded-lg border border-[#E8A020]/20">${formatCurrency(p.price)}</span>
               </div>
-              <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
+              <p class="mt-1 text-xs leading-relaxed text-[#F5E6C8]/70">${p.description}</p>
             </div>
-            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
+            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl shadow-md transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/20 text-[#F5E6C8]/20 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#f2b33a]'}">
               <i class="fa-solid fa-plus text-xs"></i>
             </button>
           </article>
@@ -381,9 +376,9 @@
 
       if (keys.length === 0) {
         container.innerHTML = `
-          <div class="rounded-2xl border border-dashed border-[#E8A020]/20 bg-[#4E1111]/45 p-8 text-center">
+          <div class="rounded-2xl border border-dashed border-[#E8A020]/20 bg-[#2b0c0d]/50 p-8 text-center">
             <p class="font-black uppercase text-[#F5E6C8]">Tu pedido está vacío.</p>
-            <p class="mt-1 text-sm text-[#F5E6C8]/45">Agrega algo delicioso para comenzar.</p>
+            <p class="mt-1 text-sm text-[#F5E6C8]/50">Agrega algo delicioso para comenzar.</p>
           </div>`;
         return;
       }
@@ -394,21 +389,21 @@
         const lineTotal = (item.price || 0) * qty;
 
         return `
-          <div class="rounded-2xl border border-[#500707]/15 bg-[#FFFBEB] p-4 shadow-sm">
+          <div class="rounded-2xl border border-[#E8A020]/20 bg-[#1f1a1a] p-3.5 shadow-md">
             <div class="flex items-start justify-between gap-4">
               <div>
-                <h3 class="font-black uppercase text-[#500707]">${item.name}</h3>
-                <p class="mt-1 text-xs font-medium text-[#500707]/70">$${(item.price || 0).toFixed(2)} c/u</p>
+                <h3 class="font-black uppercase text-[#F5E6C8]">${item.name}</h3>
+                <p class="mt-0.5 text-xs font-medium text-[#F5E6C8]/60">$${(item.price || 0).toFixed(2)} c/u</p>
               </div>
-              <p class="shrink-0 font-black text-[#500707]">$${lineTotal.toFixed(2)}</p>
+              <p class="shrink-0 font-black text-[#E8A020]">$${lineTotal.toFixed(2)}</p>
             </div>
             <div class="mt-3 flex items-center justify-between">
-              <div class="inline-flex items-center rounded-xl border border-[#500707]/20 bg-white p-1">
-                <button onclick="changeQuantity('${id}', -1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition"><i class="fa-solid fa-minus text-xs"></i></button>
-                <span class="w-8 text-center text-sm font-black text-[#500707]">${qty}</span>
-                <button onclick="changeQuantity('${id}', 1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition"><i class="fa-solid fa-plus text-xs"></i></button>
+              <div class="inline-flex items-center rounded-xl border border-[#E8A020]/30 bg-[#120a0a] p-1">
+                <button onclick="changeQuantity('${id}', -1)" class="flex h-7 w-7 items-center justify-center rounded-lg text-[#F5E6C8] hover:bg-[#E8A020]/20 active:scale-90 transition"><i class="fa-solid fa-minus text-xs"></i></button>
+                <span class="w-8 text-center text-sm font-black text-[#E8A020]">${qty}</span>
+                <button onclick="changeQuantity('${id}', 1)" class="flex h-7 w-7 items-center justify-center rounded-lg text-[#F5E6C8] hover:bg-[#E8A020]/20 active:scale-90 transition"><i class="fa-solid fa-plus text-xs"></i></button>
               </div>
-              <button onclick="changeQuantity('${id}', -${qty})" class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-[#500707] hover:bg-[#500707]/10 transition">
+              <button onclick="changeQuantity('${id}', -${qty})" class="inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-bold text-red-400 hover:bg-red-500/10 transition">
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>
             </div>
