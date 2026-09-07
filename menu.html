@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
   <!-- Meta tags para vista previa en WhatsApp -->
-<meta property="og:type" content="website" />
-<meta property="og:title" content="Cory's Fast Food - Menú Interactivo" />
-<meta property="og:description" content="Conoce nuestro menú digital interactivo y realiza tu pedido al instante." />
-<meta property="og:image" content="https://eldac23.github.io/landingcorys/logo.webp" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cory's Fast Food - Menú Interactivo" />
+  <meta property="og:description" content="Conoce nuestro menú digital interactivo y realiza tu pedido al instante." />
+  <meta property="og:image" content="https://eldac23.github.io/landingcorys/logo.webp" />
   <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-<link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cory's Fast Food - Menú Interactivo</title>
@@ -42,7 +42,7 @@
   <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
       
-      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313]">
+      <a href="index.html" class="flex items-center gap-2 rounded-xl border border-[#E8A020]/30 bg-[#171313]/60 px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition duration-200 hover:border-[#E8A020] hover:bg-[#E8A020] hover:text-[#171313] active:scale-95">
         <i class="fa-solid fa-arrow-left"></i>
         <span class="hidden sm:inline">Volver</span>
       </a>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] transition hover:border-[#E8A020] sm:px-4 sm:py-2.5">
+      <button onclick="toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] shadow-md transition duration-200 hover:border-[#E8A020] hover:bg-[#8f1618] active:scale-95 sm:px-4 sm:py-2.5">
         <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
         <span class="hidden sm:inline">Ver pedido</span>
       </button>
@@ -103,7 +103,7 @@
     <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
       <button onclick="toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
         <div class="flex min-w-0 items-center gap-2">
-          <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313]">
+          <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow-sm">
             <i class="fa-solid fa-basket-shopping"></i>
             <span id="badge-count" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313]">0</span>
           </div>
@@ -112,34 +112,65 @@
         <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
       </button>
 
-      <button onclick="sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
+      <button onclick="sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
         <i class="fa-brands fa-whatsapp text-sm"></i>
         <span class="hidden sm:inline">Pedir por </span>WhatsApp
       </button>
     </div>
   </div>
 
+  <!-- MODAL DEL CARRITO DE COMPRAS -->
   <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
-    <div class="max-h-[88vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/20 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
+    <div class="max-h-[90vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
+      
+      <!-- Encabezado Modal -->
       <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
         <div>
           <h2 class="text-xl font-black uppercase text-[#F5E6C8]">Tu pedido</h2>
-          <p class="text-xs font-medium text-[#F5E6C8]/45">Revisa cantidades antes de enviarlo.</p>
+          <p class="text-xs font-medium text-[#F5E6C8]/45">Revisa cantidades y datos antes de enviarlo.</p>
         </div>
         <button onclick="toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
 
-      <div id="modal-cart-items" class="max-h-[55vh] overflow-y-auto p-5 space-y-3"></div>
+      <!-- Lista de Productos -->
+      <div id="modal-cart-items" class="max-h-[42vh] overflow-y-auto p-5 space-y-3 custom-scrollbar"></div>
 
+      <!-- Datos del Cliente (Nombre y Observaciones) -->
+      <div class="border-t border-[#F5E6C8]/10 bg-[#1f1a1a] p-4 space-y-2.5">
+        <div>
+          <label for="clientName" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+            <i class="fa-solid fa-user mr-1"></i> Tu Nombre Completo
+          </label>
+          <input 
+            type="text" 
+            id="clientName" 
+            placeholder="Ej. María Pérez" 
+            class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
+          >
+        </div>
+        <div>
+          <label for="clientNotes" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+            <i class="fa-solid fa-comment-dots mr-1"></i> Observaciones (Opcional)
+          </label>
+          <input 
+            type="text" 
+            id="clientNotes" 
+            placeholder="Ej. Sin cebolla, salsa tártara aparte..." 
+            class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
+          >
+        </div>
+      </div>
+
+      <!-- Pie del Modal: Total y Botón de Envío -->
       <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
         <div class="mb-4 flex items-center justify-between">
           <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total a pagar</span>
           <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
         </div>
-        <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] transition hover:bg-[#F2B33A] disabled:cursor-not-allowed disabled:opacity-40">
-          <i class="fa-solid fa-check"></i>
+        <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
           Confirmar pedido por WhatsApp
         </button>
       </div>
@@ -249,9 +280,9 @@
       container.innerHTML = categories.map(cat => {
         const active = cat === activeCategory;
         return `
-          <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition sm:text-sm ${
+          <button onclick="selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition duration-150 active:scale-95 sm:text-sm ${
             active
-              ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md"
+              ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md shadow-[#E8A020]/20"
               : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
           }">
             <span>${cat}</span>
@@ -292,7 +323,7 @@
       grid.innerHTML = filtered.map(p => {
         const disabled = p.price == null;
         return `
-          <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition hover:border-[#E8A020] sm:p-3">
+          <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
             <div class="min-w-0 flex-1">
               <div class="flex items-baseline justify-between gap-3">
                 <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
@@ -300,7 +331,7 @@
               </div>
               <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
             </div>
-            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
+            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
               <i class="fa-solid fa-plus text-xs"></i>
             </button>
           </article>
@@ -373,11 +404,11 @@
             </div>
             <div class="mt-3 flex items-center justify-between">
               <div class="inline-flex items-center rounded-xl border border-[#500707]/20 bg-white p-1">
-                <button onclick="changeQuantity('${id}', -1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10"><i class="fa-solid fa-minus text-xs"></i></button>
+                <button onclick="changeQuantity('${id}', -1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition"><i class="fa-solid fa-minus text-xs"></i></button>
                 <span class="w-8 text-center text-sm font-black text-[#500707]">${qty}</span>
-                <button onclick="changeQuantity('${id}', 1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10"><i class="fa-solid fa-plus text-xs"></i></button>
+                <button onclick="changeQuantity('${id}', 1)" class="flex h-8 w-8 items-center justify-center rounded-lg text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition"><i class="fa-solid fa-plus text-xs"></i></button>
               </div>
-              <button onclick="changeQuantity('${id}', -${qty})" class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-[#500707] hover:bg-[#500707]/10">
+              <button onclick="changeQuantity('${id}', -${qty})" class="inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold text-[#500707] hover:bg-[#500707]/10 transition">
                 <i class="fa-solid fa-trash"></i> Eliminar
               </button>
             </div>
@@ -402,6 +433,9 @@
       const keys = Object.keys(cart);
       if (keys.length === 0) return;
 
+      const clientName = document.getElementById("clientName")?.value.trim() || "";
+      const clientNotes = document.getElementById("clientNotes")?.value.trim() || "";
+
       let total = 0;
       const lines = keys.map(id => {
         const item = products.find(p => p.id === id);
@@ -410,7 +444,18 @@
         return `- ${cart[id]}x ${item.name} ($${sub.toFixed(2)})`;
       });
 
-      const message = `¡Hola Cory Fast! Quisiera hacer el siguiente pedido:\n\n${lines.join('\n')}\n\n- Total a pagar: $${total.toFixed(2)}`;
+      let message = `¡Hola Cory Fast! Quisiera hacer el siguiente pedido:\n`;
+
+      if (clientName) {
+        message += `👤 *Cliente:* ${clientName}\n`;
+      }
+
+      message += `\n${lines.join('\n')}\n\n- Total a pagar: $${total.toFixed(2)}`;
+
+      if (clientNotes) {
+        message += `\n📝 *Observaciones:* ${clientNotes}`;
+      }
+
       window.open(`https://wa.me/584120367308?text=${encodeURIComponent(message)}`, '_blank');
     }
 
