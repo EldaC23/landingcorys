@@ -14,14 +14,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Scroll suave global */
-    html {
-      scroll-behavior: smooth;
-    }
-    /* Margen superior para que el header sticky no tape las secciones al saltar */
-    .category-section {
-      scroll-margin-top: 130px;
-    }
     /* Scrollbar siempre visible con el color #E8A020 */
     .custom-scrollbar {
       scrollbar-width: auto;
@@ -87,8 +79,24 @@
     </div>
   </section>
 
-  <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8 space-y-12" id="main-menu-container">
-    <!-- Aquí se desplegarán de forma continua todas las categorías -->
+  <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8">
+    <div class="mb-3 flex flex-col gap-2 sm:mb-6">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <p id="cat-subtitle" class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">Hamb. Carne</p>
+          <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
+          <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
+        </div>
+        <p id="cat-count" class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">0 opciones</p>
+      </div>
+
+      <!-- Notice Badge for Burger Categories -->
+      <div id="burgers-notice" class="hidden mt-2 rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-xs font-bold text-[#E8A020] shadow-sm">
+        🍟 Todas nuestras hamburguesas vienen acompañadas con 100g de papas fritas
+      </div>
+    </div>
+
+    <div id="products-grid" class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3"></div>
   </main>
 
   <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
@@ -112,7 +120,7 @@
   </div>
 
   <!-- MODAL DEL CARRITO DE COMPRAS -->
-  <div id="cart-modal" class="fixed inset-0 z-[100] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
+  <div id="cart-modal" class="fixed inset-0 z-[60] hidden flex-col justify-end bg-[#171313]/80 p-0 backdrop-blur-sm sm:items-center sm:justify-center sm:p-4">
     <div class="max-h-[90vh] w-full overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       
       <!-- Encabezado Modal -->
@@ -158,10 +166,10 @@
       <!-- Pie del Modal: Total y Botón de Envío -->
       <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
         <div class="mb-4 flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total a pagar</span>
+          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total estimado</span>
           <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
         </div>
-        <p class="text-sm font-semibold text-[#E8A020] text-right mb-3">* Precios no incluyen delivery</p>
+        <p class="text-sm font-semibold text-[#E8A020] text-right mb-3">* No incluye delivery</p>
         <button onclick="sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
           <i class="fa-brands fa-whatsapp text-lg"></i>
           Confirmar pedido por WhatsApp
@@ -267,7 +275,6 @@
     let cart = {};
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
-    const getSlug = str => str.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     function renderCategories() {
       const container = document.getElementById("categories-bar");
@@ -288,70 +295,47 @@
     function selectCategory(cat) {
       activeCategory = cat;
       renderCategories();
-      const target = document.getElementById(`cat-${getSlug(cat)}`);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth' });
-      }
+      renderProducts();
     }
 
     function renderProducts() {
-      const container = document.getElementById("main-menu-container");
+      const grid = document.getElementById("products-grid");
+      const filtered = products.filter(p => p.category === activeCategory);
 
-      container.innerHTML = categories.map(cat => {
-        const filtered = products.filter(p => p.category === cat);
-        const isBurger = burgerCategories.includes(cat);
-        const slug = getSlug(cat);
+      document.getElementById("cat-subtitle").innerText = activeCategory;
+      document.getElementById("cat-count").innerText = `${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}`;
 
-        let productsHTML = '';
-        if (filtered.length === 0) {
-          productsHTML = `
-            <div class="col-span-full rounded-[28px] border border-[#E8A020]/20 bg-[#171313]/80 p-10 text-center">
-              <h3 class="text-xl font-black uppercase text-[#F5E6C8]">Próximamente</h3>
-              <p class="mt-2 text-sm text-[#F5E6C8]/55">Esta categoría estará disponible pronto con nuevos productos.</p>
-            </div>`;
-        } else {
-          productsHTML = filtered.map(p => {
-            const disabled = p.price == null;
-            return `
-              <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
-                    <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
-                  </div>
-                  <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
-                </div>
-                <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
-                  <i class="fa-solid fa-plus text-xs"></i>
-                </button>
-              </article>
-            `;
-          }).join('');
-        }
+      const noticeEl = document.getElementById("burgers-notice");
+      if (burgerCategories.includes(activeCategory)) {
+        noticeEl.classList.remove("hidden");
+      } else {
+        noticeEl.classList.add("hidden");
+      }
 
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full rounded-[28px] border border-[#E8A020]/20 bg-[#171313]/80 p-10 text-center">
+            <h3 class="text-xl font-black uppercase text-[#F5E6C8]">Próximamente</h3>
+            <p class="mt-2 text-sm text-[#F5E6C8]/55">Esta categoría estará disponible pronto con nuevos productos.</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const disabled = p.price == null;
         return `
-          <section id="cat-${slug}" class="category-section">
-            <div class="mb-3 flex flex-col gap-2 sm:mb-6">
-              <div class="flex items-end justify-between gap-4">
-                <div>
-                  <p class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">${cat}</p>
-                  <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
-                  <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
-                </div>
-                <p class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}</p>
+          <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-baseline justify-between gap-3">
+                <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
               </div>
-
-              ${isBurger ? `
-                <div class="mt-2 rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-xs font-bold text-[#E8A020] shadow-sm">
-                  🍟 Todas nuestras hamburguesas vienen acompañadas con 100g de papas fritas
-                </div>
-              ` : ''}
+              <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
             </div>
-
-            <div class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
-              ${productsHTML}
-            </div>
-          </section>
+            <button onclick="addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </article>
         `;
       }).join('');
     }
@@ -448,7 +432,7 @@
       } else {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
-        document.body.style.overflow = "";
+        document.body.style.overflow = "unset";
       }
     }
 
@@ -473,7 +457,7 @@
         message += `👤 *Cliente:* ${clientName}\n`;
       }
 
-      message += `\n${lines.join('\n')}\n\n- Total a pagar: $${total.toFixed(2)}\n📌 *Nota: El monto no incluye delivery*`;
+      message += `\n${lines.join('\n')}\n\n- Total estimado: $${total.toFixed(2)}\n📌 *Nota: No incluye delivery*`;
 
       if (clientNotes) {
         message += `\n📝 *Observaciones:* ${clientNotes}`;
