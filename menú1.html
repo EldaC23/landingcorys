@@ -65,7 +65,7 @@
         </div>
       </div>
 
-      <button onclick="window.toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] shadow-md transition duration-200 hover:border-[#E8A020] hover:bg-[#8f1618] active:scale-95 sm:px-4 sm:py-2.5">
+      <button type="button" onclick="window.toggleCartModal(true)" class="flex shrink-0 items-center gap-2 rounded-full border border-[#E8A020]/40 bg-[#7B1213] px-3 py-2 text-xs font-black uppercase text-[#F5E6C8] shadow-md transition duration-200 hover:border-[#E8A020] hover:bg-[#8f1618] active:scale-95 sm:px-4 sm:py-2.5">
         <i class="fa-solid fa-bag-shopping text-[#E8A020]"></i>
         <span class="hidden sm:inline">Ver pedido</span>
       </button>
@@ -96,8 +96,10 @@
 
   <!-- BARRA FLOTANTE INFERIOR -->
   <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
-    <div class="mx-auto flex max-w-6xl items-center gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
-      <button onclick="window.toggleCartModal(true)" class="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left transition hover:bg-[#4E1111]/60">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
+      
+      <!-- HACIENDO CLIC EN CUALQUIER LADO DE ESTA ZONA SE ABRE EL MODAL -->
+      <div onclick="window.toggleCartModal(true)" class="flex min-w-0 flex-1 cursor-pointer items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 transition hover:bg-[#4E1111]/60">
         <div class="flex min-w-0 items-center gap-2">
           <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow-sm">
             <i class="fa-solid fa-basket-shopping"></i>
@@ -106,16 +108,18 @@
           <p id="bottom-cart-label" class="truncate text-xs font-black text-[#F5E6C8]">Tu pedido está vacío</p>
         </div>
         <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
+      </div>
+
+      <!-- BOTÓN VER/REVISAR PEDIDO -->
+      <button type="button" onclick="window.toggleCartModal(true)" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95">
+        <i class="fa-solid fa-[#fa-list-check] text-sm"></i>
+        <span>Ver Pedido</span>
       </button>
 
-      <button onclick="window.sendWhatsApp()" id="btn-whatsapp-bar" disabled class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95 disabled:cursor-not-allowed disabled:opacity-40">
-        <i class="fa-brands fa-whatsapp text-sm"></i>
-        <span class="hidden sm:inline">Pedir por </span>WhatsApp
-      </button>
     </div>
   </div>
 
-  <!-- MODAL DEL PEDIDO (AJUSTADO Z-INDEX Y VISIBILIDAD) -->
+  <!-- MODAL DEL PEDIDO -->
   <div id="cart-modal" class="fixed inset-0 z-[9999] hidden items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4" onclick="if(event.target === this) window.toggleCartModal(false)">
     <div class="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       
@@ -125,7 +129,7 @@
           <h2 class="text-xl font-black uppercase text-[#F5E6C8]">Tu pedido</h2>
           <p class="text-xs font-medium text-[#F5E6C8]/45">Revisa cantidades y datos antes de enviarlo.</p>
         </div>
-        <button onclick="window.toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
+        <button type="button" onclick="window.toggleCartModal(false)" class="rounded-xl p-2 text-[#F5E6C8]/55 transition hover:bg-[#F5E6C8]/10 hover:text-[#F5E6C8]">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
@@ -166,7 +170,7 @@
           <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
         </div>
         <p class="text-[11px] font-semibold text-[#E8A020] text-right mb-3">* Precios no incluyen delivery</p>
-        <button onclick="window.sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
+        <button type="button" onclick="window.sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
           <i class="fa-brands fa-whatsapp text-lg"></i>
           Confirmar pedido por WhatsApp
         </button>
@@ -314,7 +318,7 @@
       container.innerHTML = categories.map(cat => {
         const active = cat === activeCategory;
         return `
-          <button onclick="window.selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition duration-150 active:scale-95 sm:text-sm ${
+          <button type="button" onclick="window.selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition duration-150 active:scale-95 sm:text-sm ${
             active
               ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md shadow-[#E8A020]/20"
               : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
@@ -353,7 +357,7 @@
                   </div>
                   <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
                 </div>
-                <button onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
+                <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
                   <i class="fa-solid fa-plus text-xs"></i>
                 </button>
               </article>
@@ -406,7 +410,6 @@
       document.getElementById("bottom-cart-label").innerText = count === 0 ? "Tu pedido está vacío" : `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
 
       const disabled = count === 0;
-      document.getElementById("btn-whatsapp-bar").disabled = disabled;
       document.getElementById("btn-whatsapp-modal").disabled = disabled;
 
       renderCartModalItems();
@@ -439,15 +442,15 @@
             
             <div class="flex shrink-0 items-center gap-1.5">
               <div class="inline-flex items-center rounded-lg border border-[#500707]/20 bg-white p-0.5">
-                <button onclick="window.changeQuantity('${id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
+                <button type="button" onclick="window.changeQuantity('${id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
                   <i class="fa-solid fa-minus text-[10px]"></i>
                 </button>
                 <span class="w-6 text-center text-xs font-black text-[#500707]">${qty}</span>
-                <button onclick="window.changeQuantity('${id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
+                <button type="button" onclick="window.changeQuantity('${id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
                   <i class="fa-solid fa-plus text-[10px]"></i>
                 </button>
               </div>
-              <button onclick="window.changeQuantity('${id}', -${qty})" class="flex h-6 w-6 items-center justify-center rounded text-[#500707]/60 hover:bg-[#500707]/10 hover:text-[#500707] transition" title="Eliminar producto">
+              <button type="button" onclick="window.changeQuantity('${id}', -${qty})" class="flex h-6 w-6 items-center justify-center rounded text-[#500707]/60 hover:bg-[#500707]/10 hover:text-[#500707] transition" title="Eliminar producto">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
             </div>
@@ -487,7 +490,7 @@
       window.open(`https://wa.me/584120367308?text=${encodeURIComponent(message)}`, '_blank');
     };
 
-    // Tecla ESC para cerrar el modal fácilmente
+    // Cerrar modal con ESC
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         window.toggleCartModal(false);
