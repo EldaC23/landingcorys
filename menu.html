@@ -107,8 +107,11 @@
           </div>
           <p id="bottom-cart-label" class="truncate text-xs font-black text-[#F5E6C8]">Tu pedido está vacío</p>
         </div>
-        <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
-      </div>
+       <div class="ml-2 flex shrink-0 flex-col items-end leading-none">
+  <span class="text-[9px] font-bold uppercase tracking-wider text-[#E8A020]/70">Total estimado</span>
+  <span id="bottom-cart-total" class="my-0.5 text-sm font-black text-[#E8A020]">$0.00</span>
+  <span class="text-[9px] font-semibold text-[#E8A020]/70">No incluye delivery</span>
+</div>
 
       <!-- BOTÓN VER/REVISAR PEDIDO -->
       <button type="button" onclick="window.toggleCartModal(true)" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95">
