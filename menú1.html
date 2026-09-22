@@ -107,8 +107,11 @@
           </div>
           <p id="bottom-cart-label" class="truncate text-xs font-black text-[#F5E6C8]">Tu pedido está vacío</p>
         </div>
-        <span id="bottom-cart-total" class="ml-2 shrink-0 text-sm font-black text-[#E8A020]">$0.00</span>
-      </div>
+       <div class="ml-2 flex shrink-0 flex-col items-end leading-none">
+  <span class="text-[9px] font-bold uppercase tracking-wider text-[#E8A020]/70">Total estimado</span>
+  <span id="bottom-cart-total" class="my-0.5 text-sm font-black text-[#E8A020]">$0.00</span>
+  <span class="text-[9px] font-semibold text-[#E8A020]/70">No incluye delivery</span>
+</div>
 
       <!-- BOTÓN VER/REVISAR PEDIDO -->
       <button type="button" onclick="window.toggleCartModal(true)" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95">
@@ -180,6 +183,7 @@
 
   <script>
     const products = [
+      
       // HAMBURGUESAS DE CARNE
       { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 6.2 },
       { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.8 },
@@ -212,6 +216,17 @@
       { id: "p5", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
       { id: "p6", category: "Perritos", name: "Lleve", description: "Chorifrito, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
 
+       // PROMOS
+      { id: "promo-1", category: "Promos", name: "Promo 1", description: "1 Cuaima + 2 Mártir + Refresco 1L", price: 13.99 },
+      { id: "promo-2", category: "Promos", name: "Promo 2", description: "1 Sifrina + 2 Mártir + Refresco 1L", price: 11.99 },
+      { id: "promo-3", category: "Promos", name: "Promo 3", description: "1 Mamasita + 1 Chama + Refresco 1L", price: 17.99 },
+      { id: "promo-4", category: "Promos", name: "Promo 4", description: "2 Lleve + Bombonita", price: 8.99 },
+      { id: "promo-5", category: "Promos", name: "Promo 5", description: "2 Mártir + Bombonita", price: 5.99 },
+      { id: "promo-6", category: "Promos", name: "Promo 6", description: "2 Mártir + Malta (Sólo para comer en el establecimiento)", price: 5.99 },
+      { id: "promo-7", category: "Promos", name: "Promo 7", description: "1 Chama + 1 Catira + Refresco 1L", price: 17.99 },
+      { id: "promo-8", category: "Promos", name: "Promo 8", description: "2 Cuaima + Refresco 1L", price: 13.99 },
+      { id: "promo-9", category: "Promos", name: "Promo 9", description: "2 Lleve + Malta (Sólo para comer en el establecimiento)", price: 8.99 },
+      
       // PAPAS
       { id: "pa1", category: "Papas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas Wiener y salsas básicas.", price: 5.2 },
       { id: "pa2", category: "Papas", name: "Quesua", description: "300 grs de papas francesas, salchichas Wiener, maíz, queso amarillo y salsas básicas.", price: 6.9 },
@@ -256,6 +271,7 @@
       "Súper Hamburguesas",
       "Hamb. Gourmets",
       "Perritos",
+      "Promos",
       "Papas",
       "Pepitos",
       "Sanguches",
@@ -271,7 +287,7 @@
       "Hamb. Gourmets"
     ];
 
-    let activeCategory = "Hamb. Carne";
+    let activeCategory = "Promos";
     let cart = {};
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
@@ -357,9 +373,17 @@
                   </div>
                   <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
                 </div>
-                <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow transition duration-150 active:scale-90 ${disabled ? 'bg-[#7B1213]/10 text-[#7B1213]/35 cursor-not-allowed' : 'bg-[#E8A020] text-[#171313] hover:bg-[#F2B33A]'}">
-                  <i class="fa-solid fa-plus text-xs"></i>
-                </button>
+                ${cart[p.id] > 0 ? `
+  <div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
+    <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
+    <span class="w-4 text-center text-xs font-black text-[#7B1213]">${cart[p.id]}</span>
+    <button type="button" onclick="window.changeQuantity('${p.id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-plus text-[10px]"></i></button>
+  </div>
+` : `
+  <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow transition duration-150 active:scale-90">
+    <i class="fa-solid fa-plus text-xs"></i>
+  </button>
+`}
               </article>
             `;
           }).join('');
@@ -370,8 +394,7 @@
             <div class="mb-3 flex flex-col gap-2 sm:mb-6">
               <div class="flex items-end justify-between gap-4">
                 <div>
-                  <p class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">${cat}</p>
-                  <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
+                  <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#E8A020] sm:text-3xl">${cat}</h2>
                   <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
                 </div>
                 <p class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}</p>
@@ -413,8 +436,8 @@
       document.getElementById("btn-whatsapp-modal").disabled = disabled;
 
       renderCartModalItems();
+  renderProducts();
     }
-
     function renderCartModalItems() {
       const container = document.getElementById("modal-cart-items");
       if (!container) return;
