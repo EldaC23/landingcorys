@@ -89,6 +89,19 @@
   
   <!-- BARRA DE CATEGORÍAS -->
   <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
+    <!-- BARRA DE BÚSQUEDA -->
+<div class="mb-6 px-4">
+  <div class="relative max-w-md mx-auto">
+    <input 
+      type="text" 
+      id="search-input" 
+      oninput="renderProducts()" 
+      placeholder="Buscar por producto o ingrediente..." 
+      class="w-full rounded-xl border border-[#E8A020]/40 bg-[#171313]/90 py-2.5 pl-10 pr-4 text-sm text-[#F5E6C8] placeholder-[#F5E6C8]/40 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020]"
+    />
+    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-[#E8A020]"></i>
+  </div>
+</div>
     <div class="relative mx-auto max-w-6xl">
       <div class="custom-scrollbar overflow-x-auto pl-4 pr-16 py-3.5 sm:pl-6 sm:pr-20">
         <div class="flex min-w-max gap-3 pr-12" id="categories-bar"></div>
