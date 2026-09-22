@@ -166,10 +166,10 @@
       <!-- Pie del Modal: Total y Botón de Envío -->
       <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
         <div class="mb-2 flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total a pagar</span>
+          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total estimado</span>
           <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
+          <p class="text-[11px] font-semibold text-[#E8A020] text-right mb-3">* No incluye delivery</p>
         </div>
-        <p class="text-[11px] font-semibold text-[#E8A020] text-right mb-3">* Precios no incluyen delivery</p>
         <button type="button" onclick="window.sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
           <i class="fa-brands fa-whatsapp text-lg"></i>
           Confirmar pedido por WhatsApp
@@ -180,6 +180,17 @@
 
   <script>
     const products = [
+      // PROMOS
+      { id: "promo-1", category: "Promos", name: "Promo 1", description: "1 Cuaima + 2 Mártir + Refresco 1L", price: 13.99 },
+      { id: "promo-2", category: "Promos", name: "Promo 2", description: "1 Sifrina + 2 Mártir + Refresco 1L", price: 11.99 },
+      { id: "promo-3", category: "Promos", name: "Promo 3", description: "1 Mamasita + 1 Chama + Refresco 1L", price: 17.99 },
+      { id: "promo-4", category: "Promos", name: "Promo 4", description: "2 Lleve + Bombonita", price: 8.99 },
+      { id: "promo-5", category: "Promos", name: "Promo 5", description: "2 Mártir + Bombonita", price: 5.99 },
+      { id: "promo-6", category: "Promos", name: "Promo 6", description: "(Sólo para comer en el establecimiento) 2 Mártir + Malta", price: 5.99 },
+      { id: "promo-7", category: "Promos", name: "Promo 7", description: "1 Chama + 1 Catira + Refresco 1L", price: 17.99 },
+      { id: "promo-8", category: "Promos", name: "Promo 8", description: "2 Cuaima + Refresco 1L", price: 13.99 },
+      { id: "promo-9", category: "Promos", name: "Promo 9", description: "(Sólo para comer en el establecimiento) 2 Lleve + Malta", price: 8.99 },
+
       // HAMBURGUESAS DE CARNE
       { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 6.2 },
       { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.8 },
@@ -251,6 +262,7 @@
     ];
 
     const categories = [
+      "Promos",
       "Hamb. Carne",
       "Hamb. Pollo",
       "Súper Hamburguesas",
@@ -271,7 +283,7 @@
       "Hamb. Gourmets"
     ];
 
-    let activeCategory = "Hamb. Carne";
+    let activeCategory = "Promos";
     let cart = {};
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
@@ -370,8 +382,7 @@
             <div class="mb-3 flex flex-col gap-2 sm:mb-6">
               <div class="flex items-end justify-between gap-4">
                 <div>
-                  <p class="text-[11px] font-black uppercase tracking-[0.25em] text-[#E8A020]">${cat}</p>
-                  <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#F5E6C8] sm:text-3xl">Elige tu favorito</h2>
+                  <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#E8A020] sm:text-3xl">${cat}</h2>
                   <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
                 </div>
                 <p class="shrink-0 text-right text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">${filtered.length} ${filtered.length === 1 ? 'opción' : 'opciones'}</p>
@@ -481,7 +492,7 @@
         message += `👤 *Cliente:* ${clientName}\n`;
       }
 
-      message += `\n${lines.join('\n')}\n\n- Total a pagar: $${total.toFixed(2)}\n📌 *Nota: El monto no incluye delivery*`;
+      message += `\n${lines.join('\n')}\n\n- Total estimado: $${total.toFixed(2)}\n📌 *Nota: No incluye delivery*`;
 
       if (clientNotes) {
         message += `\n📝 *Observaciones:* ${clientNotes}`;
