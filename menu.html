@@ -14,18 +14,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
-    /* Scroll suave global */
     html {
       scroll-behavior: smooth;
     }
-    /* Margen superior para que el header + buscador + barra de categorías no tapen las secciones ni las tarjetas al saltar */
     .category-section {
       scroll-margin-top: 190px;
     }
     .product-card {
       scroll-margin-top: 190px;
     }
-    /* Scrollbar siempre visible con el color #E8A020 */
     .custom-scrollbar {
       scrollbar-width: auto;
       scrollbar-color: #E8A020 rgba(232, 160, 32, 0.25);
@@ -51,7 +48,6 @@
 </head>
 <body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
 
-  <!-- HEADER STICKY -->
   <header class="sticky top-0 z-50 border-b border-[#E8A020]/20 shadow-lg" style="background-color: rgba(78,17,17,.97)">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6 sm:py-3">
       
@@ -76,10 +72,8 @@
     </div>
   </header>
 
-  <!-- BUSCADOR + BARRA DE CATEGORÍAS (una sola sección sticky) -->
   <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
 
-    <!-- Buscador -->
     <div class="mx-auto max-w-6xl px-4 pt-3 sm:px-6">
       <div class="relative">
         <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#E8A020]/70"></i>
@@ -95,12 +89,10 @@
           <i class="fa-solid fa-xmark text-xs"></i>
         </button>
 
-        <!-- Dropdown de resultados -->
         <div id="search-results" class="custom-scrollbar absolute left-0 right-0 top-full z-50 mt-1.5 hidden max-h-72 overflow-y-auto rounded-2xl border border-[#E8A020]/30 bg-[#171313] shadow-2xl"></div>
       </div>
     </div>
 
-    <!-- Categorías -->
     <div class="relative mx-auto max-w-6xl">
       <div class="custom-scrollbar overflow-x-auto pl-4 pr-16 py-3.5 sm:pl-6 sm:pr-20">
         <div class="flex min-w-max gap-3 pr-12" id="categories-bar"></div>
@@ -115,16 +107,12 @@
     </div>
   </section>
 
-  <!-- CONTENIDO PRINCIPAL -->
   <main class="mx-auto max-w-6xl px-4 py-4 sm:px-6 sm:py-8 space-y-12" id="main-menu-container">
-    <!-- Secciones cargadas dinámicamente -->
   </main>
 
-  <!-- BARRA FLOTANTE INFERIOR -->
   <div class="fixed inset-x-0 bottom-0 z-40 px-3 pb-2 sm:px-6 sm:pb-3">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-2 rounded-xl border border-[#E8A020]/25 bg-[#171313]/95 p-1.5 shadow-2xl backdrop-blur-xl">
       
-      <!-- HACIENDO CLIC EN CUALQUIER LADO DE ESTA ZONA SE ABRE EL MODAL -->
       <div onclick="window.toggleCartModal(true)" class="flex min-w-0 flex-1 cursor-pointer items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 transition hover:bg-[#4E1111]/60">
         <div class="flex min-w-0 items-center gap-2">
           <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow-sm">
@@ -139,7 +127,6 @@
   <span class="text-[9px] font-semibold text-[#E8A020]/70">No incluye delivery</span>
 </div>
 
-      <!-- BOTÓN VER/REVISAR PEDIDO -->
       <button type="button" onclick="window.toggleCartModal(true)" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95">
         <i class="fa-solid fa-[#fa-list-check] text-sm"></i>
         <span>Ver Pedido</span>
@@ -148,11 +135,9 @@
     </div>
   </div>
 
-  <!-- MODAL DEL PEDIDO -->
   <div id="cart-modal" class="fixed inset-0 z-[9999] hidden items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4" onclick="if(event.target === this) window.toggleCartModal(false)">
     <div class="flex max-h-[90vh] w-full flex-col overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       
-      <!-- Encabezado Modal -->
       <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
         <div>
           <h2 class="text-xl font-black uppercase text-[#F5E6C8]">Tu pedido</h2>
@@ -163,10 +148,8 @@
         </button>
       </div>
 
-      <!-- Lista de Productos -->
       <div id="modal-cart-items" class="max-h-[38vh] overflow-y-auto p-4 space-y-2 custom-scrollbar"></div>
 
-      <!-- Datos del Cliente -->
       <div class="border-t border-[#F5E6C8]/10 bg-[#1f1a1a] p-4 space-y-2.5">
         <div>
           <label for="clientName" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
@@ -192,7 +175,6 @@
         </div>
       </div>
 
-      <!-- Pie del Modal: Total y Botón de Envío -->
       <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
         <div class="mb-2 flex items-center justify-between">
           <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total estimado</span>
@@ -210,19 +192,16 @@
   <script>
     const products = [
       
-      // HAMBURGUESAS DE CARNE
       { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 6.2 },
       { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.8 },
       { id: "hc3", category: "Hamb. Carne", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con un tequeyoyo.", price: 10.1 },
 
-      // HAMBURGUESAS DE POLLO
       { id: "hp1", category: "Hamb. Pollo", name: "La Sifrina", description: "120grs de pollo, lechuga, tomate, papas hilo y salsas básicas.", price: 5.2 },
       { id: "hp2", category: "Hamb. Pollo", name: "La Catira", description: "120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 7.8 },
       { id: "hp3", category: "Hamb. Pollo", name: "La Mamasita", description: "120grs de pollo krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.1 },
       { id: "hp4", category: "Hamb. Pollo", name: "La Empoderada", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 9.6 },
       { id: "hp5", category: "Hamb. Pollo", name: "La Queen", description: "200grs de pechuga krispy, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta coronada con un tequeyoyo.", price: 11.0 },
 
-      // SÚPER HAMBURGUESAS
       { id: "sh1", category: "Súper Hamburguesas", name: "La Diva", description: "240grs de pollo, lechuga, tomate, papas hilo y salsas básicas.", price: 7.8 },
       { id: "sh2", category: "Súper Hamburguesas", name: "La Caballota", description: "240grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 10.4 },
       { id: "sh3", category: "Súper Hamburguesas", name: "La Pana", description: "240grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 9.7 },
@@ -230,11 +209,9 @@
       { id: "sh5", category: "Súper Hamburguesas", name: "La Tóxica", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 11.4 },
       { id: "sh6", category: "Súper Hamburguesas", name: "La Bandida", description: "120grs de carne, 120grs de pollo, lechuga, tomate, papas hilo, salsas básicas, huevo, facilita Kraft y tocineta.", price: 11.8 },
 
-      // HAMBURGUESAS GOURMETS
       { id: "hg1", category: "Hamb. Gourmets", name: "La Sugar", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, chutney de piña, facilita Kraft y tocineta.", price: 10.4 },
       { id: "hg2", category: "Hamb. Gourmets", name: "La Mommy", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, queso crema con tocineta caramelizada y facilita Kraft.", price: 10.4 },
 
-      // PERRITOS
       { id: "p1", category: "Perritos", name: "El Mártir", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 2.6 },
       { id: "p2", category: "Perritos", name: "El Chamo", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, facilita Kraft, tocineta y salsas básicas.", price: 4.9 },
       { id: "p3", category: "Perritos", name: "El Azteca", description: "Salchicha wiener, ensalada, cebolla, papas hilo, queso amarillo, maíz y salsas básicas.", price: 3.4 },
@@ -242,7 +219,6 @@
       { id: "p5", category: "Perritos", name: "El Germano", description: "Salchicha alemana, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
       { id: "p6", category: "Perritos", name: "Lleve", description: "Chorifrito, ensalada, cebolla, papas hilo, queso amarillo y salsas básicas.", price: 4.4 },
 
-       // PROMOS
       { id: "promo-1", category: "Promos", name: "Promo 1", description: "1 Cuaima + 2 Mártir + Refresco 1L", price: 13.99 },
       { id: "promo-2", category: "Promos", name: "Promo 2", description: "1 Sifrina + 2 Mártir + Refresco 1L", price: 11.99 },
       { id: "promo-3", category: "Promos", name: "Promo 3", description: "1 Mamasita + 1 Chama + Refresco 1L", price: 17.99 },
@@ -253,19 +229,15 @@
       { id: "promo-8", category: "Promos", name: "Promo 8", description: "2 Cuaima + Refresco 1L", price: 13.99 },
       { id: "promo-9", category: "Promos", name: "Promo 9", description: "2 Lleve + Malta (Sólo para comer en el establecimiento)", price: 8.99 },
       
-      // PAPAS
       { id: "pa1", category: "Papas", name: "Clasiquitas", description: "300 grs de papas francesas, salchichas Wiener y salsas básicas.", price: 5.2 },
       { id: "pa2", category: "Papas", name: "Quesua", description: "300 grs de papas francesas, salchichas Wiener, maíz, queso amarillo y salsas básicas.", price: 6.9 },
       { id: "pa3", category: "Papas", name: "Chorreada", description: "300 grs de papas francesas, queso fundido, tocineta y topping de cebollín.", price: 8.5 },
 
-      // PEPITOS
       { id: "pe1", category: "Pepitos", name: "Carne, Pollo o Mixto", description: "Pan de orégano tostado con ajo, 300grs de proteína, queso amarillo, tocineta, maíz, lechuga, tomate, papas hilo, salsas básicas.", price: 15.5 },
 
-      // SANGUCHES
       { id: "s1", category: "Sanguches", name: "El Club de la Casa", description: "Sándwich estilo club house con jamón, queso, huevo, lechuga, tomate, salsas básicas, 150 grs de proteína (carne, pollo o krispy) + 200 grs de papas francesas.", price: 13.5 },
       { id: "s2", category: "Sanguches", name: "El Campesino", description: "Sándwich estilo granjero con queso Kraft, tocineta, lechuga, tomate, pepinillo, salsa tártara + 200grs de pechuga krispy.", price: 12.5 },
 
-      // RACIONES & EXTRAS
       { id: "r1", category: "Raciones & Extras", name: "Tequeños (5 unidades)", description: "5 deliciosas unidades de tequeños.", price: 3.0 },
       { id: "r2", category: "Raciones & Extras", name: "Tender + Papas Fritas", description: "Tenders de pollo acompañados con papas fritas.", price: 4.5 },
       { id: "r3", category: "Raciones & Extras", name: "Tequeyoyo", description: "Tequeyoyo tradicional.", price: 1.5 },
@@ -278,11 +250,9 @@
       { id: "r10", category: "Raciones & Extras", name: "Extra de Tocineta", description: "Porción adicional de tocineta.", price: 1.4 },
       { id: "r11", category: "Raciones & Extras", name: "Salchicha", description: "Adicional de salchicha.", price: 0.8 },
 
-      // ENSALADAS
       { id: "e1", category: "Ensaladas", name: "César Pollo", description: "200grs de pollo a la plancha, lechuga, crutones, tocineta, aderezo césar.", price: 10.0 },
       { id: "e2", category: "Ensaladas", name: "César Krispy", description: "200grs de pollo krispy, lechuga, crutones, tocineta, aderezo césar.", price: 11.0 },
 
-      // PARA TOMAR
       { id: "t1", category: "Para tomar", name: "Refresco 355ml", description: "Refresco individual de 355ml.", price: 1.2 },
       { id: "t2", category: "Para tomar", name: "Refresco 1Lt", description: "Refresco de 1 litro.", price: 2.0 },
       { id: "t3", category: "Para tomar", name: "Refresco 2Lt", description: "Refresco de 2 litros.", price: 3.5 },
@@ -313,8 +283,75 @@
       "Hamb. Gourmets"
     ];
 
+    // ===== PERSONALIZACIÓN DE PRODUCTO (slots en cascada) =====
+    const modifierSets = {
+      "Perritos": ["ensalada", "cebolla", "mostaza", "purapapa", "queso"],
+      "Hamb. Carne": ["lechuga", "tomate", "mostaza", "tocineta", "salsas"],
+      "Hamb. Pollo": ["lechuga", "tomate", "mostaza", "tocineta", "salsas"],
+      "Súper Hamburguesas": ["lechuga", "tomate", "mostaza", "tocineta", "salsas"],
+      "Hamb. Gourmets": ["lechuga", "tomate", "mostaza", "tocineta", "salsas"],
+      "Sanguches": ["lechuga", "tomate", "mostaza"]
+    };
+    const proteinCategories = ["Pepitos"];
+
+    const modShortLabels = {
+      ensalada: "Sin ensalada", cebolla: "Sin cebolla", mostaza: "Sin mostaza",
+      purapapa: "Pura papa", queso: "Sin queso", lechuga: "Sin lechuga",
+      tomate: "Sin tomate", tocineta: "Sin tocineta", salsas: "Sin salsas"
+    };
+    const modLineLabels = {
+      ensalada: "sin ensalada", cebolla: "sin cebolla", mostaza: "sin mostaza",
+      purapapa: "pura papa", queso: "sin queso", lechuga: "sin lechuga",
+      tomate: "sin tomate", tocineta: "sin tocineta", salsas: "sin salsas"
+    };
+    const proteinLabels = { carne: "proteína: carne", pollo: "proteína: pollo", mixto: "proteína: mixto" };
+
+    function hasModifiers(cat) {
+      return Boolean(modifierSets[cat]) || proteinCategories.includes(cat);
+    }
+    function slotLabel(slot) {
+      const parts = slot.mods.map(m => modLineLabels[m] || m);
+      if (slot.protein) parts.push(proteinLabels[slot.protein] || slot.protein);
+      return parts.join(', ');
+    }
+    function isSlotEmpty(slot) {
+      return slot.mods.length === 0 && !slot.protein;
+    }
+    function activeSlots(item) {
+      return item.slots.filter(s => !isSlotEmpty(s));
+    }
+    function totalQty(item) {
+      return Math.max(item.manualQty, activeSlots(item).length);
+    }
+    function plainQty(item) {
+      return Math.max(item.manualQty - activeSlots(item).length, 0);
+    }
+    // Tras cualquier cambio: deja solo los slots con contenido + exactamente
+    // un slot vacío al final, listo para la próxima personalización.
+    function normalizeSlots(item) {
+      const active = activeSlots(item);
+      active.push({ mods: [], protein: null });
+      item.slots = active;
+    }
+
     let activeCategory = "Hamb. Carne";
+    // cart[id] = { manualQty: <puesto con +/->, slots: [{mods:[], protein}, ...] }
     let cart = {};
+    let openAccordion = {};
+
+    function getOrCreateItem(id) {
+      if (!cart[id]) cart[id] = { manualQty: 0, slots: [{ mods: [], protein: null }] };
+      return cart[id];
+    }
+    function peekItem(id) {
+      return cart[id] || { manualQty: 0, slots: [{ mods: [], protein: null }] };
+    }
+    function cleanupIfEmpty(id) {
+      const item = cart[id];
+      if (item && item.manualQty === 0 && activeSlots(item).length === 0) {
+        delete cart[id];
+      }
+    }
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
     const getSlug = str => str.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -334,14 +371,56 @@
     };
 
     window.addToCart = function(id) {
-      cart[id] = (cart[id] || 0) + 1;
+      window.changeQuantity(id, 1);
+    };
+
+    // Cambia lo que el cliente puso manualmente con +/-.
+    // El total visible es siempre max(manualQty, personalizadas activas) —
+    // nunca hay que "restar prestado" a mano, se recalcula solo.
+    window.changeQuantity = function(id, delta) {
+      const item = getOrCreateItem(id);
+      item.manualQty = Math.max(0, item.manualQty + delta);
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
       updateCartUI();
     };
 
-    window.changeQuantity = function(id, delta) {
-      if (!cart[id]) return;
-      cart[id] += delta;
-      if (cart[id] <= 0) delete cart[id];
+    window.toggleAccordionPanel = function(id) {
+      openAccordion[id] = !openAccordion[id];
+      renderProducts();
+    };
+
+    // Marca/desmarca una casilla dentro de un slot específico. En vivo:
+    // no hace falta confirmar nada, el carrito se actualiza al instante.
+    window.toggleSlotMod = function(id, slotIndex, mod) {
+      const item = getOrCreateItem(id);
+      const slot = item.slots[slotIndex];
+      if (!slot) return;
+      const i = slot.mods.indexOf(mod);
+      if (i === -1) slot.mods.push(mod); else slot.mods.splice(i, 1);
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
+      updateCartUI();
+    };
+
+    window.selectSlotProtein = function(id, slotIndex, protein) {
+      const item = getOrCreateItem(id);
+      const slot = item.slots[slotIndex];
+      if (!slot) return;
+      slot.protein = (slot.protein === protein) ? null : protein;
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
+      updateCartUI();
+    };
+
+    // Quita una personalización ya creada (botón "x" en el modal del carrito).
+    window.clearSlot = function(id, slotIndex) {
+      const item = cart[id];
+      if (!item || !item.slots[slotIndex]) return;
+      item.slots[slotIndex].mods = [];
+      item.slots[slotIndex].protein = null;
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
       updateCartUI();
     };
 
@@ -390,26 +469,78 @@
         } else {
           productsHTML = filtered.map(p => {
             const disabled = p.price == null;
+            const item = peekItem(p.id);
+            const total = totalQty(item);
+            const plain = plainQty(item);
+            const active = activeSlots(item);
+            const showsMods = hasModifiers(p.category);
+            const isOpen = Boolean(openAccordion[p.id]);
+            const checkboxList = modifierSets[p.category] || [];
+            const showsProtein = proteinCategories.includes(p.category);
+
+            const breakdownHTML = active.length > 0 ? `
+              <div class="mt-1 space-y-0.5 border-t border-[#7B1213]/10 pt-1">
+                ${plain > 0 ? `<p class="text-[10px] text-[#500707]/70">${plain} con todo</p>` : ''}
+                ${active.map(s => `<p class="text-[10px] italic text-[#7B1213]">1 ${slotLabel(s)}</p>`).join('')}
+              </div>
+            ` : '';
+
+            const slotsHTML = item.slots.map((slot, idx) => {
+              const num = idx + 1;
+              const isLast = idx === item.slots.length - 1;
+              return `
+                <div class="${isLast ? '' : 'border-b border-[#7B1213]/10 pb-1.5 mb-1.5'}">
+                  <p class="text-[10px] font-black uppercase ${isSlotEmpty(slot) ? 'text-[#7B1213]/40' : 'text-[#7B1213]'} mb-1">Personalizada ${num}</p>
+                  ${checkboxList.length > 0 ? `
+                    <div class="flex flex-wrap gap-1 mb-1">
+                      ${checkboxList.map(m => `
+                        <button type="button" onclick="window.toggleSlotMod('${p.id}', ${idx}, '${m}')" class="rounded-full border px-2 py-0.5 text-[10px] font-bold transition ${slot.mods.includes(m) ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${modShortLabels[m]}</button>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                  ${showsProtein ? `
+                    <div class="flex gap-1">
+                      ${['carne','pollo','mixto'].map(pr => `
+                        <button type="button" onclick="window.selectSlotProtein('${p.id}', ${idx}, '${pr}')" class="flex-1 rounded-full border px-2 py-1 text-[10px] font-black uppercase transition ${slot.protein === pr ? 'border-[#7B1213] bg-[#7B1213] text-[#F5E6C8]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${pr}</button>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>`;
+            }).join('');
+
+            const accordionHTML = showsMods ? `
+              <button type="button" onclick="window.toggleAccordionPanel('${p.id}')" class="mt-1.5 flex items-center gap-1 text-[10px] font-black uppercase text-[#7B1213]">
+                Personalizar <i class="fa-solid fa-chevron-down text-[9px] transition-transform ${isOpen ? 'rotate-180' : ''}"></i>
+              </button>
+              <div class="${isOpen ? '' : 'hidden'} mt-1.5 border-t border-[#7B1213]/10 pt-1.5">
+                ${slotsHTML}
+              </div>
+            ` : '';
+
             return `
-              <article id="prod-${p.id}" class="product-card flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
-                <div class="min-w-0 flex-1">
-                  <div class="flex items-baseline justify-between gap-3">
-                    <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
-                    <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
+              <article id="prod-${p.id}" class="product-card rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
+                <div class="flex items-center gap-3">
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-baseline justify-between gap-3">
+                      <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                      <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
+                    </div>
+                    <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
                   </div>
-                  <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
+                  ${total > 0 ? `
+    <div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
+      <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
+      <span class="w-4 text-center text-xs font-black text-[#7B1213]">${total}</span>
+      <button type="button" onclick="window.changeQuantity('${p.id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-plus text-[10px]"></i></button>
+    </div>
+  ` : `
+    <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow transition duration-150 active:scale-90">
+      <i class="fa-solid fa-plus text-xs"></i>
+    </button>
+  `}
                 </div>
-                ${cart[p.id] > 0 ? `
-  <div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
-    <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
-    <span class="w-4 text-center text-xs font-black text-[#7B1213]">${cart[p.id]}</span>
-    <button type="button" onclick="window.changeQuantity('${p.id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-plus text-[10px]"></i></button>
-  </div>
-` : `
-  <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow transition duration-150 active:scale-90">
-    <i class="fa-solid fa-plus text-xs"></i>
-  </button>
-`}
+                ${breakdownHTML}
+                ${accordionHTML}
               </article>
             `;
           }).join('');
@@ -446,10 +577,12 @@
       let total = 0;
 
       Object.keys(cart).forEach(id => {
-        const item = products.find(p => p.id === id);
-        if (item && item.price != null) {
-          count += cart[id];
-          total += item.price * cart[id];
+        const product = products.find(p => p.id === id);
+        const cartItem = cart[id];
+        if (product && product.price != null && cartItem) {
+          const q = totalQty(cartItem);
+          count += q;
+          total += product.price * q;
         }
       });
 
@@ -479,33 +612,51 @@
       }
 
       container.innerHTML = keys.map(id => {
-        const item = products.find(p => p.id === id);
-        const qty = cart[id];
-        const lineTotal = (item.price || 0) * qty;
+        const product = products.find(p => p.id === id);
+        const cartItem = cart[id];
+        const price = product.price || 0;
+        const plain = plainQty(cartItem);
+        const active = activeSlots(cartItem);
+        let rows = '';
 
-        return `
-          <div class="flex items-center justify-between gap-2 rounded-xl border border-[#500707]/15 bg-[#FFFBEB] px-3 py-2 shadow-sm">
-            <div class="min-w-0 flex-1">
-              <h3 class="truncate text-xs font-black uppercase text-[#500707]">${item.name}</h3>
-            </div>
-            
-            <div class="flex shrink-0 items-center gap-1.5">
-              <div class="inline-flex items-center rounded-lg border border-[#500707]/20 bg-white p-0.5">
-                <button type="button" onclick="window.changeQuantity('${id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
-                  <i class="fa-solid fa-minus text-[10px]"></i>
-                </button>
-                <span class="w-6 text-center text-xs font-black text-[#500707]">${qty}</span>
-                <button type="button" onclick="window.changeQuantity('${id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
-                  <i class="fa-solid fa-plus text-[10px]"></i>
-                </button>
+        if (plain > 0) {
+          rows += `
+            <div class="flex items-center justify-between gap-2 rounded-xl border border-[#500707]/15 bg-[#FFFBEB] px-3 py-2 shadow-sm">
+              <div class="min-w-0 flex-1">
+                <h3 class="truncate text-xs font-black uppercase text-[#500707]">${product.name}</h3>
+                <p class="text-[10px] text-[#500707]/60">con todo</p>
               </div>
-              <button type="button" onclick="window.changeQuantity('${id}', -${qty})" class="flex h-6 w-6 items-center justify-center rounded text-[#500707]/60 hover:bg-[#500707]/10 hover:text-[#500707] transition" title="Eliminar producto">
+              <div class="flex shrink-0 items-center gap-1.5">
+                <div class="inline-flex items-center rounded-lg border border-[#500707]/20 bg-white p-0.5">
+                  <button type="button" onclick="window.changeQuantity('${id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
+                    <i class="fa-solid fa-minus text-[10px]"></i>
+                  </button>
+                  <span class="w-6 text-center text-xs font-black text-[#500707]">${plain}</span>
+                  <button type="button" onclick="window.changeQuantity('${id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
+                    <i class="fa-solid fa-plus text-[10px]"></i>
+                  </button>
+                </div>
+              </div>
+              <span class="w-16 shrink-0 text-right text-xs font-black text-[#500707]">$${(price * plain).toFixed(2)}</span>
+            </div>`;
+        }
+
+        active.forEach((slot) => {
+          const slotIdx = cartItem.slots.indexOf(slot);
+          rows += `
+            <div class="flex items-center justify-between gap-2 rounded-xl border border-[#500707]/15 bg-[#FFFBEB] px-3 py-2 shadow-sm">
+              <div class="min-w-0 flex-1">
+                <h3 class="truncate text-xs font-black uppercase text-[#500707]">${product.name}</h3>
+                <p class="truncate text-[10px] italic text-[#7B1213]">${slotLabel(slot)}</p>
+              </div>
+              <span class="w-16 shrink-0 text-right text-xs font-black text-[#500707]">$${price.toFixed(2)}</span>
+              <button type="button" onclick="window.clearSlot('${id}', ${slotIdx})" class="flex h-6 w-6 items-center justify-center rounded text-[#500707]/60 hover:bg-[#500707]/10 hover:text-[#500707] transition" title="Quitar esta personalización">
                 <i class="fa-solid fa-trash text-xs"></i>
               </button>
-            </div>
+            </div>`;
+        });
 
-            <span class="w-16 shrink-0 text-right text-xs font-black text-[#500707]">$${lineTotal.toFixed(2)}</span>
-          </div>`;
+        return rows;
       }).join('');
     }
 
@@ -517,11 +668,22 @@
       const clientNotes = document.getElementById("clientNotes")?.value.trim() || "";
 
       let total = 0;
-      const lines = keys.map(id => {
-        const item = products.find(p => p.id === id);
-        const sub = (item.price || 0) * cart[id];
-        total += sub;
-        return `- ${cart[id]}x ${item.name} ($${sub.toFixed(2)})`;
+      const lines = [];
+      keys.forEach(id => {
+        const product = products.find(p => p.id === id);
+        const cartItem = cart[id];
+        const price = product.price || 0;
+        const plain = plainQty(cartItem);
+
+        if (plain > 0) {
+          const sub = price * plain;
+          total += sub;
+          lines.push(`- ${plain}x ${product.name} ($${sub.toFixed(2)})`);
+        }
+        activeSlots(cartItem).forEach(slot => {
+          total += price;
+          lines.push(`- 1x ${product.name} (${slotLabel(slot)}) ($${price.toFixed(2)})`);
+        });
       });
 
       let message = `¡Hola Cory´s Fast Food! Quisiera hacer el siguiente pedido:\n`;
@@ -614,7 +776,6 @@
       renderCategories();
       renderProducts();
 
-      // Esperamos a que el DOM se actualice antes de buscar la tarjeta y hacer scroll
       requestAnimationFrame(() => {
         const card = document.getElementById(`prod-${product.id}`);
         if (card) {
@@ -632,7 +793,6 @@
       input.focus();
     };
 
-    // Cerrar el dropdown si se hace clic fuera del buscador
     document.addEventListener('click', function(e) {
       const resultsBox = document.getElementById('search-results');
       const input = document.getElementById('search-input');
@@ -642,7 +802,6 @@
       }
     });
 
-    // Cerrar modal y dropdown de búsqueda con ESC
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         window.toggleCartModal(false);
