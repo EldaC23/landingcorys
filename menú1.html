@@ -283,8 +283,7 @@
       "Hamb. Gourmets"
     ];
 
-    // ===== PERSONALIZACIÓN DE PRODUCTO =====
-    // Set de checkboxes de exclusión disponibles por categoría.
+    // ===== PERSONALIZACIÓN DE PRODUCTO (slots en cascada) =====
     const modifierSets = {
       "Perritos": ["ensalada", "cebolla", "mostaza", "purapapa", "queso"],
       "Hamb. Carne": ["lechuga", "tomate", "mostaza", "tocineta", "salsas"],
@@ -293,63 +292,65 @@
       "Hamb. Gourmets": ["lechuga", "tomate", "mostaza", "tocineta", "salsas"],
       "Sanguches": ["lechuga", "tomate", "mostaza"]
     };
-    // Categorías que además (o únicamente) ofrecen selector de proteína de única elección.
     const proteinCategories = ["Pepitos"];
 
-    const modLabels = {
-      ensalada: "sin ensalada",
-      cebolla: "sin cebolla",
-      mostaza: "sin mostaza",
-      purapapa: "pura papa",
-      queso: "sin queso",
-      lechuga: "sin lechuga",
-      tomate: "sin tomate",
-      tocineta: "sin tocineta",
-      salsas: "sin salsas"
-    };
     const modShortLabels = {
-      ensalada: "Sin ensalada",
-      cebolla: "Sin cebolla",
-      mostaza: "Sin mostaza",
-      purapapa: "Pura papa",
-      queso: "Sin queso",
-      lechuga: "Sin lechuga",
-      tomate: "Sin tomate",
-      tocineta: "Sin tocineta",
-      salsas: "Sin salsas"
+      ensalada: "Sin ensalada", cebolla: "Sin cebolla", mostaza: "Sin mostaza",
+      purapapa: "Pura papa", queso: "Sin queso", lechuga: "Sin lechuga",
+      tomate: "Sin tomate", tocineta: "Sin tocineta", salsas: "Sin salsas"
+    };
+    const modLineLabels = {
+      ensalada: "sin ensalada", cebolla: "sin cebolla", mostaza: "sin mostaza",
+      purapapa: "pura papa", queso: "sin queso", lechuga: "sin lechuga",
+      tomate: "sin tomate", tocineta: "sin tocineta", salsas: "sin salsas"
     };
     const proteinLabels = { carne: "proteína: carne", pollo: "proteína: pollo", mixto: "proteína: mixto" };
 
     function hasModifiers(cat) {
       return Boolean(modifierSets[cat]) || proteinCategories.includes(cat);
     }
-    function buildLineKey(mods, protein) {
-      return [...mods].sort().join(',') + '|' + (protein || '');
-    }
-    function lineLabel(mods, protein) {
-      const parts = mods.map(m => modLabels[m] || m);
-      if (protein) parts.push(proteinLabels[protein] || protein);
+    function slotLabel(slot) {
+      const parts = slot.mods.map(m => modLineLabels[m] || m);
+      if (slot.protein) parts.push(proteinLabels[slot.protein] || slot.protein);
       return parts.join(', ');
+    }
+    function isSlotEmpty(slot) {
+      return slot.mods.length === 0 && !slot.protein;
+    }
+    function activeSlots(item) {
+      return item.slots.filter(s => !isSlotEmpty(s));
+    }
+    function totalQty(item) {
+      return Math.max(item.manualQty, activeSlots(item).length);
+    }
+    function plainQty(item) {
+      return Math.max(item.manualQty - activeSlots(item).length, 0);
+    }
+    // Tras cualquier cambio: deja solo los slots con contenido + exactamente
+    // un slot vacío al final, listo para la próxima personalización.
+    function normalizeSlots(item) {
+      const active = activeSlots(item);
+      active.push({ mods: [], protein: null });
+      item.slots = active;
     }
 
     let activeCategory = "Hamb. Carne";
-    // cart[id] = { qty: <total pedido>, lines: [{ key, mods:[], protein, qty }] }
+    // cart[id] = { manualQty: <puesto con +/->, slots: [{mods:[], protein}, ...] }
     let cart = {};
-    // Selección pendiente en el acordeón de cada producto, antes de presionar "Agregar personalizada"
-    let pendingMods = {};
-    // Qué acordeones están abiertos (se preserva entre re-renders)
     let openAccordion = {};
 
-    function getPending(id) {
-      if (!pendingMods[id]) pendingMods[id] = { mods: [], protein: null };
-      return pendingMods[id];
-    }
-    function getCartItem(id) {
-      if (!cart[id]) cart[id] = { qty: 0, lines: [] };
+    function getOrCreateItem(id) {
+      if (!cart[id]) cart[id] = { manualQty: 0, slots: [{ mods: [], protein: null }] };
       return cart[id];
     }
-    function plainQtyOf(item) {
-      return item.qty - item.lines.reduce((s, l) => s + l.qty, 0);
+    function peekItem(id) {
+      return cart[id] || { manualQty: 0, slots: [{ mods: [], protein: null }] };
+    }
+    function cleanupIfEmpty(id) {
+      const item = cart[id];
+      if (item && item.manualQty === 0 && activeSlots(item).length === 0) {
+        delete cart[id];
+      }
     }
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
@@ -370,54 +371,17 @@
     };
 
     window.addToCart = function(id) {
-      getCartItem(id).qty += 1;
-      updateCartUI();
+      window.changeQuantity(id, 1);
     };
 
-    // Cambia la cantidad TOTAL de un producto (contador grande de la tarjeta/modal).
-    // Al restar, primero quita unidades "sin personalizar"; si ya no quedan,
-    // quita de la última línea personalizada (nunca deja el total en un estado inconsistente).
+    // Cambia lo que el cliente puso manualmente con +/-.
+    // El total visible es siempre max(manualQty, personalizadas activas) —
+    // nunca hay que "restar prestado" a mano, se recalcula solo.
     window.changeQuantity = function(id, delta) {
-      const item = cart[id];
-      if (!item) return;
-
-      if (delta > 0) {
-        item.qty += 1;
-      } else {
-        if (item.qty <= 0) return;
-        const plain = plainQtyOf(item);
-        if (plain > 0) {
-          item.qty -= 1;
-        } else if (item.lines.length > 0) {
-          const last = item.lines[item.lines.length - 1];
-          last.qty -= 1;
-          item.qty -= 1;
-          if (last.qty <= 0) item.lines.pop();
-        } else {
-          item.qty -= 1;
-        }
-      }
-
-      if (item.qty <= 0) delete cart[id];
-      updateCartUI();
-    };
-
-    // Sube/baja la cantidad de UNA línea específica (usado en el modal del carrito).
-    // A diferencia de changeQuantity, aquí sí se suma/resta una unidad real al total,
-    // porque el usuario está pidiendo explícitamente más/menos de esa configuración exacta.
-    window.changeLineQuantity = function(id, lineKey, delta) {
-      const item = cart[id];
-      if (!item) return;
-      const line = item.lines.find(l => l.key === lineKey);
-      if (!line) return;
-
-      line.qty += delta;
-      item.qty += delta;
-
-      if (line.qty <= 0) {
-        item.lines = item.lines.filter(l => l.key !== lineKey);
-      }
-      if (item.qty <= 0) delete cart[id];
+      const item = getOrCreateItem(id);
+      item.manualQty = Math.max(0, item.manualQty + delta);
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
       updateCartUI();
     };
 
@@ -426,43 +390,37 @@
       renderProducts();
     };
 
-    window.toggleMod = function(id, mod) {
-      const pending = getPending(id);
-      const idx = pending.mods.indexOf(mod);
-      if (idx === -1) pending.mods.push(mod); else pending.mods.splice(idx, 1);
-      renderProducts();
+    // Marca/desmarca una casilla dentro de un slot específico. En vivo:
+    // no hace falta confirmar nada, el carrito se actualiza al instante.
+    window.toggleSlotMod = function(id, slotIndex, mod) {
+      const item = getOrCreateItem(id);
+      const slot = item.slots[slotIndex];
+      if (!slot) return;
+      const i = slot.mods.indexOf(mod);
+      if (i === -1) slot.mods.push(mod); else slot.mods.splice(i, 1);
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
+      updateCartUI();
     };
 
-    window.selectProtein = function(id, protein) {
-      const pending = getPending(id);
-      pending.protein = (pending.protein === protein) ? null : protein;
-      renderProducts();
+    window.selectSlotProtein = function(id, slotIndex, protein) {
+      const item = getOrCreateItem(id);
+      const slot = item.slots[slotIndex];
+      if (!slot) return;
+      slot.protein = (slot.protein === protein) ? null : protein;
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
+      updateCartUI();
     };
 
-    // Agrega una unidad personalizada según lo marcado en el acordeón.
-    // Si hay unidades "sin personalizar" disponibles en el total, las toma prestadas
-    // (el total NO sube). Si no queda ninguna disponible, sí suma una unidad nueva.
-    window.addCustomized = function(id) {
-      const pending = getPending(id);
-      if (pending.mods.length === 0 && !pending.protein) return;
-
-      const item = getCartItem(id);
-      const key = buildLineKey(pending.mods, pending.protein);
-      let line = item.lines.find(l => l.key === key);
-      if (!line) {
-        line = { key, mods: [...pending.mods], protein: pending.protein, qty: 0 };
-        item.lines.push(line);
-      }
-
-      const plain = plainQtyOf(item);
-      if (plain > 0) {
-        line.qty += 1; // toma prestada una unidad simple, el total no cambia
-      } else {
-        line.qty += 1;
-        item.qty += 1; // no había de dónde tomar, se agrega una unidad nueva
-      }
-
-      pendingMods[id] = { mods: [], protein: null }; // limpia la selección para la próxima
+    // Quita una personalización ya creada (botón "x" en el modal del carrito).
+    window.clearSlot = function(id, slotIndex) {
+      const item = cart[id];
+      if (!item || !item.slots[slotIndex]) return;
+      item.slots[slotIndex].mods = [];
+      item.slots[slotIndex].protein = null;
+      normalizeSlots(item);
+      cleanupIfEmpty(id);
       updateCartUI();
     };
 
@@ -511,42 +469,51 @@
         } else {
           productsHTML = filtered.map(p => {
             const disabled = p.price == null;
-            const item = cart[p.id];
-            const qty = item ? item.qty : 0;
-            const plain = item ? plainQtyOf(item) : 0;
+            const item = peekItem(p.id);
+            const total = totalQty(item);
+            const plain = plainQty(item);
+            const active = activeSlots(item);
             const showsMods = hasModifiers(p.category);
             const isOpen = Boolean(openAccordion[p.id]);
-            const pending = getPending(p.id);
             const checkboxList = modifierSets[p.category] || [];
             const showsProtein = proteinCategories.includes(p.category);
 
-            const breakdownHTML = (item && item.lines.length > 0) ? `
+            const breakdownHTML = active.length > 0 ? `
               <div class="mt-1 space-y-0.5 border-t border-[#7B1213]/10 pt-1">
-                ${plain > 0 ? `<p class="text-[10px] text-[#500707]/70">${plain} sin personalizar</p>` : ''}
-                ${item.lines.map(l => `<p class="text-[10px] italic text-[#7B1213]">${l.qty} ${lineLabel(l.mods, l.protein)}</p>`).join('')}
+                ${plain > 0 ? `<p class="text-[10px] text-[#500707]/70">${plain} con todo</p>` : ''}
+                ${active.map(s => `<p class="text-[10px] italic text-[#7B1213]">1 ${slotLabel(s)}</p>`).join('')}
               </div>
             ` : '';
+
+            const slotsHTML = item.slots.map((slot, idx) => {
+              const num = idx + 1;
+              const isLast = idx === item.slots.length - 1;
+              return `
+                <div class="${isLast ? '' : 'border-b border-[#7B1213]/10 pb-1.5 mb-1.5'}">
+                  <p class="text-[10px] font-black uppercase ${isSlotEmpty(slot) ? 'text-[#7B1213]/40' : 'text-[#7B1213]'} mb-1">Personalizada ${num}</p>
+                  ${checkboxList.length > 0 ? `
+                    <div class="flex flex-wrap gap-1 mb-1">
+                      ${checkboxList.map(m => `
+                        <button type="button" onclick="window.toggleSlotMod('${p.id}', ${idx}, '${m}')" class="rounded-full border px-2 py-0.5 text-[10px] font-bold transition ${slot.mods.includes(m) ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${modShortLabels[m]}</button>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                  ${showsProtein ? `
+                    <div class="flex gap-1">
+                      ${['carne','pollo','mixto'].map(pr => `
+                        <button type="button" onclick="window.selectSlotProtein('${p.id}', ${idx}, '${pr}')" class="flex-1 rounded-full border px-2 py-1 text-[10px] font-black uppercase transition ${slot.protein === pr ? 'border-[#7B1213] bg-[#7B1213] text-[#F5E6C8]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${pr}</button>
+                      `).join('')}
+                    </div>
+                  ` : ''}
+                </div>`;
+            }).join('');
 
             const accordionHTML = showsMods ? `
               <button type="button" onclick="window.toggleAccordionPanel('${p.id}')" class="mt-1.5 flex items-center gap-1 text-[10px] font-black uppercase text-[#7B1213]">
                 Personalizar <i class="fa-solid fa-chevron-down text-[9px] transition-transform ${isOpen ? 'rotate-180' : ''}"></i>
               </button>
-              <div class="${isOpen ? '' : 'hidden'} mt-1.5 border-t border-[#7B1213]/10 pt-1.5 space-y-1.5">
-                ${checkboxList.length > 0 ? `
-                  <div class="flex flex-wrap gap-1">
-                    ${checkboxList.map(m => `
-                      <button type="button" onclick="window.toggleMod('${p.id}','${m}')" class="rounded-full border px-2 py-0.5 text-[10px] font-bold transition ${pending.mods.includes(m) ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${modShortLabels[m]}</button>
-                    `).join('')}
-                  </div>
-                ` : ''}
-                ${showsProtein ? `
-                  <div class="flex gap-1">
-                    ${['carne','pollo','mixto'].map(pr => `
-                      <button type="button" onclick="window.selectProtein('${p.id}','${pr}')" class="flex-1 rounded-full border px-2 py-1 text-[10px] font-black uppercase transition ${pending.protein === pr ? 'border-[#7B1213] bg-[#7B1213] text-[#F5E6C8]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${pr}</button>
-                    `).join('')}
-                  </div>
-                ` : ''}
-                <button type="button" onclick="window.addCustomized('${p.id}')" class="w-full rounded-lg bg-[#7B1213] py-1.5 text-[10px] font-black uppercase text-[#F5E6C8]">Agregar personalizada</button>
+              <div class="${isOpen ? '' : 'hidden'} mt-1.5 border-t border-[#7B1213]/10 pt-1.5">
+                ${slotsHTML}
               </div>
             ` : '';
 
@@ -560,10 +527,10 @@
                     </div>
                     <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
                   </div>
-                  ${qty > 0 ? `
+                  ${total > 0 ? `
     <div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
       <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
-      <span class="w-4 text-center text-xs font-black text-[#7B1213]">${qty}</span>
+      <span class="w-4 text-center text-xs font-black text-[#7B1213]">${total}</span>
       <button type="button" onclick="window.changeQuantity('${p.id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-plus text-[10px]"></i></button>
     </div>
   ` : `
@@ -613,8 +580,9 @@
         const product = products.find(p => p.id === id);
         const cartItem = cart[id];
         if (product && product.price != null && cartItem) {
-          count += cartItem.qty;
-          total += product.price * cartItem.qty;
+          const q = totalQty(cartItem);
+          count += q;
+          total += product.price * q;
         }
       });
 
@@ -646,8 +614,9 @@
       container.innerHTML = keys.map(id => {
         const product = products.find(p => p.id === id);
         const cartItem = cart[id];
-        const plain = plainQtyOf(cartItem);
         const price = product.price || 0;
+        const plain = plainQty(cartItem);
+        const active = activeSlots(cartItem);
         let rows = '';
 
         if (plain > 0) {
@@ -655,6 +624,7 @@
             <div class="flex items-center justify-between gap-2 rounded-xl border border-[#500707]/15 bg-[#FFFBEB] px-3 py-2 shadow-sm">
               <div class="min-w-0 flex-1">
                 <h3 class="truncate text-xs font-black uppercase text-[#500707]">${product.name}</h3>
+                <p class="text-[10px] text-[#500707]/60">con todo</p>
               </div>
               <div class="flex shrink-0 items-center gap-1.5">
                 <div class="inline-flex items-center rounded-lg border border-[#500707]/20 bg-white p-0.5">
@@ -671,25 +641,18 @@
             </div>`;
         }
 
-        cartItem.lines.forEach(line => {
+        active.forEach((slot) => {
+          const slotIdx = cartItem.slots.indexOf(slot);
           rows += `
             <div class="flex items-center justify-between gap-2 rounded-xl border border-[#500707]/15 bg-[#FFFBEB] px-3 py-2 shadow-sm">
               <div class="min-w-0 flex-1">
                 <h3 class="truncate text-xs font-black uppercase text-[#500707]">${product.name}</h3>
-                <p class="truncate text-[10px] italic text-[#7B1213]">${lineLabel(line.mods, line.protein)}</p>
+                <p class="truncate text-[10px] italic text-[#7B1213]">${slotLabel(slot)}</p>
               </div>
-              <div class="flex shrink-0 items-center gap-1.5">
-                <div class="inline-flex items-center rounded-lg border border-[#500707]/20 bg-white p-0.5">
-                  <button type="button" onclick="window.changeLineQuantity('${id}','${line.key}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
-                    <i class="fa-solid fa-minus text-[10px]"></i>
-                  </button>
-                  <span class="w-6 text-center text-xs font-black text-[#500707]">${line.qty}</span>
-                  <button type="button" onclick="window.changeLineQuantity('${id}','${line.key}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#500707] hover:bg-[#500707]/10 active:scale-90 transition">
-                    <i class="fa-solid fa-plus text-[10px]"></i>
-                  </button>
-                </div>
-              </div>
-              <span class="w-16 shrink-0 text-right text-xs font-black text-[#500707]">$${(price * line.qty).toFixed(2)}</span>
+              <span class="w-16 shrink-0 text-right text-xs font-black text-[#500707]">$${price.toFixed(2)}</span>
+              <button type="button" onclick="window.clearSlot('${id}', ${slotIdx})" class="flex h-6 w-6 items-center justify-center rounded text-[#500707]/60 hover:bg-[#500707]/10 hover:text-[#500707] transition" title="Quitar esta personalización">
+                <i class="fa-solid fa-trash text-xs"></i>
+              </button>
             </div>`;
         });
 
@@ -710,17 +673,16 @@
         const product = products.find(p => p.id === id);
         const cartItem = cart[id];
         const price = product.price || 0;
-        const plain = plainQtyOf(cartItem);
+        const plain = plainQty(cartItem);
 
         if (plain > 0) {
           const sub = price * plain;
           total += sub;
           lines.push(`- ${plain}x ${product.name} ($${sub.toFixed(2)})`);
         }
-        cartItem.lines.forEach(line => {
-          const sub = price * line.qty;
-          total += sub;
-          lines.push(`- ${line.qty}x ${product.name} (${lineLabel(line.mods, line.protein)}) ($${sub.toFixed(2)})`);
+        activeSlots(cartItem).forEach(slot => {
+          total += price;
+          lines.push(`- 1x ${product.name} (${slotLabel(slot)}) ($${price.toFixed(2)})`);
         });
       });
 
