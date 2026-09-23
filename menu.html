@@ -374,12 +374,33 @@
       window.changeQuantity(id, 1);
     };
 
-    // Cambia lo que el cliente puso manualmente con +/-.
-    // El total visible es siempre max(manualQty, personalizadas activas) —
-    // nunca hay que "restar prestado" a mano, se recalcula solo.
+    // Cambia la cantidad total. Al sumar, siempre agrega una unidad "con todo".
+    // Al restar: primero quita de las unidades "con todo"; si ya no quedan,
+    // quita la personalización más reciente (de atrás hacia adelante), hasta
+    // llegar a 0 y que el producto se elimine del pedido — igual que cualquier
+    // contador normal, sin necesidad de desmarcar nada a mano primero.
     window.changeQuantity = function(id, delta) {
       const item = getOrCreateItem(id);
-      item.manualQty = Math.max(0, item.manualQty + delta);
+
+      if (delta > 0) {
+        item.manualQty += 1;
+      } else {
+        const plain = plainQty(item);
+        if (plain > 0) {
+          item.manualQty = Math.max(0, item.manualQty - 1);
+        } else {
+          const active = activeSlots(item);
+          if (active.length > 0) {
+            const last = active[active.length - 1];
+            const idx = item.slots.indexOf(last);
+            item.slots[idx].mods = [];
+            item.slots[idx].protein = null;
+          } else if (item.manualQty > 0) {
+            item.manualQty -= 1;
+          }
+        }
+      }
+
       normalizeSlots(item);
       cleanupIfEmpty(id);
       updateCartUI();
