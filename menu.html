@@ -18,9 +18,12 @@
     html {
       scroll-behavior: smooth;
     }
-    /* Margen superior para que el header sticky no tape las secciones al saltar */
+    /* Margen superior para que el header + buscador + barra de categorías no tapen las secciones ni las tarjetas al saltar */
     .category-section {
-      scroll-margin-top: 130px;
+      scroll-margin-top: 190px;
+    }
+    .product-card {
+      scroll-margin-top: 190px;
     }
     /* Scrollbar siempre visible con el color #E8A020 */
     .custom-scrollbar {
@@ -73,8 +76,31 @@
     </div>
   </header>
 
-  <!-- BARRA DE CATEGORÍAS -->
+  <!-- BUSCADOR + BARRA DE CATEGORÍAS (una sola sección sticky) -->
   <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
+
+    <!-- Buscador -->
+    <div class="mx-auto max-w-6xl px-4 pt-3 sm:px-6">
+      <div class="relative">
+        <i class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#E8A020]/70"></i>
+        <input
+          type="text"
+          id="search-input"
+          placeholder="Buscar categoría, producto o ingrediente..."
+          autocomplete="off"
+          oninput="window.handleSearchInput(this.value)"
+          class="w-full rounded-full border border-[#E8A020]/30 bg-[#171313] py-2 pl-9 pr-8 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/35 transition focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] sm:text-sm"
+        >
+        <button type="button" id="search-clear-btn" onclick="window.clearSearch()" class="absolute right-2.5 top-1/2 hidden -translate-y-1/2 text-[#F5E6C8]/40 transition hover:text-[#F5E6C8]">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+
+        <!-- Dropdown de resultados -->
+        <div id="search-results" class="custom-scrollbar absolute left-0 right-0 top-full z-50 mt-1.5 hidden max-h-72 overflow-y-auto rounded-2xl border border-[#E8A020]/30 bg-[#171313] shadow-2xl"></div>
+      </div>
+    </div>
+
+    <!-- Categorías -->
     <div class="relative mx-auto max-w-6xl">
       <div class="custom-scrollbar overflow-x-auto pl-4 pr-16 py-3.5 sm:pl-6 sm:pr-20">
         <div class="flex min-w-max gap-3 pr-12" id="categories-bar"></div>
@@ -365,7 +391,7 @@
           productsHTML = filtered.map(p => {
             const disabled = p.price == null;
             return `
-              <article class="flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
+              <article id="prod-${p.id}" class="product-card flex items-center gap-3 rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
                 <div class="min-w-0 flex-1">
                   <div class="flex items-baseline justify-between gap-3">
                     <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
@@ -513,10 +539,114 @@
       window.open(`https://wa.me/584120367308?text=${encodeURIComponent(message)}`, '_blank');
     };
 
-    // Cerrar modal con ESC
+    // ===== BUSCADOR =====
+    function normalizeText(str) {
+      return str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+    }
+
+    window.handleSearchInput = function(rawValue) {
+      const query = rawValue.trim();
+      const clearBtn = document.getElementById('search-clear-btn');
+      const resultsBox = document.getElementById('search-results');
+      clearBtn.classList.toggle('hidden', query.length === 0);
+
+      if (query.length < 2) {
+        resultsBox.classList.add('hidden');
+        resultsBox.innerHTML = '';
+        return;
+      }
+
+      const nq = normalizeText(query);
+
+      const matchedCategories = categories.filter(cat => normalizeText(cat).includes(nq));
+      const matchedProducts = products.filter(p =>
+        normalizeText(p.name).includes(nq) ||
+        normalizeText(p.description).includes(nq) ||
+        normalizeText(p.category).includes(nq)
+      ).slice(0, 8);
+
+      if (matchedCategories.length === 0 && matchedProducts.length === 0) {
+        resultsBox.innerHTML = `<div class="px-4 py-3 text-xs text-[#F5E6C8]/50">Sin resultados para "${query}"</div>`;
+        resultsBox.classList.remove('hidden');
+        return;
+      }
+
+      let html = '';
+
+      if (matchedCategories.length > 0) {
+        html += `<p class="px-4 pt-3 pb-1 text-[10px] font-black uppercase tracking-wider text-[#E8A020]/70">Categorías</p>`;
+        html += matchedCategories.map(cat => `
+          <button type="button" onclick="window.selectSearchResult('category', '${cat.replace(/'/g, "\\'")}')" class="flex w-full items-center gap-2 px-4 py-2 text-left text-xs font-bold text-[#F5E6C8] transition hover:bg-[#4E1111]/60 sm:text-sm">
+            <i class="fa-solid fa-layer-group text-[#E8A020]/70"></i> ${cat}
+          </button>
+        `).join('');
+      }
+
+      if (matchedProducts.length > 0) {
+        html += `<p class="px-4 pt-3 pb-1 text-[10px] font-black uppercase tracking-wider text-[#E8A020]/70">Productos</p>`;
+        html += matchedProducts.map(p => `
+          <button type="button" onclick="window.selectSearchResult('product', '${p.id}')" class="flex w-full flex-col items-start gap-0.5 px-4 py-2 text-left transition hover:bg-[#4E1111]/60">
+            <span class="text-xs font-black uppercase text-[#F5E6C8] sm:text-sm">${p.name} <span class="ml-1 text-[10px] font-bold text-[#E8A020]">· ${p.category}</span></span>
+            <span class="truncate text-[11px] text-[#F5E6C8]/50">${p.description}</span>
+          </button>
+        `).join('');
+      }
+
+      resultsBox.innerHTML = html;
+      resultsBox.classList.remove('hidden');
+    };
+
+    window.selectSearchResult = function(type, value) {
+      document.getElementById('search-results').classList.add('hidden');
+
+      if (type === 'category') {
+        window.selectCategory(value);
+        return;
+      }
+
+      const product = products.find(p => p.id === value);
+      if (!product) return;
+
+      activeCategory = product.category;
+      renderCategories();
+      renderProducts();
+
+      // Esperamos a que el DOM se actualice antes de buscar la tarjeta y hacer scroll
+      requestAnimationFrame(() => {
+        const card = document.getElementById(`prod-${product.id}`);
+        if (card) {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.classList.add('ring-4', 'ring-[#E8A020]');
+          setTimeout(() => card.classList.remove('ring-4', 'ring-[#E8A020]'), 1600);
+        }
+      });
+    };
+
+    window.clearSearch = function() {
+      const input = document.getElementById('search-input');
+      input.value = '';
+      window.handleSearchInput('');
+      input.focus();
+    };
+
+    // Cerrar el dropdown si se hace clic fuera del buscador
+    document.addEventListener('click', function(e) {
+      const resultsBox = document.getElementById('search-results');
+      const input = document.getElementById('search-input');
+      if (!resultsBox || !input) return;
+      if (!resultsBox.contains(e.target) && e.target !== input) {
+        resultsBox.classList.add('hidden');
+      }
+    });
+
+    // Cerrar modal y dropdown de búsqueda con ESC
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         window.toggleCartModal(false);
+        document.getElementById('search-results')?.classList.add('hidden');
       }
     });
 
