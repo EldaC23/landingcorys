@@ -190,8 +190,13 @@
   </div>
 
   <script>
-    const products = [
-      
+    // Fuente de datos dinámica: Google Sheets publicada como CSV.
+    // Si el fetch falla o tarda demasiado, se usa fallbackProducts/fallbackCategories (definidos más abajo).
+    const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBSL_gRsEDvmZdZ7gH-6iNoEglnS-csuWdBBAypFYo_Et3CPLuqPApVRJr9s1agCMdq9NtHwbIfRwx/pub?gid=1676624173&single=true&output=csv";
+    const PRODUCTS_FETCH_TIMEOUT_MS = 6000;
+
+    const fallbackProducts = [
+
       { id: "hc1", category: "Hamb. Carne", name: "La Cuaima", description: "120grs de carne, lechuga, tomate, papas hilo y salsas básicas.", price: 6.2 },
       { id: "hc2", category: "Hamb. Carne", name: "La Chama", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilita Kraft y tocineta.", price: 8.8 },
       { id: "hc3", category: "Hamb. Carne", name: "La Morena", description: "120grs de carne, lechuga, tomate, papas hilo, salsas básicas, facilitas Kraft, tocineta, coronada con un tequeyoyo.", price: 10.1 },
@@ -261,7 +266,7 @@
       { id: "t6", category: "Para tomar", name: "Té", description: "Té frío.", price: 2.5 }
     ];
 
-    const categories = [
+    const fallbackCategories = [
       "Hamb. Carne",
       "Hamb. Pollo",
       "Súper Hamburguesas",
@@ -275,6 +280,10 @@
       "Ensaladas",
       "Para tomar"
     ];
+
+    // Se reemplazan por los datos del CSV si la carga tiene éxito (ver loadProducts()).
+    let products = fallbackProducts;
+    let categories = fallbackCategories;
 
     const burgerCategories = [
       "Hamb. Carne",
@@ -357,6 +366,108 @@
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
     const getSlug = str => str.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
+    // ===== CARGA DINÁMICA DE PRODUCTOS DESDE GOOGLE SHEETS (CSV) =====
+    // Parser CSV simple pero robusto: respeta comas y saltos de línea dentro de campos entre comillas.
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i++) {
+        const c = text[i];
+        if (inQuotes) {
+          if (c === '"') {
+            if (text[i + 1] === '"') { field += '"'; i++; }
+            else { inQuotes = false; }
+          } else {
+            field += c;
+          }
+        } else if (c === '"') {
+          inQuotes = true;
+        } else if (c === ',') {
+          row.push(field);
+          field = '';
+        } else if (c === '\r') {
+          // ignorar, se maneja el salto con \n
+        } else if (c === '\n') {
+          row.push(field);
+          rows.push(row);
+          row = [];
+          field = '';
+        } else {
+          field += c;
+        }
+      }
+      if (field.length > 0 || row.length > 0) {
+        row.push(field);
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    function parseProductsCSV(text) {
+      const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+      if (rows.length < 2) return null;
+
+      const header = rows[0].map(h => h.trim().toLowerCase());
+      const colIndex = {
+        categoria: header.indexOf('categoria'),
+        nombre: header.indexOf('nombre'),
+        descripcion: header.indexOf('descripcion'),
+        precio: header.indexOf('precio'),
+        disponible: header.indexOf('disponible')
+      };
+      if (colIndex.categoria === -1 || colIndex.nombre === -1 || colIndex.precio === -1) return null;
+
+      const categoriesOrder = [];
+      const productsOut = [];
+      let counter = 0;
+
+      rows.slice(1).forEach(cols => {
+        const categoria = (cols[colIndex.categoria] || '').trim();
+        const nombre = (cols[colIndex.nombre] || '').trim();
+        if (!categoria || !nombre) return;
+
+        const descripcion = colIndex.descripcion !== -1 ? (cols[colIndex.descripcion] || '').trim() : '';
+        const precioRaw = colIndex.precio !== -1 ? (cols[colIndex.precio] || '').trim() : '';
+        const precio = parseFloat(precioRaw.replace(',', '.'));
+        if (isNaN(precio)) return;
+
+        const disponibleRaw = colIndex.disponible !== -1 ? (cols[colIndex.disponible] || '') : '';
+        const disponible = disponibleRaw.trim().toLowerCase() !== 'no';
+
+        if (!categoriesOrder.includes(categoria)) categoriesOrder.push(categoria);
+
+        counter++;
+        const id = `${getSlug(categoria)}-${getSlug(nombre)}-${counter}`;
+        productsOut.push({ id, category: categoria, name: nombre, description: descripcion, price: precio, available: disponible });
+      });
+
+      if (productsOut.length === 0) return null;
+      return { products: productsOut, categories: categoriesOrder };
+    }
+
+    async function loadProducts() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), PRODUCTS_FETCH_TIMEOUT_MS);
+        const response = await fetch(PRODUCTS_CSV_URL, { signal: controller.signal, cache: 'no-store' });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`No se pudo obtener el CSV (status ${response.status})`);
+
+        const text = await response.text();
+        const parsed = parseProductsCSV(text);
+        if (!parsed) throw new Error('El CSV no tiene el formato esperado o está vacío');
+
+        products = parsed.products;
+        categories = parsed.categories;
+      } catch (err) {
+        console.warn('No se pudo cargar el menú desde Google Sheets, se usa el respaldo local:', err);
+        products = fallbackProducts;
+        categories = fallbackCategories;
+      }
+    }
+
     window.toggleCartModal = function(show) {
       const modal = document.getElementById("cart-modal");
       const backBtn = document.getElementById("btn-back");
@@ -392,6 +503,11 @@
     // llegar a 0 y que el producto se elimine del pedido — igual que cualquier
     // contador normal, sin necesidad de desmarcar nada a mano primero.
     window.changeQuantity = function(id, delta) {
+      if (delta > 0) {
+        const product = products.find(p => p.id === id);
+        if (product && product.available === false) return;
+      }
+
       const item = getOrCreateItem(id);
 
       if (delta > 0) {
@@ -501,7 +617,8 @@
             </div>`;
         } else {
           productsHTML = filtered.map(p => {
-            const disabled = p.price == null;
+            const unavailable = p.available === false;
+            const disabled = p.price == null || unavailable;
             const item = peekItem(p.id);
             const total = totalQty(item);
             const plain = plainQty(item);
@@ -541,7 +658,7 @@
                 </div>`;
             }).join('');
 
-            const accordionHTML = showsMods ? `
+            const accordionHTML = (showsMods && !unavailable) ? `
               <button type="button" onclick="window.toggleAccordionPanel('${p.id}')" class="mt-1.5 flex items-center gap-1 text-[10px] font-black uppercase text-[#7B1213]">
                 Personalizar <i class="fa-solid fa-chevron-down text-[9px] transition-transform ${isOpen ? 'rotate-180' : ''}"></i>
               </button>
@@ -551,11 +668,14 @@
             ` : '';
 
             return `
-              <article id="prod-${p.id}" class="product-card rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3">
+              <article id="prod-${p.id}" class="product-card rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3 ${unavailable ? 'opacity-55' : ''}">
                 <div class="flex items-center gap-3">
                   <div class="min-w-0 flex-1">
                     <div class="flex items-baseline justify-between gap-3">
-                      <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                      <div class="flex min-w-0 items-center gap-1.5">
+                        <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                        ${unavailable ? `<span class="shrink-0 rounded-full bg-[#7B1213]/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wide text-[#7B1213]">Agotado</span>` : ''}
+                      </div>
                       <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
                     </div>
                     <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
@@ -564,8 +684,10 @@
     <div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
       <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
       <span class="w-4 text-center text-xs font-black text-[#7B1213]">${total}</span>
-      <button type="button" onclick="window.changeQuantity('${p.id}', 1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-plus text-[10px]"></i></button>
+      <button type="button" onclick="window.changeQuantity('${p.id}', 1)" ${unavailable ? 'disabled' : ''} class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213] ${unavailable ? 'cursor-not-allowed opacity-30' : ''}"><i class="fa-solid fa-plus text-[10px]"></i></button>
     </div>
+  ` : unavailable ? `
+    <span class="shrink-0 rounded-lg border border-[#7B1213]/20 bg-white/70 px-2.5 py-2 text-[10px] font-black uppercase tracking-wide text-[#7B1213]/60">Agotado</span>
   ` : `
     <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow transition duration-150 active:scale-90">
       <i class="fa-solid fa-plus text-xs"></i>
@@ -842,9 +964,12 @@
       }
     });
 
-    renderCategories();
-    renderProducts();
-    updateCartUI();
+    (async function init() {
+      await loadProducts();
+      renderCategories();
+      renderProducts();
+      updateCartUI();
+    })();
   </script>
 </body>
 </html>
