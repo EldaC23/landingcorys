@@ -423,15 +423,48 @@
       const productsOut = [];
       let counter = 0;
 
-      rows.slice(1).forEach(cols => {
-        const categoria = (cols[colIndex.categoria] || '').trim();
-        const nombre = (cols[colIndex.nombre] || '').trim();
-        if (!categoria || !nombre) return;
+      rows.slice(1).forEach((cols, i) => {
+        const rowNumber = i + 2; // +1 por el encabezado, +1 porque el índice empieza en 0
 
+        let categoria = (cols[colIndex.categoria] || '').trim();
+        let nombre = (cols[colIndex.nombre] || '').trim();
         const descripcion = colIndex.descripcion !== -1 ? (cols[colIndex.descripcion] || '').trim() : '';
         const precioRaw = colIndex.precio !== -1 ? (cols[colIndex.precio] || '').trim() : '';
-        const precio = parseFloat(precioRaw.replace(',', '.'));
-        if (isNaN(precio)) return;
+        let precio = parseFloat(precioRaw.replace(',', '.'));
+
+        const faltaCategoria = !categoria;
+        const faltaNombre = !nombre;
+        const faltaPrecio = isNaN(precio);
+
+        if (faltaCategoria && faltaNombre) {
+          console.warn(`Fila ${rowNumber} del CSV: faltan "categoria" y "nombre", no se puede identificar el producto. Se omite del menú.`);
+          return;
+        }
+
+        if (faltaCategoria || faltaNombre || faltaPrecio) {
+          // Intenta autocorregir el dato faltante buscando el mismo producto (por los campos que sí vinieron) en el respaldo.
+          const known = {};
+          if (!faltaCategoria) known.category = categoria;
+          if (!faltaNombre) known.name = nombre;
+          const candidatos = fallbackProducts.filter(bp =>
+            Object.keys(known).every(k => normalizeText(bp[k]) === normalizeText(known[k]))
+          );
+          const respaldo = candidatos.length === 1 ? candidatos[0] : null;
+
+          const camposFaltantes = [faltaCategoria && 'categoria', faltaNombre && 'nombre', faltaPrecio && 'precio'].filter(Boolean).join(', ');
+          const nombreParaLog = nombre || (respaldo && respaldo.name) || '(sin nombre)';
+
+          if (respaldo) {
+            if (faltaCategoria) categoria = respaldo.category;
+            if (faltaNombre) nombre = respaldo.name;
+            if (faltaPrecio) precio = respaldo.price;
+            console.warn(`Producto "${nombreParaLog}" (fila ${rowNumber} del CSV): faltaba "${camposFaltantes}". Se completó automáticamente con el valor de respaldo.`);
+          } else {
+            console.warn(`Producto "${nombreParaLog}" (fila ${rowNumber} del CSV): faltaba "${camposFaltantes}" y no se encontró en el respaldo. Se omite del menú.`);
+          }
+        }
+
+        if (!categoria || !nombre || isNaN(precio)) return; // sigue incompleto tras intentar autocorregir: se omite
 
         const disponibleRaw = colIndex.disponible !== -1 ? (cols[colIndex.disponible] || '') : '';
         const disponible = disponibleRaw.trim().toLowerCase() !== 'no';
