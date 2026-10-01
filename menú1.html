@@ -190,6 +190,16 @@
   </div>
 
   <script>
+    // Botón "Volver": si el visitante llegó desde la landing de Menús Interactivos
+    // (?from=efecto), regresa allí; si no, mantiene el comportamiento original.
+    const BACK_HREF = new URLSearchParams(location.search).get('from') === 'efecto'
+      ? 'https://eldac23.github.io/efectolandingmenu/#demos'
+      : 'index.html';
+    (function () {
+      const b = document.getElementById('btn-back');
+      if (b) b.setAttribute('href', BACK_HREF);
+    })();
+
     // Fuente de datos dinámica: Google Sheets publicada como CSV.
     // Si el fetch falla o tarda demasiado, se usa fallbackProducts/fallbackCategories (definidos más abajo).
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBSL_gRsEDvmZdZ7gH-6iNoEglnS-csuWdBBAypFYo_Et3CPLuqPApVRJr9s1agCMdq9NtHwbIfRwx/pub?gid=1676624173&single=true&output=csv";
@@ -521,7 +531,7 @@
         if (backBtn) {
           backBtn.removeAttribute("aria-disabled");
           backBtn.classList.remove("pointer-events-none", "opacity-40");
-          backBtn.setAttribute("href", "index.html");
+          backBtn.setAttribute("href", BACK_HREF);
         }
       }
     };
