@@ -896,7 +896,17 @@
         message += `\n📝 *Observaciones:* ${clientNotes}`;
       }
 
-      window.open(`https://wa.me/584128995687?text=${encodeURIComponent(message)}`, '_blank');
+      // Modo demostración: se muestra cómo llegaría el pedido, sin enviarlo a nadie.
+      document.getElementById('demo-message-preview').innerText = message;
+      const demoModal = document.getElementById('demo-modal');
+      demoModal.classList.remove('hidden');
+      demoModal.classList.add('flex');
+    };
+
+    window.closeDemoModal = function() {
+      const demoModal = document.getElementById('demo-modal');
+      demoModal.classList.add('hidden');
+      demoModal.classList.remove('flex');
     };
 
     // ===== BUSCADOR =====
@@ -1014,5 +1024,22 @@
       updateCartUI();
     })();
   </script>
+
+<!-- MODO DEMOSTRACIÓN: muestra cómo llegaría el pedido, sin enviarlo a nadie -->
+<div id="demo-modal" class="fixed inset-0 z-[200] hidden items-center justify-center bg-black/85 p-4 backdrop-blur-sm">
+  <div class="relative w-full max-w-sm space-y-4 rounded-2xl border border-[#E8A020]/40 bg-[#2B0A0A] p-5 text-[#F5E6C8] shadow-2xl">
+    <button type="button" onclick="window.closeDemoModal()" class="absolute right-3 top-3 p-1 text-lg text-[#F5E6C8]/60 hover:text-white" aria-label="Cerrar">✕</button>
+    <div class="space-y-1 text-center">
+      <span class="rounded-full bg-[#E8A020]/20 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#E8A020]">Modo demostración</span>
+      <h3 class="pt-1 text-lg font-black">🚀 ¡Así recibirías este pedido!</h3>
+      <p class="text-xs text-[#F5E6C8]/70">El sistema genera el mensaje listo para llegar a tu WhatsApp. En esta demo no se envía a nadie:</p>
+    </div>
+    <div id="demo-message-preview" class="max-h-56 overflow-y-auto whitespace-pre-wrap rounded-xl border border-[#F5E6C8]/10 bg-black/30 p-3.5 font-mono text-xs leading-relaxed"></div>
+    <div class="space-y-3 pt-1 text-center">
+      <p class="px-1 text-xs text-[#F5E6C8]/70">¿Te gustaría automatizar la toma de pedidos en tu negocio con un menú interactivo como este?</p>
+      <a href="https://eldac23.github.io/efectolandingmenu/#cotizar" class="block w-full rounded-xl bg-[#E8A020] py-3 text-xs font-black uppercase tracking-wide text-[#2B0A0A] shadow-lg">Quiero cotizar mi menú</a>
+    </div>
+  </div>
+</div>
 </body>
 </html>
