@@ -73,7 +73,6 @@
   </header>
 
   <div class="mx-auto max-w-6xl space-y-1.5 px-4 pt-2 sm:px-6">
-    <div id="promo-banner" class="hidden rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-center text-xs font-bold text-[#E8A020] shadow-sm"></div>
     <div id="horario-banner" class="hidden rounded-xl border border-[#F5E6C8]/15 bg-[#171313]/60 px-3.5 py-1.5 text-center text-[11px] font-bold uppercase tracking-wide text-[#F5E6C8]/80 shadow-sm"></div>
   </div>
 
@@ -815,18 +814,6 @@
       return computeHorarioStatus(dayIndex, minutes, appConfig.horarios).open;
     }
 
-    function renderPromoBanner() {
-      const el = document.getElementById('promo-banner');
-      if (!el) return;
-      if (!appConfig.promoTexto) {
-        el.classList.add('hidden');
-        el.textContent = '';
-        return;
-      }
-      el.textContent = appConfig.promoTexto;
-      el.classList.remove('hidden');
-    }
-
     window.toggleCartModal = function(show) {
       const modal = document.getElementById("cart-modal");
       const backBtn = document.getElementById("btn-back");
@@ -974,7 +961,6 @@
       const isOpen = Boolean(openAccordion[p.id]);
       const checkboxList = modifierSets[p.category] || [];
       const showsProtein = proteinCategories.includes(p.category);
-      const bsPrice = formatBs(p.price);
 
       const breakdownHTML = active.length > 0 ? `
         <div class="mt-1 space-y-0.5 border-t border-[#7B1213]/10 pt-1">
@@ -1026,7 +1012,6 @@
                 </div>
                 <div class="shrink-0 text-right">
                   <span class="block text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
-                  ${bsPrice ? `<span class="block text-[9px] font-semibold text-[#7B1213]/60">${bsPrice}</span>` : ''}
                 </div>
               </div>
               <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
@@ -1057,7 +1042,14 @@
     function renderDestacados() {
       if (searchActive) return '';
       const featured = products.filter(p => p.featured && p.available !== false);
-      if (featured.length === 0) return '';
+      const hasPromo = Boolean(appConfig.promoTexto);
+      if (featured.length === 0 && !hasPromo) return '';
+
+      const promoCardHTML = hasPromo ? `
+        <div class="col-span-full rounded-xl border border-[#E8A020]/40 bg-[#171313]/90 px-4 py-3 text-center text-xs font-bold text-[#E8A020] shadow-md sm:col-span-2 lg:col-span-3">
+          🎉 ${appConfig.promoTexto}
+        </div>
+      ` : '';
 
       return `
         <section id="cat-destacados" class="category-section">
@@ -1070,6 +1062,7 @@
             </div>
           </div>
           <div class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+            ${promoCardHTML}
             ${featured.map(p => renderProductCard(p, 'feat-prod')).join('')}
           </div>
         </section>
@@ -1547,7 +1540,6 @@
       renderCategories();
       renderProducts();
       updateCartUI();
-      renderPromoBanner();
       renderHorarioBanner();
       setInterval(renderHorarioBanner, 60000);
     })();
