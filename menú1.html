@@ -746,7 +746,9 @@
         }
       }
 
-      if (today && !today.overnight && minutes < today.start) {
+      // Nota: aplica también si el horario de hoy cruza medianoche (ej. 17:30-00:00) —
+      // "aún no abre hoy" es válido sin importar si luego el cierre cae en el día siguiente.
+      if (today && minutes < today.start) {
         return { open: false, nextLabel: 'hoy', nextStart: today.start };
       }
 
@@ -1046,8 +1048,8 @@
       if (featured.length === 0 && !hasPromo) return '';
 
       const promoCardHTML = hasPromo ? `
-        <div class="col-span-full rounded-xl border border-[#E8A020]/40 bg-[#171313]/90 px-4 py-3 text-center text-xs font-bold text-[#E8A020] shadow-md sm:col-span-2 lg:col-span-3">
-          🎉 ${appConfig.promoTexto}
+        <div class="col-span-full rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] px-4 py-4 text-center shadow-md sm:col-span-2 lg:col-span-3">
+          <p class="text-base font-black uppercase leading-tight text-[#7B1213] sm:text-lg">🎉 ${appConfig.promoTexto}</p>
         </div>
       ` : '';
 
