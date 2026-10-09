@@ -1,0 +1,12 @@
+clave,valor,ayuda
+tasa_bs,,Tasa de cambio para mostrar precios en bolívares (ej. 45.5 o 45,5). Déjala vacía si no quieres mostrar precios en Bs.
+abierto,si,"Interruptor manual: escribe ""no"" para marcar el negocio como ""Cerrado temporalmente"" sin importar el horario. Déjalo en ""si"" (o vacío) el resto del tiempo."
+horario_lun,09:00-20:00,"Horario del lunes, formato HH:MM-HH:MM (24 horas). Escribe ""cerrado"" si no abres ese día, o déjalo vacío si no quieres usar horarios."
+horario_mar,09:00-20:00,Horario del martes. Mismo formato que horario_lun.
+horario_mie,09:00-20:00,Horario del miércoles. Mismo formato que horario_lun.
+horario_jue,09:00-20:00,Horario del jueves. Mismo formato que horario_lun.
+horario_vie,09:00-22:00,Horario del viernes. Mismo formato que horario_lun.
+horario_sab,09:00-22:00,"Horario del sábado. Si cierras después de medianoche, por ejemplo de 6pm a 2am, escribe 18:00-02:00."
+horario_dom,cerrado,"Horario del domingo. Escribe ""cerrado"" si no abres ese día."
+metodos_pago,Pago Móvil|Zelle|Efectivo,"Lista de formas de pago que aceptas, separadas por el símbolo | (barra vertical). Déjala vacía si no quieres pedir el método de pago."
+promo_texto,,"Texto corto de una promoción para mostrar en un banner arriba del menú (ej. ""2x1 en perros calientes hoy""). Déjalo vacío si no tienes ninguna promoción activa."

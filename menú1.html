@@ -72,6 +72,11 @@
     </div>
   </header>
 
+  <div class="mx-auto max-w-6xl space-y-1.5 px-4 pt-2 sm:px-6">
+    <div id="promo-banner" class="hidden rounded-xl border border-[#E8A020]/40 bg-[#171313]/80 px-3.5 py-2 text-center text-xs font-bold text-[#E8A020] shadow-sm"></div>
+    <div id="horario-banner" class="hidden rounded-xl border border-[#F5E6C8]/15 bg-[#171313]/60 px-3.5 py-1.5 text-center text-[11px] font-bold uppercase tracking-wide text-[#F5E6C8]/80 shadow-sm"></div>
+  </div>
+
   <section class="sticky top-[57px] z-40 border-b border-[#E8A020]/30 bg-[#171313]/98 backdrop-blur-md">
 
     <div class="mx-auto max-w-6xl px-4 pt-3 sm:px-6">
@@ -124,7 +129,8 @@
        <div class="ml-2 flex shrink-0 flex-col items-end leading-none">
   <span class="text-[9px] font-bold uppercase tracking-wider text-[#E8A020]/70">Total estimado</span>
   <span id="bottom-cart-total" class="my-0.5 text-sm font-black text-[#E8A020]">$0.00</span>
-  <span class="text-[9px] font-semibold text-[#E8A020]/70">No incluye delivery</span>
+  <span id="bottom-cart-bs" class="text-[9px] font-semibold text-[#E8A020]/70"></span>
+  <span id="bottom-cart-note" class="text-[9px] font-semibold text-[#E8A020]/70">No incluye delivery</span>
 </div>
 
       <button type="button" onclick="window.toggleCartModal(true)" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95">
@@ -151,6 +157,8 @@
       <div id="modal-cart-items" class="max-h-[38vh] overflow-y-auto p-4 space-y-2 custom-scrollbar"></div>
 
       <div class="border-t border-[#F5E6C8]/10 bg-[#1f1a1a] p-4 space-y-2.5">
+        <div id="order-details" class="space-y-2.5"></div>
+        <p id="order-details-error" class="hidden rounded-lg border border-red-400/40 bg-red-500/10 px-3 py-2 text-[11px] font-bold text-red-300"></p>
         <div>
           <label for="clientName" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
             <i class="fa-solid fa-user mr-1"></i> Tu Nombre Completo
@@ -176,11 +184,22 @@
       </div>
 
       <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
+        <div id="modal-cart-breakdown" class="hidden space-y-1 mb-2">
+          <div class="flex items-center justify-between text-xs font-semibold text-[#F5E6C8]/70">
+            <span>Subtotal</span>
+            <span id="modal-cart-subtotal">$0.00</span>
+          </div>
+          <div class="flex items-center justify-between text-xs font-semibold text-[#F5E6C8]/70">
+            <span>Envío</span>
+            <span id="modal-cart-shipping">$0.00</span>
+          </div>
+        </div>
         <div class="mb-2 flex items-center justify-between">
           <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total estimado</span>
           <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
-          <p class="text-[11px] font-semibold text-[#E8A020] text-right mb-3">* No incluye delivery</p>
         </div>
+        <p id="modal-cart-bs" class="text-[11px] font-semibold text-[#E8A020]/80 text-right mb-1"></p>
+        <p id="modal-cart-note" class="text-[11px] font-semibold text-[#E8A020] text-right mb-3">* No incluye delivery</p>
         <button type="button" onclick="window.sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
           <i class="fa-brands fa-whatsapp text-lg"></i>
           Confirmar pedido por WhatsApp
@@ -203,7 +222,12 @@
     // Fuente de datos dinámica: Google Sheets publicada como CSV.
     // Si el fetch falla o tarda demasiado, se usa fallbackProducts/fallbackCategories (definidos más abajo).
     const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBSL_gRsEDvmZdZ7gH-6iNoEglnS-csuWdBBAypFYo_Et3CPLuqPApVRJr9s1agCMdq9NtHwbIfRwx/pub?gid=1676624173&single=true&output=csv";
+    const CONFIG_CSV_URL = "PEGAR_URL_CONFIG_AQUI";
+    const ZONAS_CSV_URL = "PEGAR_URL_ZONAS_AQUI";
     const PRODUCTS_FETCH_TIMEOUT_MS = 6000;
+
+    // Si la URL sigue siendo el placeholder, ni se intenta el fetch: se asume "no configurado".
+    const isCsvUrlConfigured = url => typeof url === 'string' && !url.startsWith('PEGAR_URL_');
 
     const fallbackProducts = [
 
@@ -295,6 +319,18 @@
     let products = fallbackProducts;
     let categories = fallbackCategories;
 
+    // ===== CONFIG (pestaña "config") Y ZONAS (pestaña "zonas") =====
+    // Único valor por defecto real: métodos de pago. Todo lo demás vacío/null si no se configura.
+    const defaultConfig = {
+      tasaBs: null,
+      abierto: true,
+      horarios: { lun: '', mar: '', mie: '', jue: '', vie: '', sab: '', dom: '' },
+      metodosPago: ['Pago Móvil', 'Zelle', 'Efectivo'],
+      promoTexto: ''
+    };
+    let appConfig = defaultConfig;
+    let zonas = []; // [{ zona, price }]
+
     const burgerCategories = [
       "Hamb. Carne",
       "Hamb. Pollo",
@@ -359,6 +395,9 @@
     let cart = {};
     let openAccordion = {};
 
+    // Datos del pedido capturados en el modal (entrega, dirección, zona, método de pago).
+    let orderMeta = { deliveryType: null, address: '', zone: null, paymentMethod: null };
+
     function getOrCreateItem(id) {
       if (!cart[id]) cart[id] = { manualQty: 0, slots: [{ mods: [], protein: null }] };
       return cart[id];
@@ -374,6 +413,12 @@
     }
 
     const formatCurrency = val => val == null ? "Consultar" : `$${val.toFixed(2)}`;
+    // Bs 6.000,00: punto de millar, coma decimal (convención venezolana). Vacío si no hay tasa configurada.
+    const formatBs = usdAmount => {
+      if (appConfig.tasaBs == null || usdAmount == null) return '';
+      const bs = usdAmount * appConfig.tasaBs;
+      return `Bs ${bs.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    };
     const getSlug = str => str.toLowerCase().replace(/[^a-z0-9]/g, '-');
 
     // ===== CARGA DINÁMICA DE PRODUCTOS DESDE GOOGLE SHEETS (CSV) =====
@@ -425,7 +470,8 @@
         nombre: header.indexOf('nombre'),
         descripcion: header.indexOf('descripcion'),
         precio: header.indexOf('precio'),
-        disponible: header.indexOf('disponible')
+        disponible: header.indexOf('disponible'),
+        destacado: header.indexOf('destacado')
       };
       if (colIndex.categoria === -1 || colIndex.nombre === -1 || colIndex.precio === -1) return null;
 
@@ -479,11 +525,14 @@
         const disponibleRaw = colIndex.disponible !== -1 ? (cols[colIndex.disponible] || '') : '';
         const disponible = disponibleRaw.trim().toLowerCase() !== 'no';
 
+        const destacadoRaw = colIndex.destacado !== -1 ? (cols[colIndex.destacado] || '') : '';
+        const featured = destacadoRaw.trim().toLowerCase() === 'si';
+
         if (!categoriesOrder.includes(categoria)) categoriesOrder.push(categoria);
 
         counter++;
         const id = `${getSlug(categoria)}-${getSlug(nombre)}-${counter}`;
-        productsOut.push({ id, category: categoria, name: nombre, description: descripcion, price: precio, available: disponible });
+        productsOut.push({ id, category: categoria, name: nombre, description: descripcion, price: precio, available: disponible, featured });
       });
 
       if (productsOut.length === 0) return null;
@@ -511,6 +560,269 @@
       }
     }
 
+    // ===== CARGA DE LA PESTAÑA "config" =====
+    function parseConfigCSV(text) {
+      const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+      if (rows.length < 2) return null;
+
+      const header = rows[0].map(h => h.trim().toLowerCase());
+      const colIndex = { clave: header.indexOf('clave'), valor: header.indexOf('valor') };
+      if (colIndex.clave === -1 || colIndex.valor === -1) return null;
+
+      const raw = {};
+      rows.slice(1).forEach(cols => {
+        const clave = (cols[colIndex.clave] || '').trim().toLowerCase();
+        const valor = (cols[colIndex.valor] || '').trim();
+        if (!clave) return;
+        raw[clave] = valor;
+      });
+
+      const tasaRaw = raw['tasa_bs'] || '';
+      const tasaBs = tasaRaw ? parseFloat(tasaRaw.replace(',', '.')) : NaN;
+
+      const abiertoRaw = (raw['abierto'] || '').trim().toLowerCase();
+      const abierto = abiertoRaw !== 'no';
+
+      const horarios = {};
+      ['lun', 'mar', 'mie', 'jue', 'vie', 'sab', 'dom'].forEach(dia => {
+        horarios[dia] = (raw[`horario_${dia}`] || '').trim();
+      });
+
+      // Distingue "la fila no existe en config" (-> valor por defecto) de "existe pero vacía"
+      // (-> el dueño la vació a propósito, sin métodos de pago).
+      const metodosPago = Object.prototype.hasOwnProperty.call(raw, 'metodos_pago')
+        ? raw['metodos_pago'].split('|').map(m => m.trim()).filter(Boolean)
+        : defaultConfig.metodosPago;
+
+      const promoTexto = raw['promo_texto'] || '';
+
+      return {
+        tasaBs: isNaN(tasaBs) ? null : tasaBs,
+        abierto,
+        horarios,
+        metodosPago,
+        promoTexto
+      };
+    }
+
+    async function loadConfig() {
+      if (!isCsvUrlConfigured(CONFIG_CSV_URL)) {
+        console.warn('CONFIG_CSV_URL no está configurado todavía: se usan los valores por defecto.');
+        appConfig = defaultConfig;
+        return;
+      }
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), PRODUCTS_FETCH_TIMEOUT_MS);
+        const response = await fetch(CONFIG_CSV_URL, { signal: controller.signal, cache: 'no-store' });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`No se pudo obtener config CSV (status ${response.status})`);
+
+        const text = await response.text();
+        const parsed = parseConfigCSV(text);
+        if (!parsed) throw new Error('El CSV de config no tiene el formato esperado o está vacío');
+
+        appConfig = parsed;
+      } catch (err) {
+        console.warn('No se pudo cargar la configuración desde Google Sheets, se usan los valores por defecto:', err);
+        appConfig = defaultConfig;
+      }
+    }
+
+    // ===== CARGA DE LA PESTAÑA "zonas" =====
+    function parseZonasCSV(text) {
+      const rows = parseCSV(text).filter(r => r.some(c => c.trim() !== ''));
+      if (rows.length < 2) return null;
+
+      const header = rows[0].map(h => h.trim().toLowerCase());
+      const colIndex = { zona: header.indexOf('zona'), precio: header.indexOf('precio') };
+      if (colIndex.zona === -1 || colIndex.precio === -1) return null;
+
+      const out = [];
+      rows.slice(1).forEach((cols, i) => {
+        const rowNumber = i + 2;
+        const zona = (cols[colIndex.zona] || '').trim();
+        const precioRaw = (cols[colIndex.precio] || '').trim();
+        const precio = parseFloat(precioRaw.replace(',', '.'));
+        if (!zona || isNaN(precio)) {
+          console.warn(`Fila ${rowNumber} del CSV de zonas: falta "zona" o "precio" válido. Se omite.`);
+          return;
+        }
+        out.push({ zona, price: precio });
+      });
+
+      return out;
+    }
+
+    async function loadZonas() {
+      if (!isCsvUrlConfigured(ZONAS_CSV_URL)) {
+        console.warn('ZONAS_CSV_URL no está configurado todavía: no habrá zonas de envío.');
+        zonas = [];
+        return;
+      }
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), PRODUCTS_FETCH_TIMEOUT_MS);
+        const response = await fetch(ZONAS_CSV_URL, { signal: controller.signal, cache: 'no-store' });
+        clearTimeout(timeoutId);
+        if (!response.ok) throw new Error(`No se pudo obtener zonas CSV (status ${response.status})`);
+
+        const text = await response.text();
+        const parsed = parseZonasCSV(text);
+        if (parsed === null) throw new Error('El CSV de zonas no tiene el formato esperado o está vacío');
+
+        zonas = parsed;
+      } catch (err) {
+        console.warn('No se pudo cargar las zonas desde Google Sheets, no habrá zonas de envío:', err);
+        zonas = [];
+      }
+    }
+
+    // ===== HORARIO (modo informar, nunca bloquea) =====
+    // Siempre calculado con la zona horaria America/Caracas, nunca con la del dispositivo.
+    const DAY_KEYS = ['dom', 'lun', 'mar', 'mie', 'jue', 'vie', 'sab'];
+    const WEEKDAY_LABELS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+    function getCaracasNow() {
+      const fmt = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'America/Caracas',
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+      });
+      const parts = fmt.formatToParts(new Date());
+      const get = type => parts.find(p => p.type === type).value;
+      const year = +get('year'), month = +get('month'), day = +get('day');
+      let hour = +get('hour');
+      if (hour === 24) hour = 0; // algunos motores devuelven "24" para medianoche con hour12:false
+      const minute = +get('minute');
+      const dayIndex = new Date(Date.UTC(year, month - 1, day)).getUTCDay();
+      return { dayIndex, minutes: hour * 60 + minute };
+    }
+
+    // "18:00-02:00" → { start, end, overnight }. "cerrado" o vacío → null. Formato inválido → null + warn.
+    function parseHorarioRange(raw) {
+      const val = (raw || '').trim().toLowerCase();
+      if (!val || val === 'cerrado') return null;
+      const m = val.match(/^(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})$/);
+      const validPart = (h, mi) => h >= 0 && h <= 23 && mi >= 0 && mi <= 59;
+      if (!m || !validPart(+m[1], +m[2]) || !validPart(+m[3], +m[4])) {
+        console.warn(`Horario con formato inválido: "${raw}". Se trata como cerrado.`);
+        return null;
+      }
+      const start = (+m[1]) * 60 + (+m[2]);
+      const end = (+m[3]) * 60 + (+m[4]);
+      if (start === end) {
+        console.warn(`Horario "${raw}" tiene la misma hora de apertura y cierre. Se trata como cerrado.`);
+        return null;
+      }
+      return { start, end, overnight: end < start };
+    }
+
+    function isHorarioConfigured(horarios) {
+      return Object.values(horarios).some(v => v && v.trim() !== '');
+    }
+
+    // Decide si está abierto AHORA, considerando también el turno de ayer si cruzó medianoche.
+    function computeHorarioStatus(dayIndex, minutes, horarios) {
+      const todayKey = DAY_KEYS[dayIndex];
+      const yestKey = DAY_KEYS[(dayIndex + 6) % 7];
+      const today = parseHorarioRange(horarios[todayKey]);
+      const yesterday = parseHorarioRange(horarios[yestKey]);
+
+      if (yesterday && yesterday.overnight && minutes < yesterday.end) {
+        return { open: true, closesAt: yesterday.end };
+      }
+
+      if (today) {
+        if (!today.overnight) {
+          if (minutes >= today.start && minutes < today.end) {
+            return { open: true, closesAt: today.end };
+          }
+        } else if (minutes >= today.start) {
+          return { open: true, closesAt: today.end };
+        }
+      }
+
+      if (today && !today.overnight && minutes < today.start) {
+        return { open: false, nextLabel: 'hoy', nextStart: today.start };
+      }
+
+      for (let add = 1; add <= 7; add++) {
+        const key = DAY_KEYS[(dayIndex + add) % 7];
+        const range = parseHorarioRange(horarios[key]);
+        if (range) {
+          return {
+            open: false,
+            nextLabel: add === 1 ? 'mañana' : WEEKDAY_LABELS[(dayIndex + add) % 7],
+            nextStart: range.start
+          };
+        }
+      }
+      return { open: false, nextLabel: null, nextStart: null };
+    }
+
+    function formatHora12(minutes) {
+      const h = Math.floor(minutes / 60);
+      const m = minutes % 60;
+      const suffix = h < 12 ? 'a. m.' : 'p. m.';
+      let h12 = h % 12;
+      if (h12 === 0) h12 = 12;
+      return `${h12}:${String(m).padStart(2, '0')} ${suffix}`;
+    }
+
+    function renderHorarioBanner() {
+      const el = document.getElementById('horario-banner');
+      if (!el) return;
+
+      if (!appConfig.abierto) {
+        el.textContent = 'Cerrado temporalmente';
+        el.classList.remove('hidden');
+        return;
+      }
+
+      if (!isHorarioConfigured(appConfig.horarios)) {
+        el.classList.add('hidden');
+        el.textContent = '';
+        return;
+      }
+
+      const { dayIndex, minutes } = getCaracasNow();
+      const status = computeHorarioStatus(dayIndex, minutes, appConfig.horarios);
+
+      let text;
+      if (status.open) {
+        text = `Abierto ahora · cierra a las ${formatHora12(status.closesAt)}`;
+      } else if (status.nextStart != null) {
+        text = status.nextLabel === 'hoy'
+          ? `Cerrado ahora · abre hoy a las ${formatHora12(status.nextStart)}`
+          : `Cerrado hoy · abre ${status.nextLabel === 'mañana' ? 'mañana' : `el ${status.nextLabel}`} a las ${formatHora12(status.nextStart)}`;
+      } else {
+        text = 'Cerrado';
+      }
+
+      el.textContent = text;
+      el.classList.remove('hidden');
+    }
+
+    function isBusinessOpenNow() {
+      if (!appConfig.abierto) return false;
+      if (!isHorarioConfigured(appConfig.horarios)) return true; // sin horario configurado: no se bloquea nada
+      const { dayIndex, minutes } = getCaracasNow();
+      return computeHorarioStatus(dayIndex, minutes, appConfig.horarios).open;
+    }
+
+    function renderPromoBanner() {
+      const el = document.getElementById('promo-banner');
+      if (!el) return;
+      if (!appConfig.promoTexto) {
+        el.classList.add('hidden');
+        el.textContent = '';
+        return;
+      }
+      el.textContent = appConfig.promoTexto;
+      el.classList.remove('hidden');
+    }
+
     window.toggleCartModal = function(show) {
       const modal = document.getElementById("cart-modal");
       const backBtn = document.getElementById("btn-back");
@@ -519,6 +831,7 @@
         modal.classList.remove("hidden");
         modal.classList.add("flex");
         document.body.style.overflow = "hidden";
+        renderOrderDetails();
         if (backBtn) {
           backBtn.setAttribute("aria-disabled", "true");
           backBtn.classList.add("pointer-events-none", "opacity-40");
@@ -642,11 +955,128 @@
       }).join('');
     }
 
+    // Tarjeta de producto compartida: se usa tanto en Destacados como en el listado normal
+    // por categoría. idPrefix distingue los ids HTML para no duplicarlos cuando el mismo
+    // producto aparece en ambos sitios; el estado (cantidad/slots) sigue atado a p.id, así
+    // que las dos tarjetas de un mismo producto quedan siempre sincronizadas.
+    function renderProductCard(p, idPrefix) {
+      const unavailable = p.available === false;
+      const disabled = p.price == null || unavailable;
+      const item = peekItem(p.id);
+      const total = totalQty(item);
+      const plain = plainQty(item);
+      const active = activeSlots(item);
+      const showsMods = hasModifiers(p.category);
+      const isOpen = Boolean(openAccordion[p.id]);
+      const checkboxList = modifierSets[p.category] || [];
+      const showsProtein = proteinCategories.includes(p.category);
+      const bsPrice = formatBs(p.price);
+
+      const breakdownHTML = active.length > 0 ? `
+        <div class="mt-1 space-y-0.5 border-t border-[#7B1213]/10 pt-1">
+          ${plain > 0 ? `<p class="text-[10px] text-[#500707]/70">${plain} con todo</p>` : ''}
+          ${active.map(s => `<p class="text-[10px] italic text-[#7B1213]">1 ${slotLabel(s)}</p>`).join('')}
+        </div>
+      ` : '';
+
+      const slotsHTML = item.slots.map((slot, idx) => {
+        const num = idx + 1;
+        const isLast = idx === item.slots.length - 1;
+        return `
+          <div class="${isLast ? '' : 'border-b border-[#7B1213]/10 pb-1.5 mb-1.5'}">
+            <p class="text-[10px] font-black uppercase ${isSlotEmpty(slot) ? 'text-[#7B1213]/40' : 'text-[#7B1213]'} mb-1">Personalizada ${num}</p>
+            ${checkboxList.length > 0 ? `
+              <div class="flex flex-wrap gap-1 mb-1">
+                ${checkboxList.map(m => `
+                  <button type="button" onclick="window.toggleSlotMod('${p.id}', ${idx}, '${m}')" class="rounded-full border px-2 py-0.5 text-[10px] font-bold transition ${slot.mods.includes(m) ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${modShortLabels[m]}</button>
+                `).join('')}
+              </div>
+            ` : ''}
+            ${showsProtein ? `
+              <div class="flex gap-1">
+                ${['carne','pollo','mixto'].map(pr => `
+                  <button type="button" onclick="window.selectSlotProtein('${p.id}', ${idx}, '${pr}')" class="flex-1 rounded-full border px-2 py-1 text-[10px] font-black uppercase transition ${slot.protein === pr ? 'border-[#7B1213] bg-[#7B1213] text-[#F5E6C8]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${pr}</button>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>`;
+      }).join('');
+
+      const accordionHTML = (showsMods && !unavailable) ? `
+        <button type="button" onclick="window.toggleAccordionPanel('${p.id}')" class="mt-1.5 flex items-center gap-1 text-[10px] font-black uppercase text-[#7B1213]">
+          Personalizar <i class="fa-solid fa-chevron-down text-[9px] transition-transform ${isOpen ? 'rotate-180' : ''}"></i>
+        </button>
+        <div class="${isOpen ? '' : 'hidden'} mt-1.5 border-t border-[#7B1213]/10 pt-1.5">
+          ${slotsHTML}
+        </div>
+      ` : '';
+
+      return `
+        <article id="${idPrefix}-${p.id}" class="product-card rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3 ${unavailable ? 'opacity-55' : ''}">
+          <div class="flex items-center gap-3">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-baseline justify-between gap-3">
+                <div class="flex min-w-0 items-center gap-1.5">
+                  <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
+                  ${unavailable ? `<span class="shrink-0 rounded-full bg-[#7B1213]/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wide text-[#7B1213]">Agotado</span>` : ''}
+                </div>
+                <div class="shrink-0 text-right">
+                  <span class="block text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
+                  ${bsPrice ? `<span class="block text-[9px] font-semibold text-[#7B1213]/60">${bsPrice}</span>` : ''}
+                </div>
+              </div>
+              <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
+            </div>
+            ${total > 0 ? `
+<div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
+  <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
+  <span class="w-4 text-center text-xs font-black text-[#7B1213]">${total}</span>
+  <button type="button" onclick="window.changeQuantity('${p.id}', 1)" ${unavailable ? 'disabled' : ''} class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213] ${unavailable ? 'cursor-not-allowed opacity-30' : ''}"><i class="fa-solid fa-plus text-[10px]"></i></button>
+</div>
+` : unavailable ? `
+<span class="shrink-0 rounded-lg border border-[#7B1213]/20 bg-white/70 px-2.5 py-2 text-[10px] font-black uppercase tracking-wide text-[#7B1213]/60">Agotado</span>
+` : `
+<button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow transition duration-150 active:scale-90">
+  <i class="fa-solid fa-plus text-xs"></i>
+</button>
+`}
+          </div>
+          ${breakdownHTML}
+          ${accordionHTML}
+        </article>
+      `;
+    }
+
+    // Se oculta Destacados mientras el buscador tiene una búsqueda activa (2+ caracteres).
+    let searchActive = false;
+
+    function renderDestacados() {
+      if (searchActive) return '';
+      const featured = products.filter(p => p.featured && p.available !== false);
+      if (featured.length === 0) return '';
+
+      return `
+        <section id="cat-destacados" class="category-section">
+          <div class="mb-3 flex flex-col gap-2 sm:mb-6">
+            <div class="flex items-end justify-between gap-4">
+              <div>
+                <h2 class="mt-1 text-lg font-black uppercase leading-none text-[#E8A020] sm:text-3xl">Destacados</h2>
+                <div class="mt-2 h-1 w-12 rounded-full bg-[#E8A020]"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+            ${featured.map(p => renderProductCard(p, 'feat-prod')).join('')}
+          </div>
+        </section>
+      `;
+    }
+
     function renderProducts() {
       const container = document.getElementById("main-menu-container");
       if (!container) return;
 
-      container.innerHTML = categories.map(cat => {
+      const categoriesHTML = categories.map(cat => {
         const filtered = products.filter(p => p.category === cat);
         const isBurger = burgerCategories.includes(cat);
         const slug = getSlug(cat);
@@ -659,89 +1089,7 @@
               <p class="mt-2 text-sm text-[#F5E6C8]/55">Esta categoría estará disponible pronto con nuevos productos.</p>
             </div>`;
         } else {
-          productsHTML = filtered.map(p => {
-            const unavailable = p.available === false;
-            const disabled = p.price == null || unavailable;
-            const item = peekItem(p.id);
-            const total = totalQty(item);
-            const plain = plainQty(item);
-            const active = activeSlots(item);
-            const showsMods = hasModifiers(p.category);
-            const isOpen = Boolean(openAccordion[p.id]);
-            const checkboxList = modifierSets[p.category] || [];
-            const showsProtein = proteinCategories.includes(p.category);
-
-            const breakdownHTML = active.length > 0 ? `
-              <div class="mt-1 space-y-0.5 border-t border-[#7B1213]/10 pt-1">
-                ${plain > 0 ? `<p class="text-[10px] text-[#500707]/70">${plain} con todo</p>` : ''}
-                ${active.map(s => `<p class="text-[10px] italic text-[#7B1213]">1 ${slotLabel(s)}</p>`).join('')}
-              </div>
-            ` : '';
-
-            const slotsHTML = item.slots.map((slot, idx) => {
-              const num = idx + 1;
-              const isLast = idx === item.slots.length - 1;
-              return `
-                <div class="${isLast ? '' : 'border-b border-[#7B1213]/10 pb-1.5 mb-1.5'}">
-                  <p class="text-[10px] font-black uppercase ${isSlotEmpty(slot) ? 'text-[#7B1213]/40' : 'text-[#7B1213]'} mb-1">Personalizada ${num}</p>
-                  ${checkboxList.length > 0 ? `
-                    <div class="flex flex-wrap gap-1 mb-1">
-                      ${checkboxList.map(m => `
-                        <button type="button" onclick="window.toggleSlotMod('${p.id}', ${idx}, '${m}')" class="rounded-full border px-2 py-0.5 text-[10px] font-bold transition ${slot.mods.includes(m) ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${modShortLabels[m]}</button>
-                      `).join('')}
-                    </div>
-                  ` : ''}
-                  ${showsProtein ? `
-                    <div class="flex gap-1">
-                      ${['carne','pollo','mixto'].map(pr => `
-                        <button type="button" onclick="window.selectSlotProtein('${p.id}', ${idx}, '${pr}')" class="flex-1 rounded-full border px-2 py-1 text-[10px] font-black uppercase transition ${slot.protein === pr ? 'border-[#7B1213] bg-[#7B1213] text-[#F5E6C8]' : 'border-[#7B1213]/25 bg-white text-[#500707]'}">${pr}</button>
-                      `).join('')}
-                    </div>
-                  ` : ''}
-                </div>`;
-            }).join('');
-
-            const accordionHTML = (showsMods && !unavailable) ? `
-              <button type="button" onclick="window.toggleAccordionPanel('${p.id}')" class="mt-1.5 flex items-center gap-1 text-[10px] font-black uppercase text-[#7B1213]">
-                Personalizar <i class="fa-solid fa-chevron-down text-[9px] transition-transform ${isOpen ? 'rotate-180' : ''}"></i>
-              </button>
-              <div class="${isOpen ? '' : 'hidden'} mt-1.5 border-t border-[#7B1213]/10 pt-1.5">
-                ${slotsHTML}
-              </div>
-            ` : '';
-
-            return `
-              <article id="prod-${p.id}" class="product-card rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] p-2.5 shadow-md transition-all duration-200 hover:border-[#E8A020] hover:shadow-lg sm:p-3 ${unavailable ? 'opacity-55' : ''}">
-                <div class="flex items-center gap-3">
-                  <div class="min-w-0 flex-1">
-                    <div class="flex items-baseline justify-between gap-3">
-                      <div class="flex min-w-0 items-center gap-1.5">
-                        <h3 class="truncate text-sm font-black uppercase leading-tight text-[#171313]">${p.name}</h3>
-                        ${unavailable ? `<span class="shrink-0 rounded-full bg-[#7B1213]/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wide text-[#7B1213]">Agotado</span>` : ''}
-                      </div>
-                      <span class="shrink-0 text-sm font-black text-[#7B1213]">${formatCurrency(p.price)}</span>
-                    </div>
-                    <p class="mt-0.5 text-xs leading-snug text-[#500707]">${p.description}</p>
-                  </div>
-                  ${total > 0 ? `
-    <div class="flex items-center gap-1 rounded-lg border border-[#7B1213]/20 bg-white p-0.5 shadow-sm">
-      <button type="button" onclick="window.changeQuantity('${p.id}', -1)" class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213]"><i class="fa-solid fa-minus text-[10px]"></i></button>
-      <span class="w-4 text-center text-xs font-black text-[#7B1213]">${total}</span>
-      <button type="button" onclick="window.changeQuantity('${p.id}', 1)" ${unavailable ? 'disabled' : ''} class="flex h-6 w-6 items-center justify-center rounded text-[#7B1213] ${unavailable ? 'cursor-not-allowed opacity-30' : ''}"><i class="fa-solid fa-plus text-[10px]"></i></button>
-    </div>
-  ` : unavailable ? `
-    <span class="shrink-0 rounded-lg border border-[#7B1213]/20 bg-white/70 px-2.5 py-2 text-[10px] font-black uppercase tracking-wide text-[#7B1213]/60">Agotado</span>
-  ` : `
-    <button type="button" onclick="window.addToCart('${p.id}')" ${disabled ? 'disabled' : ''} class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow transition duration-150 active:scale-90">
-      <i class="fa-solid fa-plus text-xs"></i>
-    </button>
-  `}
-                </div>
-                ${breakdownHTML}
-                ${accordionHTML}
-              </article>
-            `;
-          }).join('');
+          productsHTML = filtered.map(p => renderProductCard(p, 'prod')).join('');
         }
 
         return `
@@ -768,11 +1116,21 @@
           </section>
         `;
       }).join('');
+
+      container.innerHTML = renderDestacados() + categoriesHTML;
+    }
+
+    // Costo de envío según la zona elegida (0 si es retiro, o si no hay zonas configuradas).
+    function computeShipping() {
+      if (orderMeta.deliveryType !== 'delivery') return 0;
+      if (zonas.length === 0 || !orderMeta.zone) return 0;
+      const found = zonas.find(z => z.zona === orderMeta.zone);
+      return found ? found.price : 0;
     }
 
     function updateCartUI() {
       let count = 0;
-      let total = 0;
+      let subtotal = 0;
 
       Object.keys(cart).forEach(id => {
         const product = products.find(p => p.id === id);
@@ -780,20 +1138,43 @@
         if (product && product.price != null && cartItem) {
           const q = totalQty(cartItem);
           count += q;
-          total += product.price * q;
+          subtotal += product.price * q;
         }
       });
 
+      const hasZonas = zonas.length > 0;
+      const shipping = computeShipping();
+      const grandTotal = subtotal + shipping;
+
       document.getElementById("badge-count").innerText = count;
-      document.getElementById("bottom-cart-total").innerText = `$${total.toFixed(2)}`;
-      document.getElementById("modal-cart-total").innerText = `$${total.toFixed(2)}`;
+      document.getElementById("bottom-cart-total").innerText = `$${grandTotal.toFixed(2)}`;
       document.getElementById("bottom-cart-label").innerText = count === 0 ? "Tu pedido está vacío" : `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
+
+      const bottomNoteText = hasZonas ? "El envío se calcula al confirmar el pedido." : "No incluye delivery";
+      document.getElementById("bottom-cart-note").innerText = bottomNoteText;
+      const bottomBs = formatBs(grandTotal);
+      document.getElementById("bottom-cart-bs").innerText = bottomBs ? bottomBs : '';
+
+      document.getElementById("modal-cart-total").innerText = `$${grandTotal.toFixed(2)}`;
+      const breakdownEl = document.getElementById("modal-cart-breakdown");
+      if (hasZonas) {
+        breakdownEl.classList.remove("hidden");
+        document.getElementById("modal-cart-subtotal").innerText = `$${subtotal.toFixed(2)}`;
+        document.getElementById("modal-cart-shipping").innerText = `$${shipping.toFixed(2)}`;
+      } else {
+        breakdownEl.classList.add("hidden");
+      }
+      document.getElementById("modal-cart-note").innerText = hasZonas
+        ? "El envío se calcula al confirmar el pedido."
+        : "* No incluye delivery";
+      const modalBs = formatBs(grandTotal);
+      document.getElementById("modal-cart-bs").innerText = modalBs ? modalBs : '';
 
       const disabled = count === 0;
       document.getElementById("btn-whatsapp-modal").disabled = disabled;
 
       renderCartModalItems();
-  renderProducts();
+      renderProducts();
     }
     function renderCartModalItems() {
       const container = document.getElementById("modal-cart-items");
@@ -858,14 +1239,121 @@
       }).join('');
     }
 
+    // ===== DATOS DEL PEDIDO (entrega, dirección, zona, método de pago) =====
+    function renderOrderDetails() {
+      const container = document.getElementById('order-details');
+      if (!container) return;
+
+      const showAddress = orderMeta.deliveryType === 'delivery';
+      const showZone = showAddress && zonas.length > 0;
+      const showPayment = appConfig.metodosPago.length > 0;
+      const escapeAttr = s => String(s).replace(/"/g, '&quot;');
+
+      container.innerHTML = `
+        <div>
+          <p class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+            <i class="fa-solid fa-truck-fast mr-1"></i> Entrega
+          </p>
+          <div class="flex gap-2">
+            <button type="button" onclick="window.selectDeliveryType('delivery')" class="flex-1 rounded-xl border px-3 py-2 text-xs font-black uppercase transition ${orderMeta.deliveryType === 'delivery' ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#E8A020]/30 bg-[#171313] text-[#F5E6C8]'}">Delivery</button>
+            <button type="button" onclick="window.selectDeliveryType('retiro')" class="flex-1 rounded-xl border px-3 py-2 text-xs font-black uppercase transition ${orderMeta.deliveryType === 'retiro' ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#E8A020]/30 bg-[#171313] text-[#F5E6C8]'}">Retiro</button>
+          </div>
+        </div>
+
+        ${showAddress ? `
+          <div>
+            <label for="deliveryAddress" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+              <i class="fa-solid fa-location-dot mr-1"></i> Dirección de entrega
+            </label>
+            <input type="text" id="deliveryAddress" oninput="window.updateOrderField('address', this.value)" value="${escapeAttr(orderMeta.address)}" placeholder="Ej. Av. Principal, Casa #12"
+              class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition">
+          </div>
+        ` : ''}
+
+        ${showZone ? `
+          <div>
+            <label for="deliveryZone" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+              <i class="fa-solid fa-map-location-dot mr-1"></i> Zona de envío
+            </label>
+            <select id="deliveryZone" onchange="window.updateOrderField('zone', this.value)"
+              class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition">
+              <option value="" ${!orderMeta.zone ? 'selected' : ''}>Selecciona una zona...</option>
+              ${zonas.map(z => `<option value="${escapeAttr(z.zona)}" ${orderMeta.zone === z.zona ? 'selected' : ''}>${z.zona} ($${z.price.toFixed(2)})</option>`).join('')}
+            </select>
+          </div>
+        ` : ''}
+
+        ${showPayment ? `
+          <div>
+            <p class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+              <i class="fa-solid fa-money-bill-wave mr-1"></i> Método de pago
+            </p>
+            <div class="flex flex-wrap gap-1.5">
+              ${appConfig.metodosPago.map(m => `
+                <button type="button" onclick="window.selectPaymentMethod('${m.replace(/'/g, "\\'")}')" class="rounded-full border px-3 py-1.5 text-[11px] font-bold transition ${orderMeta.paymentMethod === m ? 'border-[#E8A020] bg-[#E8A020] text-[#171313]' : 'border-[#E8A020]/30 bg-[#171313] text-[#F5E6C8]'}">${m}</button>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    function hideOrderDetailsError() {
+      const el = document.getElementById('order-details-error');
+      if (el) { el.classList.add('hidden'); el.textContent = ''; }
+    }
+
+    window.selectDeliveryType = function(type) {
+      orderMeta.deliveryType = type;
+      if (type !== 'delivery') { orderMeta.address = ''; orderMeta.zone = null; }
+      hideOrderDetailsError();
+      renderOrderDetails();
+      updateCartUI();
+    };
+
+    window.updateOrderField = function(field, value) {
+      orderMeta[field] = value;
+      hideOrderDetailsError();
+      if (field === 'zone') updateCartUI();
+    };
+
+    window.selectPaymentMethod = function(method) {
+      orderMeta.paymentMethod = method;
+      hideOrderDetailsError();
+      renderOrderDetails();
+    };
+
+    // Devuelve la lista de errores (vacía si todo está completo). No usa alert().
+    function validateOrderDetails() {
+      const errors = [];
+      if (!orderMeta.deliveryType) errors.push('Selecciona si es Delivery o Retiro.');
+      if (orderMeta.deliveryType === 'delivery') {
+        if (!orderMeta.address.trim()) errors.push('Ingresa la dirección de entrega.');
+        if (zonas.length > 0 && !orderMeta.zone) errors.push('Selecciona la zona de envío.');
+      }
+      if (appConfig.metodosPago.length > 0 && !orderMeta.paymentMethod) errors.push('Selecciona un método de pago.');
+      return errors;
+    }
+
     window.sendWhatsApp = function() {
       const keys = Object.keys(cart);
       if (keys.length === 0) return;
 
+      const errors = validateOrderDetails();
+      if (errors.length > 0) {
+        const errEl = document.getElementById('order-details-error');
+        if (errEl) {
+          errEl.innerHTML = errors.map(e => `• ${e}`).join('<br>');
+          errEl.classList.remove('hidden');
+          errEl.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
       const clientName = document.getElementById("clientName")?.value.trim() || "";
       const clientNotes = document.getElementById("clientNotes")?.value.trim() || "";
 
-      let total = 0;
+      let subtotal = 0;
       const lines = [];
       keys.forEach(id => {
         const product = products.find(p => p.id === id);
@@ -875,14 +1363,18 @@
 
         if (plain > 0) {
           const sub = price * plain;
-          total += sub;
+          subtotal += sub;
           lines.push(`- ${plain}x ${product.name} ($${sub.toFixed(2)})`);
         }
         activeSlots(cartItem).forEach(slot => {
-          total += price;
+          subtotal += price;
           lines.push(`- 1x ${product.name} (${slotLabel(slot)}) ($${price.toFixed(2)})`);
         });
       });
+
+      const hasZonas = zonas.length > 0;
+      const shipping = computeShipping();
+      const grandTotal = subtotal + shipping;
 
       let message = `¡Hola Cory´s Fast Food! Quisiera hacer el siguiente pedido:\n`;
 
@@ -890,10 +1382,33 @@
         message += `👤 *Cliente:* ${clientName}\n`;
       }
 
-      message += `\n${lines.join('\n')}\n\n- Total estimado: $${total.toFixed(2)}\n📌 *Nota: No incluye delivery*`;
+      message += orderMeta.deliveryType === 'delivery'
+        ? `🚚 *Entrega:* Delivery${orderMeta.zone ? ` (${orderMeta.zone})` : ''}\n📍 *Dirección:* ${orderMeta.address}\n`
+        : `🏪 *Entrega:* Retiro en el local\n`;
+
+      if (orderMeta.paymentMethod) {
+        message += `💳 *Pago:* ${orderMeta.paymentMethod}\n`;
+      }
+
+      message += `\n${lines.join('\n')}\n`;
+
+      if (hasZonas) {
+        message += `\n- Subtotal: $${subtotal.toFixed(2)}\n- Envío: $${shipping.toFixed(2)}`;
+      }
+
+      const bsLine = formatBs(grandTotal);
+      message += `\n- Total estimado: $${grandTotal.toFixed(2)}${bsLine ? ` (${bsLine})` : ''}`;
+
+      if (!hasZonas) {
+        message += `\n📌 *Nota: No incluye delivery*`;
+      }
 
       if (clientNotes) {
         message += `\n📝 *Observaciones:* ${clientNotes}`;
+      }
+
+      if (!isBusinessOpenNow()) {
+        message += `\n⚠ Pedido fuera de horario`;
       }
 
       // Modo demostración: se muestra cómo llegaría el pedido, sin enviarlo a nadie.
@@ -922,6 +1437,10 @@
       const clearBtn = document.getElementById('search-clear-btn');
       const resultsBox = document.getElementById('search-results');
       clearBtn.classList.toggle('hidden', query.length === 0);
+
+      const wasActive = searchActive;
+      searchActive = query.length >= 2;
+      if (searchActive !== wasActive) renderProducts();
 
       if (query.length < 2) {
         resultsBox.classList.add('hidden');
@@ -1018,10 +1537,13 @@
     });
 
     (async function init() {
-      await loadProducts();
+      await Promise.all([loadProducts(), loadConfig(), loadZonas()]);
       renderCategories();
       renderProducts();
       updateCartUI();
+      renderPromoBanner();
+      renderHorarioBanner();
+      setInterval(renderHorarioBanner, 60000);
     })();
   </script>
 
