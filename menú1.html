@@ -154,53 +154,57 @@
         </button>
       </div>
 
-      <div id="modal-cart-items" class="max-h-[38vh] overflow-y-auto p-4 space-y-2 custom-scrollbar"></div>
+      <div class="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
+        <div id="modal-cart-items" class="p-4 space-y-2"></div>
 
-      <div class="border-t border-[#F5E6C8]/10 bg-[#1f1a1a] p-4 space-y-2.5">
-        <div id="order-details" class="space-y-2.5"></div>
-        <p id="order-details-error" class="hidden rounded-lg border border-red-400/40 bg-red-500/10 px-3 py-2 text-[11px] font-bold text-red-300"></p>
-        <div>
-          <label for="clientName" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
-            <i class="fa-solid fa-user mr-1"></i> Tu Nombre Completo
-          </label>
-          <input 
-            type="text" 
-            id="clientName" 
-            placeholder="Ej. María Pérez" 
-            class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
-          >
-        </div>
-        <div>
-          <label for="clientNotes" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
-            <i class="fa-solid fa-comment-dots mr-1"></i> Observaciones (Opcional)
-          </label>
-          <input 
-            type="text" 
-            id="clientNotes" 
-            placeholder="Ej. Sin cebolla, salsa de ajo extra, etc..." 
-            class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
-          >
+        <div class="border-t border-[#F5E6C8]/10 bg-[#1f1a1a] p-4 space-y-2.5">
+          <div id="order-details" class="space-y-2.5"></div>
+          <p id="order-details-error" class="hidden rounded-lg border border-red-400/40 bg-red-500/10 px-3 py-2 text-[11px] font-bold text-red-300"></p>
+          <div>
+            <label for="clientName" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+              <i class="fa-solid fa-user mr-1"></i> Tu Nombre Completo
+            </label>
+            <input
+              type="text"
+              id="clientName"
+              placeholder="Ej. María Pérez"
+              class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
+            >
+          </div>
+          <div>
+            <label for="clientNotes" class="block text-[10px] font-black uppercase tracking-wider text-[#E8A020] mb-1">
+              <i class="fa-solid fa-comment-dots mr-1"></i> Observaciones (Opcional)
+            </label>
+            <input
+              type="text"
+              id="clientNotes"
+              placeholder="Ej. Sin cebolla, salsa de ajo extra, etc..."
+              class="w-full rounded-xl border border-[#E8A020]/30 bg-[#171313] px-3 py-2 text-xs text-[#F5E6C8] placeholder-[#F5E6C8]/30 focus:border-[#E8A020] focus:outline-none focus:ring-1 focus:ring-[#E8A020] transition"
+            >
+          </div>
         </div>
       </div>
 
-      <div class="border-t border-[#F5E6C8]/10 bg-[#4E1111] p-5">
-        <div id="modal-cart-breakdown" class="hidden space-y-1 mb-2">
-          <div class="flex items-center justify-between text-xs font-semibold text-[#F5E6C8]/70">
+      <div class="shrink-0 border-t border-[#F5E6C8]/10 bg-[#4E1111] px-5 py-3">
+        <div id="modal-cart-breakdown" class="hidden space-y-0.5 mb-1.5 text-[11px] font-semibold text-[#F5E6C8]/70">
+          <div class="flex items-center justify-between">
             <span>Subtotal</span>
             <span id="modal-cart-subtotal">$0.00</span>
           </div>
-          <div class="flex items-center justify-between text-xs font-semibold text-[#F5E6C8]/70">
+          <div class="flex items-center justify-between">
             <span>Envío</span>
             <span id="modal-cart-shipping">$0.00</span>
           </div>
         </div>
-        <div class="mb-2 flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total estimado</span>
-          <span id="modal-cart-total" class="text-2xl font-black text-[#E8A020]">$0.00</span>
+        <div class="flex items-end justify-between">
+          <span class="text-[11px] font-bold uppercase tracking-widest text-[#F5E6C8]/50">Total estimado</span>
+          <div class="text-right leading-none">
+            <span id="modal-cart-total" class="block text-xl font-black text-[#E8A020]">$0.00</span>
+            <span id="modal-cart-bs" class="mt-0.5 block text-[10px] font-semibold text-[#E8A020]/70"></span>
+          </div>
         </div>
-        <p id="modal-cart-bs" class="text-[11px] font-semibold text-[#E8A020]/80 text-right mb-1"></p>
-        <p id="modal-cart-note" class="text-[11px] font-semibold text-[#E8A020] text-right mb-3">* No incluye delivery</p>
-        <button type="button" onclick="window.sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-3.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
+        <p id="modal-cart-note" class="mb-2 mt-1 text-[10px] font-semibold text-[#E8A020] text-right">* No incluye delivery</p>
+        <button type="button" onclick="window.sendWhatsApp()" id="btn-whatsapp-modal" disabled class="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#E8A020] px-5 py-2.5 font-black uppercase tracking-wide text-[#171313] shadow-lg transition duration-200 hover:bg-[#F2B33A] active:scale-98 disabled:cursor-not-allowed disabled:opacity-40">
           <i class="fa-brands fa-whatsapp text-lg"></i>
           Confirmar pedido por WhatsApp
         </button>
