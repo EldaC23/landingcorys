@@ -1,5 +1,5 @@
 clave,valor,ayuda
-tasa_bs,,Tasa de cambio para mostrar precios en bolívares (ej. 45.5 o 45,5). Déjala vacía si no quieres mostrar precios en Bs.
+tasa_bs,,"Tasa de cambio para mostrar precios en bolívares (ej. 45.5 o 45,5). Déjala vacía si no quieres mostrar precios en Bs."
 abierto,si,"Interruptor manual: escribe ""no"" para marcar el negocio como ""Cerrado temporalmente"" sin importar el horario. Déjalo en ""si"" (o vacío) el resto del tiempo."
 horario_lun,09:00-20:00,"Horario del lunes, formato HH:MM-HH:MM (24 horas). Escribe ""cerrado"" si no abres ese día, o déjalo vacío si no quieres usar horarios."
 horario_mar,09:00-20:00,Horario del martes. Mismo formato que horario_lun.
