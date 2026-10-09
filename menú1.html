@@ -133,7 +133,7 @@
 </div>
 
       <button type="button" onclick="window.toggleCartModal(true)" class="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg bg-[#E8A020] px-3 py-2 text-xs font-black uppercase tracking-wide text-[#171313] shadow-md transition duration-200 hover:bg-[#F2B33A] active:scale-95">
-        <i class="fa-solid fa-[#fa-list-check] text-sm"></i>
+        <i class="fa-solid fa-list-check text-sm"></i>
         <span>Ver Pedido</span>
       </button>
 
@@ -937,7 +937,7 @@
       container.innerHTML = categories.map(cat => {
         const active = cat === activeCategory;
         return `
-          <button type="button" onclick="window.selectCategory('${cat}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition duration-150 active:scale-95 sm:text-sm ${
+          <button type="button" onclick="window.selectCategory('${cat.replace(/'/g, "\\'")}')" class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-black uppercase tracking-wider transition duration-150 active:scale-95 sm:text-sm ${
             active
               ? "border-[#E8A020] bg-[#E8A020] text-[#171313] shadow-md shadow-[#E8A020]/20"
               : "border-[#F5E6C8]/15 bg-[#171313]/70 text-[#F5E6C8]/75 hover:border-[#E8A020]/45 hover:text-[#F5E6C8]"
