@@ -72,29 +72,21 @@
     </div>
   </header>
 
-  <!-- PORTADA: foto + degradado de marca, logo montado sobre el borde inferior, -->
+  <!-- PORTADA: foto (protagonista) + degradado de marca que se funde con el fondo sólido, -->
   <!-- y debajo (ya sobre el fondo sólido de la página) nombre, descripción y horario. -->
-  <div class="relative h-[190px] overflow-hidden sm:h-[220px]">
+  <div class="relative h-[230px] overflow-hidden sm:h-[270px]">
     <img
       src="hero.webp"
       alt=""
       class="absolute inset-0 h-full w-full object-cover"
-      style="object-position: 50% 38%;"
+      style="object-position: 50% 35%;"
       onerror="this.remove()"
     />
-    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(23,19,19,.30) 0%, rgba(78,17,17,.55) 50%, rgba(123,18,19,.88) 85%, rgba(123,18,19,1) 100%);"></div>
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(23,19,19,.22) 0%, rgba(78,17,17,.50) 55%, rgba(123,18,19,.88) 85%, rgba(123,18,19,1) 100%);"></div>
   </div>
 
   <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
-    <div class="-mt-10 flex justify-center sm:-mt-12 sm:justify-start">
-      <img
-        src="logo.webp"
-        alt="Cory's Fast Food"
-        class="h-20 w-20 rounded-full border-4 border-[#E8A020] object-cover shadow-xl sm:h-24 sm:w-24"
-        onerror="this.src='https://via.placeholder.com/96'"
-      />
-    </div>
-    <div class="mt-3 pb-5 text-center sm:text-left">
+    <div class="pt-4 pb-5 text-center sm:text-left">
       <h1 class="text-2xl font-black uppercase leading-none text-[#F5E6C8] sm:text-4xl">Cory's Fast Food</h1>
       <p class="mt-2 text-xs text-[#F5E6C8]/60 sm:text-sm">Hamburguesas artesanales, pepitos y perritos</p>
       <p id="horario-banner" class="mt-2.5 hidden text-[11px] font-semibold text-[#F5E6C8]/80 sm:text-xs"></p>
