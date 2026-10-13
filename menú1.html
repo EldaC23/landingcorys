@@ -1166,7 +1166,7 @@
       document.getElementById("bottom-cart-total").innerText = `$${grandTotal.toFixed(2)}`;
       document.getElementById("bottom-cart-label").innerText = count === 0 ? "Tu pedido está vacío" : `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
 
-      const bottomNoteText = hasZonas ? "El envío se calcula al confirmar el pedido." : "No incluye delivery";
+      const bottomNoteText = "No incluye delivery";
       document.getElementById("bottom-cart-note").innerText = bottomNoteText;
       const bottomBs = formatBs(grandTotal);
       document.getElementById("bottom-cart-bs").innerText = bottomBs ? bottomBs : '';
