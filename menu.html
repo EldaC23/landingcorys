@@ -44,6 +44,28 @@
     .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #f2b33a;
     }
+
+    /* ===== Animaciones ===== */
+    @keyframes bounceBadge {
+      0%, 100% { transform: scale(1); }
+      35% { transform: scale(1.35); }
+      60% { transform: scale(0.92); }
+    }
+    @keyframes pulseCartIcon {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+    .badge-bounce {
+      animation: bounceBadge 0.35s ease;
+    }
+    .cart-icon-pulse {
+      animation: pulseCartIcon 0.35s ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .badge-bounce, .cart-icon-pulse {
+        animation: none !important;
+      }
+    }
   </style>
 </head>
 <body class="min-h-screen pb-32 text-[#F5E6C8]" style="background-color: #7B1213; background-image: radial-gradient(circle at 15% 10%, rgba(232,160,32,.08), transparent 28%), radial-gradient(circle at 85% 75%, rgba(0,0,0,.12), transparent 30%);">
@@ -136,7 +158,7 @@
       
       <div onclick="window.toggleCartModal(true)" class="flex min-w-0 flex-1 cursor-pointer items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 transition hover:bg-[#4E1111]/60">
         <div class="flex min-w-0 items-center gap-2">
-          <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow-sm">
+          <div id="cart-icon-wrap" class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#E8A020] text-[#171313] shadow-sm">
             <i class="fa-solid fa-basket-shopping"></i>
             <span id="badge-count" class="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#F5E6C8] px-1 text-[9px] font-black text-[#171313]">0</span>
           </div>
@@ -872,6 +894,7 @@
       if (delta > 0) {
         const product = products.find(p => p.id === id);
         if (product && product.available === false) return;
+        pulseCartIcon();
       }
 
       const item = getOrCreateItem(id);
@@ -1144,6 +1167,16 @@
       return found ? found.price : 0;
     }
 
+    let lastBadgeCount = 0;
+
+    function pulseCartIcon() {
+      const el = document.getElementById('cart-icon-wrap');
+      if (!el) return;
+      el.classList.remove('cart-icon-pulse');
+      void el.offsetWidth; // reinicia la animación aunque se agregue seguido
+      el.classList.add('cart-icon-pulse');
+    }
+
     function updateCartUI() {
       let count = 0;
       let subtotal = 0;
@@ -1162,7 +1195,14 @@
       const shipping = computeShipping();
       const grandTotal = subtotal + shipping;
 
-      document.getElementById("badge-count").innerText = count;
+      const badgeEl = document.getElementById("badge-count");
+      badgeEl.innerText = count;
+      if (count !== lastBadgeCount) {
+        badgeEl.classList.remove('badge-bounce');
+        void badgeEl.offsetWidth;
+        badgeEl.classList.add('badge-bounce');
+        lastBadgeCount = count;
+      }
       document.getElementById("bottom-cart-total").innerText = `$${grandTotal.toFixed(2)}`;
       document.getElementById("bottom-cart-label").innerText = count === 0 ? "Tu pedido está vacío" : `${count} ${count === 1 ? 'ítem' : 'ítems'}`;
 
