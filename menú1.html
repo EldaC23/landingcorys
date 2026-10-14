@@ -46,10 +46,6 @@
     }
 
     /* ===== Animaciones ===== */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
     @keyframes bounceBadge {
       0%, 100% { transform: scale(1); }
       35% { transform: scale(1.35); }
@@ -59,46 +55,15 @@
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.15); }
     }
-    @keyframes glowPromo {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(232, 160, 32, 0.35); }
-      50% { box-shadow: 0 0 0 6px rgba(232, 160, 32, 0.08); }
-    }
-
-    .hero-cover-text {
-      animation: fadeInUp 0.6s ease both;
-    }
-    .product-card {
-      animation: fadeInUp 0.4s ease both;
-    }
-    .product-card:nth-child(1) { animation-delay: 0s; }
-    .product-card:nth-child(2) { animation-delay: 0.04s; }
-    .product-card:nth-child(3) { animation-delay: 0.08s; }
-    .product-card:nth-child(4) { animation-delay: 0.12s; }
-    .product-card:nth-child(5) { animation-delay: 0.16s; }
-    .product-card:nth-child(6) { animation-delay: 0.2s; }
-    .product-card:nth-child(n+7) { animation-delay: 0.24s; }
     .badge-bounce {
       animation: bounceBadge 0.35s ease;
     }
     .cart-icon-pulse {
       animation: pulseCartIcon 0.35s ease;
     }
-    .promo-card-glow {
-      animation: glowPromo 2.6s ease-in-out infinite;
-    }
-    .cart-modal-panel {
-      transform: translateY(24px);
-      opacity: 0;
-      transition: transform 0.28s ease, opacity 0.28s ease;
-    }
-    .cart-modal-panel.cart-modal-panel-open {
-      transform: translateY(0);
-      opacity: 1;
-    }
     @media (prefers-reduced-motion: reduce) {
-      .hero-cover-text, .product-card, .badge-bounce, .cart-icon-pulse, .promo-card-glow, .cart-modal-panel {
+      .badge-bounce, .cart-icon-pulse {
         animation: none !important;
-        transition: none !important;
       }
     }
   </style>
@@ -143,7 +108,7 @@
   </div>
 
   <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
-    <div class="hero-cover-text pt-4 pb-5 text-center sm:text-left">
+    <div class="pt-4 pb-5 text-center sm:text-left">
       <h1 class="text-2xl font-black uppercase leading-none text-[#F5E6C8] sm:text-4xl">Cory's Fast Food</h1>
       <p class="mt-2 text-xs text-[#F5E6C8]/60 sm:text-sm">Hamburguesas artesanales, perritos, pepitos y mucho mas</p>
       <p id="horario-banner" class="mt-2.5 hidden text-[11px] font-semibold text-[#F5E6C8]/80 sm:text-xs"></p>
@@ -215,7 +180,7 @@
   </div>
 
   <div id="cart-modal" class="fixed inset-0 z-[9999] hidden items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-4" onclick="if(event.target === this) window.toggleCartModal(false)">
-    <div id="cart-modal-panel" class="cart-modal-panel flex max-h-[90dvh] w-full flex-col overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
+    <div class="flex max-h-[90dvh] w-full flex-col overflow-hidden rounded-t-[28px] border border-[#E8A020]/30 bg-[#171313] shadow-2xl sm:max-w-xl sm:rounded-[28px]">
       
       <div class="flex items-center justify-between border-b border-[#F5E6C8]/10 px-5 py-4">
         <div>
@@ -892,7 +857,6 @@
 
     window.toggleCartModal = function(show) {
       const modal = document.getElementById("cart-modal");
-      const panel = document.getElementById("cart-modal-panel");
       const backBtn = document.getElementById("btn-back");
       if (!modal) return;
       if (show) {
@@ -900,10 +864,6 @@
         modal.classList.add("flex");
         document.body.style.overflow = "hidden";
         renderOrderDetails();
-        if (panel) {
-          panel.classList.remove("cart-modal-panel-open");
-          requestAnimationFrame(() => panel.classList.add("cart-modal-panel-open"));
-        }
         if (backBtn) {
           backBtn.setAttribute("aria-disabled", "true");
           backBtn.classList.add("pointer-events-none", "opacity-40");
@@ -912,7 +872,6 @@
       } else {
         modal.classList.add("hidden");
         modal.classList.remove("flex");
-        if (panel) panel.classList.remove("cart-modal-panel-open");
         document.body.style.overflow = "";
         if (backBtn) {
           backBtn.removeAttribute("aria-disabled");
@@ -1129,7 +1088,7 @@
       if (featured.length === 0 && !hasPromo) return '';
 
       const promoCardHTML = hasPromo ? `
-        <div class="promo-card-glow col-span-full rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] px-4 py-4 text-center shadow-md sm:col-span-2 lg:col-span-3">
+        <div class="col-span-full rounded-xl border border-[#D3A36E]/50 bg-[#F5E6C8] px-4 py-4 text-center shadow-md sm:col-span-2 lg:col-span-3">
           <p class="text-base font-black uppercase leading-tight text-[#7B1213] sm:text-lg">🎉 ${appConfig.promoTexto}</p>
         </div>
       ` : '';
