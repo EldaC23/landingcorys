@@ -31,6 +31,12 @@ const TASA_BCV_NOMBRE_HOJA_CONFIG = 'config';
 const TASA_BCV_NOMBRE_HOJA_LOG = 'log_tasa';
 const TASA_BCV_NOMBRE_FUNCION_DISPARADOR = 'actualizarTasa';
 
+// Texto que ve el dueño si intenta editar tasa_bs a mano estando en
+// automático. Sirve también para identificar (por su descripción) cuál
+// protección de la celda puso este script, y no tocar otras que hubiera.
+const TASA_BCV_DESCRIPCION_PROTECCION =
+  'Esta celda se actualiza sola. Para editarla a mano, cambia "tasa_automatica" a NO (fila de arriba) y, cuando termines, vuelve a ponerlo en SI.';
+
 // ===== MENÚ DENTRO DE LA HOJA =====
 
 function onOpen() {
@@ -49,8 +55,10 @@ function activarTasaAutomaticaDesdeMenu() {
     const mapa = leerMapaConfig_(sheet);
     escribirValorConfig_(sheet, mapa, 'tasa_automatica', 'SI',
       'Si está en SI, la tasa_bs se actualiza sola cada mañana con la tasa oficial del BCV. Si está en NO, tasa_bs se edita a mano.');
+    aplicarProteccionTasaBs_(sheet, mapa, true);
     ui.alert('Listo', 'La tasa automática quedó activada. Se actualizará todos los días a las ' +
-      TASA_BCV_HORA_PRINCIPAL + ':00 a. m. (con un reintento a las ' + TASA_BCV_HORA_REINTENTO + ':00 a. m.), hora de Caracas.',
+      TASA_BCV_HORA_PRINCIPAL + ':00 a. m. (con un reintento a las ' + TASA_BCV_HORA_REINTENTO + ':00 a. m.), hora de Caracas. ' +
+      'La celda tasa_bs queda protegida mientras esté en automático: para editarla a mano, primero cambia tasa_automatica a NO.',
       ui.ButtonSet.OK);
   } catch (err) {
     ui.alert('No se pudo activar', 'Ocurrió un error: ' + err.message, ui.ButtonSet.OK);
@@ -102,6 +110,7 @@ function actualizarTasa() {
   asegurarFilasBase_(sheet, mapa);
 
   const automatica = normalizarSiNo_(obtenerValorConfig_(mapa, 'tasa_automatica'));
+  aplicarProteccionTasaBs_(sheet, mapa, automatica);
   if (!automatica) {
     return 'La tasa automática está en NO: no se tocó tasa_bs.';
   }
@@ -177,6 +186,69 @@ function registrarResultado_(sheet, mapa, estadoTexto) {
   const fechaHora = Utilities.formatDate(new Date(), TASA_BCV_ZONA_HORARIA, 'dd/MM/yyyy HH:mm');
   escribirValorConfig_(sheet, mapa, 'tasa_actualizada', `${fechaHora} · ${estadoTexto}`,
     'Registro de la última actualización automática de tasa_bs (fecha, hora y resultado). Lo escribe el script, no lo edites a mano.');
+}
+
+// ===== PROTECCIÓN DE LA CELDA tasa_bs MIENTRAS ESTÉ EN AUTOMÁTICO =====
+// Bloquea la edición manual de tasa_bs cuando tasa_automatica está en SI
+// (para evitar que alguien la pise sin darse cuenta de que el script la va
+// a volver a sobrescribir), y la libera apenas se pasa a NO. El propio
+// script (que corre con la cuenta que lo activó) siempre puede seguir
+// escribiéndola: la protección solo afecta la edición manual desde la hoja.
+
+function aplicarProteccionTasaBs_(sheet, mapa, activar) {
+  const fila = mapa.filas['tasa_bs'];
+  if (!fila) return;
+  const celda = sheet.getRange(fila, mapa.colValor + 1);
+
+  // Quita cualquier protección que este mismo script haya puesto antes
+  // (identificada por su descripción), para no ir acumulando duplicados
+  // cada vez que se activa o corre de nuevo.
+  celda.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(proteccion => {
+    if (proteccion.getDescription() === TASA_BCV_DESCRIPCION_PROTECCION) {
+      proteccion.remove();
+    }
+  });
+
+  if (!activar) return;
+
+  const proteccion = celda.protect().setDescription(TASA_BCV_DESCRIPCION_PROTECCION);
+  // Deja la celda editable solo por quien creó la protección (la cuenta
+  // que activó la tasa automática); nadie más puede escribirla a mano.
+  if (proteccion.canDomainEdit()) proteccion.setDomainEdit(false);
+  const editoresActuales = proteccion.getEditors();
+  if (editoresActuales.length > 0) proteccion.removeEditors(editoresActuales);
+}
+
+// Disparador simple (se instala solo, sin pedir permisos extra) que
+// reacciona al instante cuando alguien edita tasa_automatica a mano: ajusta
+// la protección de tasa_bs de inmediato, y si pasó a NO, le recuerda que
+// debe volver a ponerlo en SI para que la actualización automática siga
+// funcionando (pensado para una corrección puntual de emergencia que
+// después se olvide revertir).
+function onEdit(e) {
+  try {
+    const sheet = e.range.getSheet();
+    if (sheet.getName() !== TASA_BCV_NOMBRE_HOJA_CONFIG) return;
+
+    const mapa = leerMapaConfig_(sheet);
+    const filaAutomatica = mapa.filas['tasa_automatica'];
+    if (!filaAutomatica) return;
+    if (e.range.getRow() !== filaAutomatica || e.range.getColumn() !== mapa.colValor + 1) return;
+
+    const automatica = normalizarSiNo_(e.value);
+    aplicarProteccionTasaBs_(sheet, mapa, automatica);
+
+    if (!automatica) {
+      sheet.getParent().toast(
+        'Cuando termines de corregir la tasa a mano, vuelve a poner "tasa_automatica" en SI para que la actualización automática siga funcionando.',
+        'Modo manual activado', 10
+      );
+    }
+  } catch (err) {
+    // Un disparador simple no debe interrumpir la edición del usuario con
+    // un error visible; si algo falla aquí, la próxima corrida de
+    // actualizarTasa() vuelve a dejar la protección en el estado correcto.
+  }
 }
 
 // ===== LECTURA/ESCRITURA GENÉRICA DE LA PESTAÑA "config" =====
