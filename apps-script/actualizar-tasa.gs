@@ -211,6 +211,13 @@ function aplicarProteccionTasaBs_(sheet, mapa, activar) {
     }
   });
 
+  // La nota (el triangulito en la esquina de la celda) es independiente de
+  // la protección: se ve igual en la app móvil de Sheets y en el navegador,
+  // a diferencia del aviso (toast), que en el celular puede no mostrarse.
+  // Por eso queda como la explicación principal; el toast es un refuerzo
+  // extra para quien lo vea desde la computadora.
+  celda.setNote(activar ? TASA_BCV_DESCRIPCION_PROTECCION : '');
+
   if (!activar) return;
 
   const proteccion = celda.protect().setDescription(TASA_BCV_DESCRIPCION_PROTECCION);
