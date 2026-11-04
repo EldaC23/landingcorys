@@ -35,7 +35,7 @@ const TASA_BCV_NOMBRE_FUNCION_DISPARADOR = 'actualizarTasa';
 // automático. Sirve también para identificar (por su descripción) cuál
 // protección de la celda puso este script, y no tocar otras que hubiera.
 const TASA_BCV_DESCRIPCION_PROTECCION =
-  'Esta celda se actualiza sola. Para editarla a mano, cambia "tasa_automatica" a NO (fila de arriba) y, cuando termines, vuelve a ponerlo en SI.';
+  'Esta celda se actualiza sola. Para editarla a mano, cambia "tasa_automatica" a NO en esta misma pestaña y, cuando termines, vuelve a ponerlo en SI.';
 
 // ===== MENÚ DENTRO DE LA HOJA =====
 
