@@ -109,7 +109,7 @@ function actualizarTasa() {
   const mapa = leerMapaConfig_(sheet);
   asegurarFilasBase_(sheet, mapa);
 
-  const automatica = normalizarSiNo_(obtenerValorConfig_(mapa, 'tasa_automatica'));
+  const automatica = normalizarSiNo_(obtenerValorConfig_(sheet, mapa, 'tasa_automatica'));
   aplicarProteccionTasaBs_(sheet, mapa, automatica);
   if (!automatica) {
     return 'La tasa automática está en NO: no se tocó tasa_bs.';
@@ -128,7 +128,7 @@ function actualizarTasa() {
     return 'La tasa recibida no es válida. Se mantiene la tasa anterior.';
   }
 
-  const tasaActualRaw = obtenerValorConfig_(mapa, 'tasa_bs');
+  const tasaActualRaw = obtenerValorConfig_(sheet, mapa, 'tasa_bs');
   const tasaActual = parsearNumeroVenezolano_(tasaActualRaw);
 
   if (!isNaN(tasaActual) && tasaActual > 0) {
@@ -221,18 +221,40 @@ function aplicarProteccionTasaBs_(sheet, mapa, activar) {
   if (editoresActuales.length > 0) proteccion.removeEditors(editoresActuales);
 }
 
-// Disparador simple (se instala solo, sin pedir permisos extra) que
-// reacciona al instante cuando alguien edita tasa_automatica a mano: ajusta
-// la protección de tasa_bs de inmediato, y si pasó a NO, le recuerda que
-// debe volver a ponerlo en SI para que la actualización automática siga
-// funcionando (pensado para una corrección puntual de emergencia que
-// después se olvide revertir).
+// Disparador simple (se instala solo, sin pedir permisos extra) con dos
+// trabajos:
+//
+// 1. Si alguien edita tasa_bs directo mientras está en automático, revierte
+//    el valor al instante. Esto es necesario además de la protección de
+//    aplicarProteccionTasaBs_() porque Google Sheets nunca permite que una
+//    protección bloquee al Propietario del archivo (así está diseñado:
+//    nadie puede quedar bloqueado de su propio archivo) — el Propietario
+//    siempre podría editarla igual sin este refuerzo.
+// 2. Si alguien edita tasa_automatica a mano, ajusta la protección de
+//    tasa_bs de inmediato, y si pasó a NO, recuerda volver a ponerlo en SI
+//    (pensado para una corrección puntual de emergencia que después se
+//    olvide revertir).
 function onEdit(e) {
   try {
     const sheet = e.range.getSheet();
     if (sheet.getName() !== TASA_BCV_NOMBRE_HOJA_CONFIG) return;
 
     const mapa = leerMapaConfig_(sheet);
+
+    const filaTasaBs = mapa.filas['tasa_bs'];
+    if (filaTasaBs && e.range.getRow() === filaTasaBs && e.range.getColumn() === mapa.colValor + 1) {
+      if (normalizarSiNo_(obtenerValorConfig_(sheet, mapa, 'tasa_automatica'))) {
+        if (e.oldValue !== undefined) {
+          e.range.setValue(e.oldValue);
+        }
+        sheet.getParent().toast(
+          'tasa_bs no se puede editar a mano mientras "tasa_automatica" esté en SI (ni como Propietario: Sheets no permite bloquear al dueño del archivo). Cambia "tasa_automatica" a NO primero.',
+          'Celda protegida', 10
+        );
+      }
+      return;
+    }
+
     const filaAutomatica = mapa.filas['tasa_automatica'];
     if (!filaAutomatica) return;
     if (e.range.getRow() !== filaAutomatica || e.range.getColumn() !== mapa.colValor + 1) return;
@@ -288,10 +310,9 @@ function leerMapaConfig_(sheet) {
   return { colClave, colValor, colAyuda, totalFilas: datos.length, filas };
 }
 
-function obtenerValorConfig_(mapa, clave) {
+function obtenerValorConfig_(sheet, mapa, clave) {
   const fila = mapa.filas[clave];
   if (!fila) return '';
-  const sheet = obtenerHojaConfig_();
   return String(sheet.getRange(fila, mapa.colValor + 1).getValue() || '').trim();
 }
 
