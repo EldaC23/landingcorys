@@ -3,11 +3,16 @@
  * tasa oficial del BCV, sin cambiar cómo el menú (menu.html / menú1.html)
  * lee los datos: el menú sigue leyendo solo la clave tasa_bs.
  *
- * Instalación: Extensiones → Apps Script en la hoja de Google, pega este
- * archivo, guarda, recarga la hoja. Aparecerá el menú "Tasa BCV".
+ * Instalación (se hace una sola vez en la plantilla de la hoja): Extensiones →
+ * Apps Script, pega este archivo, guarda, recarga la hoja. Aparecerá el menú
+ * "Tasa BCV". No hace falta "Implementar": es un script interno de la hoja.
  *
- * Ver la sección "Tasa BCV automática" del README del repositorio para
- * instrucciones de uso dirigidas al dueño del negocio.
+ * Quién activa: los disparadores se crean con la cuenta de quien pulsa
+ * "Activar tasa automática". Tras transferir la propiedad de la hoja, el
+ * nuevo propietario debe pulsarlo de nuevo.
+ *
+ * Los pasos para el dueño del negocio están en la guía del cliente; los
+ * datos técnicos, en el README del repositorio.
  */
 
 // ===== CONFIGURACIÓN (ajustar aquí si algo cambia) =====
@@ -28,7 +33,6 @@ const TASA_BCV_HORA_REINTENTO = 9;
 
 const TASA_BCV_ZONA_HORARIA = 'America/Caracas';
 const TASA_BCV_NOMBRE_HOJA_CONFIG = 'config';
-const TASA_BCV_NOMBRE_HOJA_LOG = 'log_tasa';
 const TASA_BCV_NOMBRE_FUNCION_DISPARADOR = 'actualizarTasa';
 
 // Texto que ve el dueño si intenta editar tasa_bs a mano estando en
@@ -36,6 +40,9 @@ const TASA_BCV_NOMBRE_FUNCION_DISPARADOR = 'actualizarTasa';
 // protección de la celda puso este script, y no tocar otras que hubiera.
 const TASA_BCV_DESCRIPCION_PROTECCION =
   'Esta celda se actualiza sola. Para editarla a mano, cambia "tasa_automatica" a NO en esta misma pestaña y, cuando termines, vuelve a ponerlo en SI.';
+// Prefijo común: permite reconocer (y quitar) también protecciones puestas
+// por versiones anteriores del script, aunque su texto completo fuera otro.
+const TASA_BCV_PREFIJO_PROTECCION = 'Esta celda se actualiza sola.';
 
 // ===== MENÚ DENTRO DE LA HOJA =====
 
@@ -124,7 +131,7 @@ function actualizarTasa() {
   }
 
   if (nuevaTasa == null || isNaN(nuevaTasa) || nuevaTasa <= 0) {
-    registrarResultado_(sheet, mapa, 'error de conexión, se mantiene la anterior');
+    registrarResultado_(sheet, mapa, 'respuesta no válida, se mantiene la anterior');
     return 'La tasa recibida no es válida. Se mantiene la tasa anterior.';
   }
 
@@ -201,12 +208,12 @@ function aplicarProteccionTasaBs_(sheet, mapa, activar) {
   const celda = sheet.getRange(fila, mapa.colValor + 1);
 
   // Quita cualquier protección que este mismo script haya puesto antes
-  // (identificada por su descripción), para no ir acumulando duplicados
+  // (identificada por el prefijo de su descripción), para no ir acumulando duplicados
   // cada vez que se activa o corre de nuevo. Se revisan las protecciones
   // de toda la hoja (no solo las de esta celda) porque es el método que
   // realmente existe en la API de Apps Script.
   sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(proteccion => {
-    if (proteccion.getDescription() === TASA_BCV_DESCRIPCION_PROTECCION) {
+    if (String(proteccion.getDescription() || '').indexOf(TASA_BCV_PREFIJO_PROTECCION) === 0) {
       proteccion.remove();
     }
   });
@@ -371,7 +378,7 @@ function normalizarSiNo_(raw) {
   const limpio = String(raw || '')
     .trim()
     .toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, ''); // quita tildes: sí -> si
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // quita tildes: sí -> si
   return limpio === 'si';
 }
 
@@ -403,35 +410,4 @@ function parsearNumeroVenezolano_(raw) {
 
 function formatearNumeroVenezolano_(numero) {
   return numero.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-// ===== PRUEBAS (temporal: fácil de borrar, no toca tasa_bs) =====
-
-// Consulta la API y agrega una fila a "log_tasa" (la crea si no existe)
-// con la fecha/hora de Caracas y lo que devolvió la API. Útil para ver a
-// qué hora cambia el valor (ej. revisar a las 5pm, 7pm, 12:30am y 6am).
-function probarAPI() {
-  const hojaLog = obtenerOCrearHojaLog_();
-  let promedio = '';
-  let fechaActualizacionAPI = '';
-  try {
-    const response = UrlFetchApp.fetch(TASA_BCV_API_URL, { muteHttpExceptions: true });
-    const data = JSON.parse(response.getContentText());
-    promedio = data[TASA_BCV_CAMPO_PRINCIPAL];
-    fechaActualizacionAPI = data['fechaActualizacion'] || '';
-  } catch (err) {
-    promedio = 'ERROR: ' + err.message;
-  }
-  const fechaHoraCaracas = Utilities.formatDate(new Date(), TASA_BCV_ZONA_HORARIA, 'dd/MM/yyyy HH:mm');
-  hojaLog.appendRow([fechaHoraCaracas, promedio, fechaActualizacionAPI]);
-}
-
-function obtenerOCrearHojaLog_() {
-  const libro = SpreadsheetApp.getActiveSpreadsheet();
-  let hoja = libro.getSheetByName(TASA_BCV_NOMBRE_HOJA_LOG);
-  if (!hoja) {
-    hoja = libro.insertSheet(TASA_BCV_NOMBRE_HOJA_LOG);
-    hoja.appendRow(['fecha_hora_caracas', 'promedio', 'fechaActualizacion_api']);
-  }
-  return hoja;
 }
