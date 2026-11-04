@@ -202,8 +202,10 @@ function aplicarProteccionTasaBs_(sheet, mapa, activar) {
 
   // Quita cualquier protección que este mismo script haya puesto antes
   // (identificada por su descripción), para no ir acumulando duplicados
-  // cada vez que se activa o corre de nuevo.
-  celda.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(proteccion => {
+  // cada vez que se activa o corre de nuevo. Se revisan las protecciones
+  // de toda la hoja (no solo las de esta celda) porque es el método que
+  // realmente existe en la API de Apps Script.
+  sheet.getProtections(SpreadsheetApp.ProtectionType.RANGE).forEach(proteccion => {
     if (proteccion.getDescription() === TASA_BCV_DESCRIPCION_PROTECCION) {
       proteccion.remove();
     }
