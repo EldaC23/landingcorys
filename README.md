@@ -72,3 +72,21 @@ Hoy el costo de envío se calcula por zonas fijas definidas en la pestaña `zona
 ### Nota final
 
 Estas integraciones no están incluidas en el menú entregado; esta sección es solo orientativa.
+
+## Tasa BCV automática
+
+Esto hace que la celda `tasa_bs` de la pestaña `config` se actualice sola cada mañana con la tasa oficial del BCV, en vez de tener que escribirla a mano.
+
+1. **Qué hace y qué no.** Cada mañana, la tasa en bolívares (`tasa_bs`) se pone al día sola con la tasa oficial del BCV. Si algo falla ese día (sin internet, el dato no llegó, etc.), la hoja se queda con la tasa anterior — nunca queda en blanco ni con un valor raro. En cualquier momento puedes volver a escribirla a mano si lo prefieres.
+
+2. **Activarla (una sola vez).** Abre tu hoja de Google → menú **Tasa BCV** (arriba, junto a Archivo/Edición) → **Activar tasa automática**. La primera vez, Google te va a mostrar un aviso de que "la app no está verificada" — es normal, es tu propio script, no uno ajeno. Para continuar: **Configuración avanzada** → **Ir a [nombre de tu hoja] (no seguro)** → **Permitir**.
+
+3. **Pasar de automática a manual (o al revés).** En `config`, la celda `tasa_automatica` controla esto: escribe `SI` para que se actualice sola, o `NO` para volver a escribirla tú mismo. Si la pones en `NO`, el script no toca `tasa_bs` para nada.
+
+4. **Saber si está al día.** La celda `tasa_actualizada` (también en `config`) muestra la fecha, hora y resultado de la última vez que el script intentó actualizar la tasa — por ejemplo "actualizada a 905,30" o "sin cambios". Si llevas varios días sin ver una fecha reciente ahí, algo no está corriendo.
+
+5. **Si dice error.** Si `tasa_actualizada` dice "error de conexión" o "valor rechazado", escribe la tasa a mano en `tasa_bs` mientras tanto (el menú sigue funcionando normal con lo que haya ahí) y avísame para revisarlo.
+
+**Nota técnica:** la tasa se obtiene de un servicio público de terceros que toma el dato del BCV, no del sitio oficial del Banco Central directamente. Como cualquier servicio externo, puede fallar o dejar de estar disponible sin aviso; por eso el script nunca borra la tasa anterior si algo sale mal, y por eso existe la opción de volver a `tasa_automatica` en `NO` y seguir escribiéndola a mano.
+
+El código vive en [`apps-script/actualizar-tasa.gs`](apps-script/actualizar-tasa.gs) — se instala pegándolo en **Extensiones → Apps Script** dentro de la hoja de Google (GitHub Pages no puede ejecutar código programado; por eso este script no corre en el repositorio, sino en la propia hoja).
